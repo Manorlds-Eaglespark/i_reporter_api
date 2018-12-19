@@ -16,27 +16,28 @@ def create_app(config_name):
     app.config.from_pyfile('config.py')
 
 
-    @app.route('/api/v1/red-flags', methods=[GET'])
+    @app.route('/api/v1/red-flags', methods=['GET'])
     def get_redflags():
+        data = Incident.get_red_flags()
+        return make_response(jsonify({"status":200, "data":data})), 200
+
+    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['GET'])
+    def get_a_redflag(red_flag_id):
         pass
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=[GET'])
-    def get_redflags(red_flag_id):
-        pass
-
-    @app.route('/api/v1/red-flags', methods=[POST'])
+    @app.route('/api/v1/red-flags', methods=['POST'])
     def create_redflag():
         pass
     
-    @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=[PATCH'])
+    @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):
         pass
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=[PATCH'])
+    @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=['PATCH'])
     def update_redflag_comment(red_flag_id):
         pass
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=[DELETE'])
+    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['DELETE'])
     def delete_redflag(red_flag_id):
         pass
 

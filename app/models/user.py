@@ -1,20 +1,30 @@
 #user object
 import re
+import uuid
+from datetime import datetime, timedelta
+
+
+firstname = ""
+lastname = ""
+othernames = ""
+email = ""
+password = ""
+phonenumber = ""
+username = ""
 
 class User:
     def __init__(self, *args):
-        self.id = id,
+        self.id = uuid.uuid1(),
         self.firstname = firstname,
         self.lastname = lastname,
         self.othernames = othernames,
         self.email = email,
         self.password = password,
-        self.phonenumber = phoneNumber,
+        self.phonenumber = phonenumber,
         self.username = username,
         self.registered = datetime.now()
         self.isadmin = "False"
         
-    
     def check_if_user_email_exist(self):
         email = db.check_email(self.email)
         if email != None:
