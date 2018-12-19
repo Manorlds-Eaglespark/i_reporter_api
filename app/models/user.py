@@ -11,7 +11,7 @@ class User:
         self.password = password,
         self.phonenumber = phoneNumber,
         self.username = username,
-        self.registered = registered
+        self.registered = datetime.now()
         self.isadmin = "False"
         
     
