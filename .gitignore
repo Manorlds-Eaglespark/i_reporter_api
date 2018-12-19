@@ -2,3 +2,4 @@ app/__pycache__/
 app/auth/__pycache__/
 app/models/__pycache__/
 instance/__pycache__/
+venv/
