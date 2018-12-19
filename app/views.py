@@ -16,8 +16,28 @@ def create_app(config_name):
     app.config.from_pyfile('config.py')
 
 
-    @app.route('/api/v1/redflags', methods=['POST', 'GET'])
-    def get_and_post_redflags():
+    @app.route('/api/v1/red-flags', methods=[GET'])
+    def get_redflags():
+        pass
+
+    @app.route('/api/v1/red-flags/<red_flag_id>', methods=[GET'])
+    def get_redflags(red_flag_id):
+        pass
+
+    @app.route('/api/v1/red-flags', methods=[POST'])
+    def create_redflag():
+        pass
+    
+    @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=[PATCH'])
+    def update_redflag_location(red_flag_id):
+        pass
+
+    @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=[PATCH'])
+    def update_redflag_comment(red_flag_id):
+        pass
+
+    @app.route('/api/v1/red-flags/<red_flag_id>', methods=[DELETE'])
+    def delete_redflag(red_flag_id):
         pass
 
     from .auth import auth_blueprint
