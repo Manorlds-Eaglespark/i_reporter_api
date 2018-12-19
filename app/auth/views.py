@@ -5,11 +5,8 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)) + "/..")
 from . import auth_blueprint
 from flask.views import MethodView
 from flask import make_response, request, jsonify, abort, json
-from app.models.User import User
-from app.database.Database import Database
+from app.models.user import User
 import re
-
-database = Database()
 
 
 class RegistrationView(MethodView):

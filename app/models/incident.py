@@ -8,8 +8,8 @@ class Incident:
 		self.createdOn = datetime.now()
 		self.createdBy = CreatedBy
 		self.doc_type = doc_type
-        self.location = location
+		self.location = location
 		self.status = status
 		self.images = images
-        self.videos = videos
-        self.comment = comment
+		self.videos = videos
+		self.comment = comment
