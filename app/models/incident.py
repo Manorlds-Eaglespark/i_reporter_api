@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 class Incident:
 
 	def __init__(self, *args):
-		self.id = uuid
+		self.id = id
 		self.createdOn = datetime.now()
 		self.createdBy = CreatedBy
 		self.doc_type = doc_type
