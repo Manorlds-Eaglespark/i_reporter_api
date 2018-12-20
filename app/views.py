@@ -42,11 +42,9 @@ def create_app(config_name):
         images = json.loads(request.data)['images']
         videos = json.loads(request.data)['videos']
         comment = json.loads(request.data)['comment']
-
         data = Helper_Functions.get_dict_data_from_list([created_by, doc_type, location,
                 status, images, videos, comment])
         validation = Helper_Functions.validate_incident_input(data)
-        # return str(validation)
         if validation[0] == 200:
             red_flag = Incident(data)
             incidents.append(red_flag)
@@ -58,19 +56,25 @@ def create_app(config_name):
     def update_redflag_location(red_flag_id):
         location = json.loads(request.data)['location']
         data = Helper_Functions.update_location(red_flag_id, location)
-        return Helper_Functions.the_return_method(200, data, "Updated red-flag record’s location")
+        if data:
+            return Helper_Functions.the_return_method(200, data, "Updated red-flag record’s location")
+        else:
+            return Helper_Functions.the_return_method(404, None, "Red-flag not found")
 
     @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=['PATCH'])
     def update_redflag_comment(red_flag_id):
         comment = json.loads(request.data)['comment']
         data = Helper_Functions.update_comment(red_flag_id, comment)
-        return Helper_Functions.the_return_method(200, data, "Updated red-flag record’s comment")
+        if data:
+            return Helper_Functions.the_return_method(200, data, "Updated red-flag record’s comment")
+        else:
+            return Helper_Functions.the_return_method(404, None, "Resource with that id not found")
 
     @app.route('/api/v1/red-flags/<red_flag_id>', methods=['DELETE'])
     def delete_redflag(red_flag_id):
         if Helper_Functions.delete_redflag(red_flag_id):
             data = ""
-            return Helper_Functions.the_return_method(200, data, "red-flag record has been deleted”")
+            return Helper_Functions.the_return_method(200, None, "red-flag record has been deleted")
 
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)

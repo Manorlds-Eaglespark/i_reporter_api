@@ -28,3 +28,11 @@ incident4 = Incident(incident4_data)
 incident5 = Incident(incident5_data)
 
 incidents = [incident1, incident2, incident3, incident4, incident5]
+
+new_location = {
+	"location": "new location"
+}
+
+new_comment = {
+	"comment": "This is the new comment"
+}
