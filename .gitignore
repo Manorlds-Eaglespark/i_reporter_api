@@ -15,4 +15,6 @@ instance/__init__.pyc
 instance/config.pyc
 __init__.pyc
 app/data_store/__pycache__/
+app/utilities/__pycache__/helper_functions.cpython-37.pyc
+
 
