@@ -28,7 +28,10 @@ def create_app(config_name):
     @app.route('/api/v1/red-flags/<red_flag_id>', methods=['GET'])
     def get_a_redflag(red_flag_id):
         data = Helper_Functions.get_a_red_flag(red_flag_id)
-        return make_response(jsonify({"status": 200, "data": data})), 200
+        if data:
+            return make_response(jsonify({"status": 200, "data": data})), 200
+        else:
+            return make_response(jsonify({"status": 404, "message": "Resource not found with given id"})), 404
 
     @app.route('/api/v1/red-flags', methods=['POST'])
     def create_redflag():
@@ -49,7 +52,7 @@ def create_app(config_name):
             incidents.append(red_flag)
             return Helper_Functions.the_return_method(201, red_flag.to_json_object(), "Created red-flag record")
         else:
-            return Helper_Functions.the_return_method(validation[0], "None", validation[1])
+            return Helper_Functions.the_return_method(validation[0], None, validation[1])
     
     @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):

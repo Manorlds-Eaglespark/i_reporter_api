@@ -17,3 +17,4 @@ __init__.pyc
 app/data_store/__pycache__/
 app/utilities/__pycache__/*
 tests/__pycache__/
+app/utilities/__pycache__/*

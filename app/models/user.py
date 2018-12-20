@@ -26,9 +26,7 @@ class User:
         self.isadmin = "False"
         
     def check_if_user_email_exist(self):
-        email = db.check_email(self.email)
-        if email != None:
-            return 'Email already has an account.'
+        pass
 
     @staticmethod
     def login_validate(email, password):
