@@ -11,6 +11,9 @@ def create_app(config_name):
     from app.models.admin import Admin
     from app.models.user import User
 
+    from app.utilities.helper_functions import Helper_Functions
+
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
@@ -18,12 +21,13 @@ def create_app(config_name):
 
     @app.route('/api/v1/red-flags', methods=['GET'])
     def get_redflags():
-        data = Incident.get_red_flags()
+        data = Helper_Functions.get_red_flags()
         return make_response(jsonify({"status":200, "data":data})), 200
 
     @app.route('/api/v1/red-flags/<red_flag_id>', methods=['GET'])
     def get_a_redflag(red_flag_id):
-        pass
+        data = Helper_Functions.get_a_red_flag(red_flag_id)
+        return make_response(jsonify({"status": 200, "data": data})), 200
 
     @app.route('/api/v1/red-flags', methods=['POST'])
     def create_redflag():

@@ -10,11 +10,21 @@ user3 = User(3, "Christine", "Turky", "Sweeri", "christinet@gmail.com", "asdfdsa
 
 users = [user1, user2, user3]
 
+incident1_data = {"created_by":3, "doc_type":"red-flag", "location":"0.215, 0.784", "status":"New", "images":"images-link","videos":"videos-link", "comment":"Traffic office James Komac, requested for money"}
+incident2_data = {"created_by":2, "doc_type":"red-flag", "location":"0.114, 0.342", "status":"Rejected", "images":"images-link",
+                     "videos":"videos-link", "comment":"National id official Kabulenge Christine wants a bribe"}
+incident3_data = {"created_by":2, "doc_type":"intervation", "location":"0.435, 0.034", "status":"under-investigation",
+                     "images":"images-link", "videos":"videos-link", "comment":"Bunamwaya has no clean water supply."}
+incident4_data = {"created_by":3, "doc_type":"intervation", "location":"0.111, 0.344", "status":"Resolved",
+                     "images":"images-link", "videos":"videos-link", "comment":"Kisasi bypass road has alot of traffic jam."}
+incident5_data = {"created_by":2, "doc_type":"red-flag", "location":"0.113, 0.344", "status":"under-investigation", "images":"images-link",
+                     "videos":"videos-link", "comment":"Filling up and construction in the Kisasi road wetland!!"}
+
 #incidents
-incident1 = Incident(1, "2018-12-15 19:55:04.874256", 3, "red-flag", "0.215, 0.784", "New", "images-link", "videos-link", "Traffic office James Komac, requested for money")
-incident2 = Incident(2, "2018-12-16 19:55:04.127256", 2, "red-flag", "0.114, 0.342", "Rejected", "images-link", "videos-link", "National id official Kabulenge Christine wants a bribe")
-incident3 = Incident(3, "2018-12-17 19:55:04.757256", 2, "intervation", "0.435, 0.034", "under-investigation", "images-link", "videos-link", "Bunamwaya has no clean water supply.")
-incident4 = Incident(4, "2018-12-18 19:55:04.967556", 3, "intervation", "0.111, 0.344", "Resolved", "images-link", "videos-link", "Kisasi bypass road has alot of traffic jam.")
-incident5 = Incident(5, "2018-12-19 19:55:04.927258", 2, "red-flag", "0.113, 0.344", "under-investigation", "images-link", "videos-link", "Filling up and construction in the Kisasi road wetland!!")
+incident1 = Incident(incident1_data)
+incident2 = Incident(incident2_data)
+incident3 = Incident(incident3_data)
+incident4 = Incident(incident4_data)
+incident5 = Incident(incident5_data)
 
 incidents = [incident1, incident2, incident3, incident4, incident5]
