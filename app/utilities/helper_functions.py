@@ -7,7 +7,7 @@ class Helper_Functions:
 
     @staticmethod
     def the_return_method(status, data, message):
-        return make_response(jsonify({"status": status, "data": data, "message": message})), 201
+        return make_response(jsonify({"status": status, "data": data, "message": message})), status
 
 
     @staticmethod
@@ -37,7 +37,18 @@ class Helper_Functions:
 
     @staticmethod
     def validate_incident_input(data):
-        return True
+        if not data["created_by"]:
+            return [400, "created_by required for user creating this redflag", data["created_by"]]
+        if type(data["created_by"]) is not int:
+            return[400, "created_by should be of type int."]
+        if not data["doc_type"] == "red-flag" or not data["doc_type"] == "intervation":
+            return[400, "doc_type is either red-flag or intervation"]
+        if not data["location"] or data["location"].isspace():
+            return [400, "Location field required."]
+        if not data["status"] or not data["images"] or not data["videos"] or not data["comment"]:
+            return [400, "Make sure you filled these required fields: Status, images, videos and comment"]
+
+        return [200, "All Good"]
 
     @staticmethod
     def update_location(id, location):
