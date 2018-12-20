@@ -38,34 +38,6 @@ class RegistrationView(MethodView):
             return make_response(jsonify({"message":"Make sure your password has a capital letter in it"})), 401
 
 
-        user = database.get_registered_user(email)
-
-        if not user:
-            try:
-                user = User(name=name, email=email, password=password)
-                database.save_new_user(user)
-
-
-                response = {
-                    'message': 'You registered successfully. Please log in.'
-                }
-                return make_response(jsonify(response)), 201
-            except Exception as e:
-                response = {
-                    'message': str(e)
-                }
-                return make_response(jsonify(response)), 400
-        else:
-            response = {
-                'message': 'User already exists. Please login.'
-            }
-
-            return make_response(jsonify(response)), 403
-
-
-
-
-
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
 
@@ -82,28 +54,7 @@ class LoginView(MethodView):
             return make_response(jsonify({"message":"Please enter a valid Email."})), 401
 
         try:
-            data = database.get_registered_user(email)
-            if data:
-                user = User(data[1], data[2], data[3])
-                if data and User.password_is_valid(data[3], password):
-                    access_token = user.generate_token(data[0], user.email, data[4])
-                    if access_token:
-                            response = {
-                                'message': 'You logged in successfully.',
-                                'access_token':  access_token.decode()
-                            }
-                            return make_response(jsonify(response)), 200
-                else:
-                    response = {
-                        'message': 'Invalid Password, Please try again'
-                    }
-                    return make_response(jsonify(response)), 403
-            else:
-                response = {
-                    'message': 'No account by that Email, please register first.'
-                }
-                return make_response(jsonify(response)), 400
-
+          
         except Exception as e:
             response = {
                 'message': str(e)
