@@ -61,7 +61,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_create_new_red_flag_no_doc_type(self):
         input_data = incident1_data
-        input_data["doc_type"] = ""
+        input_data["type"] = ""
         response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
                                     content_type='application/json')
         data = json.loads(response.data)
@@ -72,7 +72,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_create_new_red_flag_other_doc_type(self):
         input_data = incident1_data
-        input_data["doc_type"] = "redd_flag"
+        input_data["type"] = "redd_flag"
         response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
                                     content_type='application/json')
         data = json.loads(response.data)

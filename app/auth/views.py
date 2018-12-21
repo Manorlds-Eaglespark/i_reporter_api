@@ -41,7 +41,16 @@ class LoginView(MethodView):
         password = json.loads(request.data)['password']
         email = json.loads(request.data)['email']
         try:
-            pass
+            user = Helper_Functions.get_user(email)
+            if User.password_is_valid(user.password, password):
+                    access_token = user.generate_token(user.id, user.isadmin)
+                    if access_token:
+                            response = {
+                                'message': 'You logged in successfully.',
+                                'access_token':  access_token.decode()
+                            }
+                            return make_response(jsonify(response)), 200
+
         except Exception as e:
             response = {
                 'message': str(e)

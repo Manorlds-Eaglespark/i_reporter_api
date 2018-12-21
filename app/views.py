@@ -36,7 +36,7 @@ def create_app(config_name):
     @app.route('/api/v1/red-flags', methods=['POST'])
     def create_redflag():
         created_by = json.loads(request.data)['created_by']
-        doc_type = json.loads(request.data)['doc_type']
+        doc_type = json.loads(request.data)['type']
         location = json.loads(request.data)['location']
         status = json.loads(request.data)['status']
         images = json.loads(request.data)['images']
