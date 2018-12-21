@@ -1,6 +1,6 @@
 # app/models/redflag.py
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime
 
 class Incident:
 	init_dict ={

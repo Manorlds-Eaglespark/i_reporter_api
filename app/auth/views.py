@@ -8,8 +8,7 @@ from flask import make_response, request, jsonify, abort, json
 from app.models.user import User
 from app.data_store.data import users
 from app.utilities.helper_functions import Helper_Functions
-import re
-
+from app.utilities.login_validation import Login_Validation
 
 class RegistrationView(MethodView):
     """This class registers a new user."""
@@ -40,9 +39,14 @@ class LoginView(MethodView):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
         password = json.loads(request.data)['password']
         email = json.loads(request.data)['email']
-        try:
-            user = Helper_Functions.get_user(email)
-            if User.password_is_valid(user.password, password):
+
+        validate_input = Login_Validation({"email":email, "password":password})
+        validated_input = validate_input.check_inputs()
+        if validated_input[0] == 200:
+            try:
+                user = Helper_Functions.get_user(email)
+                if User.password_is_valid(user.password, password):
+     
                     access_token = user.generate_token(user.id, user.isadmin)
                     if access_token:
                             response = {
@@ -50,12 +54,18 @@ class LoginView(MethodView):
                                 'access_token':  access_token.decode()
                             }
                             return make_response(jsonify(response)), 200
+                else:
+                    return Helper_Functions.the_return_method(400, None, "Enter a valid Password")
 
-        except Exception as e:
-            response = {
-                'message': str(e)
-            }
-            return make_response(jsonify(response)), 500
+
+            except Exception as e:
+                response = {
+                    'message': str(e)
+                }
+                return make_response(jsonify(response)), 500
+
+        else:
+            return Helper_Functions.the_return_method(validated_input[0], None, validated_input[1])
 
 
 registration_view = RegistrationView.as_view('registration_view')
