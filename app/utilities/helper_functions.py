@@ -1,5 +1,6 @@
 from app.models.incident import Incident
 from app.data_store.data import incidents
+from app.data_store.data import users
 from flask import make_response, jsonify
 
 
@@ -14,7 +15,7 @@ class Helper_Functions:
     def get_red_flags():
         red_flags_list = []
         for incident in incidents:
-            if incident.doc_type == "red-flag":
+            if incident.type == "red-flag":
                 red_flags_list.append(incident.to_json_object())
         return red_flags_list
     @staticmethod
@@ -24,10 +25,10 @@ class Helper_Functions:
                 return incident.to_json_object()
     
     @staticmethod
-    def get_dict_data_from_list(list_data):
+    def get_dict_data_from_list_incident(list_data):
         return {
          			"created_by": list_data[0],
-         			"doc_type": list_data[1],
+         			"type": list_data[1],
          			"location": list_data[2],
          			"status": list_data[3],
          			"images": list_data[4],
@@ -36,19 +37,16 @@ class Helper_Functions:
         }
 
     @staticmethod
-    def validate_incident_input(data):
-        if not data["created_by"]:
-            return [400, "created_by required for user creating this redflag", data["created_by"]]
-        if type(data["created_by"]) is not int:
-            return[400, "created_by should be of type int."]
-        if not data["doc_type"] == "red-flag" or not data["doc_type"] == "intervation":
-            return[400, "doc_type is either red-flag or intervation"]
-        if not data["location"] or data["location"].isspace():
-            return [400, "Location field required."]
-        if not data["status"] or not data["images"] or not data["videos"] or not data["comment"]:
-            return [400, "Make sure you filled these required fields: Status, images, videos and comment"]
-
-        return [200, "All Good"]
+    def get_dict_data_from_list_user(list_data):
+        return {
+         			"firstname": list_data[0],
+         			"lastname": list_data[1],
+         			"othernames": list_data[2],
+         			"email": list_data[3],
+         			"password": list_data[4],
+         			"phonenumber": list_data[5],
+         			"username": list_data[6]
+        }
 
     @staticmethod
     def update_location(id, location):
@@ -71,3 +69,17 @@ class Helper_Functions:
                 incidents.remove(incident)
                 return True
         return False
+
+    @staticmethod
+    def email_exists_already(email):
+        for user in users:
+            if user.email == email:
+                return True
+        return False
+    
+    @staticmethod
+    def get_user(email):
+        for user in users:
+            if user.email == email:
+                return user
+

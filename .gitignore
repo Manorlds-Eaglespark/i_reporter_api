@@ -17,4 +17,8 @@ __init__.pyc
 app/data_store/__pycache__/
 app/utilities/__pycache__/*
 tests/__pycache__/
+<<<<<<< HEAD
 app/utilities/__pycache__/helper_functions.cpython-37.pyc
+=======
+app/utilities/__pycache__/*
+>>>>>>> 407de589f422cbc80fd0645339ce713b5eefab43
