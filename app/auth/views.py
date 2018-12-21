@@ -6,6 +6,7 @@ from . import auth_blueprint
 from flask.views import MethodView
 from flask import make_response, request, jsonify, abort, json
 from app.models.user import User
+from app.data_store.data import users
 import re
 
 
@@ -15,46 +16,27 @@ class RegistrationView(MethodView):
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/register"""
 
-        name = json.loads(request.data)['name']
-
-        validate_name = name.replace(" ", "")
-        if not validate_name.isalnum() and not validate_name.isalpha():
-            return make_response(jsonify({"message": "Enter only letter in the English alphabet for name."})), 400
-
-        if not isinstance(name, str) or len(name) < 3:
-            return make_response(jsonify({"message":"Enter more than 3 letters for name."})), 401
-
+        firstname = json.loads(request.data)['firstname']
+        lastname = json.loads(request.data)['lastname']
+        othernames = json.loads(request.data)['othernames']
         email = json.loads(request.data)['email']
-        
-        if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is not None:
-            return make_response(jsonify({"message":"Please enter a valid Email."})), 401
-
         password = json.loads(request.data)['password']
-        if len(password) < 8:
-            return make_response(jsonify({"message":"Make sure your password is at lest 8 letters"})), 401
-        elif re.search('[0-9]',password) is None:
-            return make_response(jsonify({"message":"Make sure your password has a number in it"})), 401
-        elif re.search('[A-Z]',password) is None: 
-            return make_response(jsonify({"message":"Make sure your password has a capital letter in it"})), 401
+        phonenumber = json.loads(request.data)['phonenumber']
+        username = json.loads(request.data)['username']
 
+        new_user = User(firstname, lastname, othernames, email, password, phonenumber, username)
+        users.append(new_user)
+        return make_response(jsonify({"status": 201, "message": "You registered successfully. Login to continue."})), 201
 
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
 
     def post(self):
         """Handle POST request for this view. Url ---> /v1/auth/login"""
-        
         password = json.loads(request.data)['password']
         email = json.loads(request.data)['email']
-
-        if password == "":
-            return make_response(jsonify({"message":"Please enter a valid Password."})), 401
-
-        if not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", email) is not None:
-            return make_response(jsonify({"message":"Please enter a valid Email."})), 401
-
         try:
-          
+          pass
         except Exception as e:
             response = {
                 'message': str(e)
