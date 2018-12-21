@@ -9,7 +9,7 @@ from app.data_store.data import incidents
 def create_app(config_name):
 
     from app.models.incident import Incident
-    from app.models.admin import Admin
+    # from app.models.admin import Admin
     from app.models.user import User
 
     from app.utilities.helper_functions import Helper_Functions
@@ -42,7 +42,7 @@ def create_app(config_name):
         images = json.loads(request.data)['images']
         videos = json.loads(request.data)['videos']
         comment = json.loads(request.data)['comment']
-        data = Helper_Functions.get_dict_data_from_list([created_by, doc_type, location,
+        data = Helper_Functions.get_dict_data_from_list_incident([created_by, doc_type, location,
                 status, images, videos, comment])
         validation = Helper_Functions.validate_incident_input(data)
         if validation[0] == 200:

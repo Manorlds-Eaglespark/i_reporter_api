@@ -1,5 +1,6 @@
 from app.models.incident import Incident
 from app.data_store.data import incidents
+from app.data_store.data import users
 from flask import make_response, jsonify
 
 
@@ -24,7 +25,7 @@ class Helper_Functions:
                 return incident.to_json_object()
     
     @staticmethod
-    def get_dict_data_from_list(list_data):
+    def get_dict_data_from_list_incident(list_data):
         return {
          			"created_by": list_data[0],
          			"doc_type": list_data[1],
@@ -33,6 +34,18 @@ class Helper_Functions:
          			"images": list_data[4],
          			"videos": list_data[5],
          			"comment": list_data[6]
+        }
+
+    @staticmethod
+    def get_dict_data_from_list_user(list_data):
+        return {
+         			"firstname": list_data[0],
+         			"lastname": list_data[1],
+         			"othernames": list_data[2],
+         			"email": list_data[3],
+         			"password": list_data[4],
+         			"phonenumber": list_data[5],
+         			"username": list_data[6]
         }
 
     @staticmethod
@@ -69,5 +82,12 @@ class Helper_Functions:
         for incident in incidents:
             if incident.id == int(id):
                 incidents.remove(incident)
+                return True
+        return False
+
+    @staticmethod
+    def email_exists_already(email):
+        for user in users:
+            if user.email == email:
                 return True
         return False

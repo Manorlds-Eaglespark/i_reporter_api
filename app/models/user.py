@@ -1,43 +1,45 @@
-#user object
-import re
+# app/models/redflag.py
 import uuid
-from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
 
 
-firstname = ""
-lastname = ""
-othernames = ""
-email = ""
-password = "_"
-phonenumber = ""
-username = ""
-
-
 class User:
-    def __init__(self, *args):
-        self.id = uuid.uuid1(),
-        self.firstname = firstname,
-        self.lastname = lastname,
-        self.othernames = othernames,
-        self.email = email,
-        self.password = Bcrypt().generate_password_hash(password).decode()
-        self.phonenumber = phonenumber,
-        self.username = username,
-        self.registered = datetime.now()
-        self.isadmin = "False"
+    user_info = {
+        "firstname": "",
+        "lastname": "",
+        "othernames": "",
+        "email": "",
+        "password": "",
+        "phonenumber": "",
+        "username": ""
+    }
 
-    def check_if_user_email_exist(self):
-        pass
+    def __init__(self, user_info):
+            """Initialize an user object"""
+            self.id = uuid.uuid4().clock_seq
+            self.firstname = user_info["firstname"]
+            self.lastname = user_info["lastname"]
+            self.othernames = user_info["othernames"]
+            self.email = user_info["email"]
+            self.password = user_info["password"]
+            self.phonenumber = user_info["phonenumber"]
+            self.username = user_info["username"]
+            self.registered = datetime.now()
+            self.isadmin = "False"
 
-    @staticmethod
-    def login_validate(email, password):
-        if not username or username.isspace():
-            return 'Username field can not be left empty.'
-        elif not password or password.isspace():
-            return 'Password field can not be left empty.'
-        else:
-            return None
+
+    def to_json_object(self):
+        return {
+            "id":self.id,
+            "firstname":self.firstname,
+            "lastname":self.lastname,
+            "othernames":self.othernames,
+            "email":self.email,
+            "phonenumber":self.phonenumber,
+            "username":self.username,
+            "registered":self.registered,
+            "isadmin":self.isadmin
+        }
 
     def password_is_valid(self, password):
         return Bcrypt().check_password_hash(self.password, password)
@@ -74,13 +76,15 @@ class User:
     @staticmethod
     def decode_admin_status(token):
         """Decodes the email from the Authorization header."""
-        payload = jwt.decode(token, str(os.getenv('SECRET')), algorithms='HS256')
+        payload = jwt.decode(token, str(
+            os.getenv('SECRET')), algorithms='HS256')
         return payload['adn']
 
     @staticmethod
     def decode_email(token):
         """Decodes the email from the Authorization header."""
-        payload = jwt.decode(token, str(os.getenv('SECRET')), algorithms='HS256')
+        payload = jwt.decode(token, str(
+            os.getenv('SECRET')), algorithms='HS256')
         return payload['eml']
 
     @staticmethod
@@ -88,7 +92,8 @@ class User:
         """Decodes the access token from the Authorization header."""
         try:
             # try to decode the token using our SECRET variable
-            payload = jwt.decode(token, str(os.getenv('SECRET')), algorithms='HS256')
+            payload = jwt.decode(token, str(
+                os.getenv('SECRET')), algorithms='HS256')
             return payload['sub']
         except jwt.ExpiredSignatureError:
             # the token is expired, return an error string

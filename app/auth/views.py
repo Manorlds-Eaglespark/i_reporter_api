@@ -7,14 +7,13 @@ from flask.views import MethodView
 from flask import make_response, request, jsonify, abort, json
 from app.models.user import User
 from app.data_store.data import users
+from app.utilities.helper_functions import Helper_Functions
 import re
 
 
 class RegistrationView(MethodView):
     """This class registers a new user."""
-
     def post(self):
-        """Handle POST request for this view. Url ---> /v1/auth/register"""
 
         firstname = json.loads(request.data)['firstname']
         lastname = json.loads(request.data)['lastname']
@@ -24,9 +23,15 @@ class RegistrationView(MethodView):
         phonenumber = json.loads(request.data)['phonenumber']
         username = json.loads(request.data)['username']
 
-        new_user = User(firstname, lastname, othernames, email, password, phonenumber, username)
-        users.append(new_user)
-        return make_response(jsonify({"status": 201, "message": "You registered successfully. Login to continue."})), 201
+        if Helper_Functions.email_exists_already(email) is True:
+            return make_response(jsonify({"status": 400, "message": "That Email already is registered. Login or use a different Email to register."})), 400
+        else:
+            new_user_info_list = [ firstname, lastname, othernames, email, password, phonenumber, username]
+            new_user = User(Helper_Functions.get_dict_data_from_list_user(new_user_info_list))
+            
+            users.append(new_user)
+            return make_response(jsonify({"status":201, "data":new_user.to_json_object(), "message":"You registered successfully. Login to continue."})), 201
+            
 
 class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
@@ -36,7 +41,7 @@ class LoginView(MethodView):
         password = json.loads(request.data)['password']
         email = json.loads(request.data)['email']
         try:
-          pass
+            pass
         except Exception as e:
             response = {
                 'message': str(e)
