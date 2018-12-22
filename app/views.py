@@ -41,7 +41,6 @@ def create_app(config_name):
         images = json.loads(request.data)['images']
         videos = json.loads(request.data)['videos']
         comment = json.loads(request.data)['comment']
-<<<<<<< HEAD
         input_list = [created_by, doc_type, location, status, images, videos, comment]
         validate_inputs = Incident_Validation(Helper_Functions.get_dict_data_from_list_incident(input_list))
         validated_inputs = validate_inputs.check_types()
@@ -51,17 +50,6 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(201, red_flag.to_json_object(), "Created red-flag record")
         else:
             return Helper_Functions.the_return_method(validated_inputs[0], None, validated_inputs[1])
-=======
-        data = Helper_Functions.get_dict_data_from_list([created_by, doc_type, location,
-                status, images, videos, comment])
-        validation = Helper_Functions.validate_incident_input(data)
-        if validation[0] == 200:
-            red_flag = Incident(data)
-            incidents.append(red_flag)
-            return Helper_Functions.the_return_method(201, red_flag.to_json_object(), "Created red-flag record")
-        else:
-            return Helper_Functions.the_return_method(validation[0], None, validation[1])
->>>>>>> ft-tests
     
     @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):

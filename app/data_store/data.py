@@ -5,8 +5,21 @@ from app.models.incident import Incident
 #users
 
 # user1 = Admin(1, "Anorld", "Mukone", "Magister", "manorldsapiens@gmail.com", "123456", "0785555", "Manorld")
-user2 = User({"id":1,"firstname": "Bob", "lastname": "Marley", "othernames": "", "email": "bob.marley@gmail.com", "password": "afsdfas21", "phonenumber": "0414225555", "username":"Bob Mar"})
-user3 = User({"id": 3, "firstname": "Christine", "lastname": "Turky", "othernames": "Sweeri", "email":"christinet@gmail.com", "password":"asdfdsaf", "phonenumber":"013234565", "username":"Sweeri"})
+register_user = {
+                    "firstname": "Bob",
+                    "lastname": "Marley",
+                    "othernames": "",
+                    "email": "bob.mareley@gmail.com",
+                    "password": "afsdfas2A1",
+                    "phonenumber": "0414225555",
+                    "username": "Bob Mar"
+                    }
+user2_data = {"firstname": "Bob", "lastname": "Marley", "othernames": "",
+              "email": "bob.marley@gmail.com", "password": "afsdfas21", "phonenumber": "0414225555", "username": "Bob Mar"}
+user3_data = {"firstname": "Christine", "lastname": "Turky", "othernames": "Sweeri",
+              "email": "christinet@gmail.com", "password": "asdfdsaf", "phonenumber": "013234565", "username": "Sweeri"}
+user2 = User(user2_data)
+user3 = User(user3_data)
 
 users = [user2, user3]
 

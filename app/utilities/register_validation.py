@@ -24,7 +24,7 @@ class Register_Validation():
         self.username = init_dict["username"]
 
     def check_input(self):
-        if not (self.firstname and self.lastname and self.othernames and self.email and self.password and self.phonenumber and self.username):
+        if not (self.firstname and self.lastname and self.email and self.password and self.phonenumber and self.username):
             return [400, "Make sure you fill all the required fields"]
         elif (type(self.firstname) is not str or type(self.lastname) is not str or type(self.othernames) is not str or type(self.email) is not str or type(self.password) is not str or type(self.phonenumber) is not str or type(self.username) is not str):
             return [400, "Make sure to strings use only "]

@@ -7,16 +7,15 @@ from datetime import datetime, timedelta
 
 
 class User:
-<<<<<<< HEAD
     user_info = {
-        "firstname": "",
-        "lastname": "",
-        "othernames": "",
-        "email": "",
-        "password": "",
-        "phonenumber": "",
-        "username": ""
-    }
+                    "firstname": "",
+                    "lastname": "",
+                    "othernames": "",
+                    "email": "",
+                    "password": "",
+                    "phonenumber": "",
+                    "username": ""
+                }
 
     def __init__(self, user_info):
             """Initialize an user object"""
@@ -83,34 +82,4 @@ class User:
         payload = jwt.decode(token, str(
             os.getenv('SECRET')), algorithms='HS256')
         return payload['adn']
-=======
-    def __init__(self, *args):
-        self.id = uuid.uuid1(),
-        self.firstname = firstname,
-        self.lastname = lastname,
-        self.othernames = othernames,
-        self.email = email,
-        self.password = password,
-        self.phonenumber = phonenumber,
-        self.username = username,
-        self.registered = datetime.now()
-        self.isadmin = "False"
-        
-    def check_if_user_email_exist(self):
-        pass
->>>>>>> ft-tests
 
-    @staticmethod
-    def decode_token(token):
-        """Decodes the access token from the Authorization header."""
-        try:
-            # try to decode the token using our SECRET variable
-            payload = jwt.decode(token, str(
-                os.getenv('SECRET')), algorithms='HS256')
-            return payload['sub']
-        except jwt.ExpiredSignatureError:
-            # the token is expired, return an error string
-            return "Expired token. Please login to get a new token"
-        except jwt.InvalidTokenError:
-            # the token is invalid, return an error string
-            return "Invalid token. Please register or login"
