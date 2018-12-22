@@ -45,7 +45,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "created_by field required for user creating this redflag")
+            data["message"], "created_by field should be of type int")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_string_creator_id(self):
@@ -56,7 +56,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "created_by should be of type int.")
+            data["message"], "created_by field should be of type int")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_no_doc_type(self):
@@ -67,7 +67,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "doc_type should either be red-flag or intervation. You entered: ")
+            data["message"], "Type should be of type string: Either 'red-flag' or 'intervation'")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_other_doc_type(self):
@@ -78,7 +78,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "doc_type should either be red-flag or intervation. You entered: redd_flag")
+            data["message"], "Valid status required. Status should be of type string")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_no_location(self):
@@ -89,7 +89,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "Location field required.")
+            data["message"], "Valid location required. Location should be of type string")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_no_comment(self):
@@ -100,7 +100,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(
-            data["message"], "Make sure you filled these required fields: Status, images, videos and comment")
+            data["message"], "Valid comment required. Comment should be of type string")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_update_red_flag_location(self):
