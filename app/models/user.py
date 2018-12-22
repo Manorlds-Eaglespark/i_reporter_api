@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 
 
 class User:
+<<<<<<< HEAD
     user_info = {
         "firstname": "",
         "lastname": "",
@@ -82,6 +83,22 @@ class User:
         payload = jwt.decode(token, str(
             os.getenv('SECRET')), algorithms='HS256')
         return payload['adn']
+=======
+    def __init__(self, *args):
+        self.id = uuid.uuid1(),
+        self.firstname = firstname,
+        self.lastname = lastname,
+        self.othernames = othernames,
+        self.email = email,
+        self.password = password,
+        self.phonenumber = phonenumber,
+        self.username = username,
+        self.registered = datetime.now()
+        self.isadmin = "False"
+        
+    def check_if_user_email_exist(self):
+        pass
+>>>>>>> ft-tests
 
     @staticmethod
     def decode_token(token):

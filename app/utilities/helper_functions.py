@@ -37,6 +37,7 @@ class Helper_Functions:
         }
 
     @staticmethod
+<<<<<<< HEAD
     def get_dict_data_from_list_user(list_data):
         return {
          			"firstname": list_data[0],
@@ -47,6 +48,21 @@ class Helper_Functions:
          			"phonenumber": list_data[5],
          			"username": list_data[6]
         }
+=======
+    def validate_incident_input(data):
+        if not data["created_by"]:
+            return [400, "created_by field required for user creating this redflag", data["created_by"]]
+        if type(data["created_by"]) is not int:
+            return[400, "created_by should be of type int."]
+        if not (data["doc_type"] == "red-flag") and not (data["doc_type"] == "intervation") or data["doc_type"].isspace():
+            return[400, "doc_type should either be red-flag or intervation. You entered: "+data["doc_type"]]
+        if not data["location"] or data["location"].isspace():
+            return [400, "Location field required."]
+        if not data["status"] or not data["images"] or not data["videos"] or not data["comment"]:
+            return [400, "Make sure you filled these required fields: Status, images, videos and comment"]
+
+        return [200, "All Good"]
+>>>>>>> ft-tests
 
     @staticmethod
     def update_location(id, location):
