@@ -151,3 +151,39 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["message"], "red-flag record has been deleted")
         self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
+
+    def test_create_new_red_flag_no_image(self):
+        input_data = incident3_data
+        input_data["images"] = " "
+        
+        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data["message"], "Valid images link required. Images should be of type string")
+        self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
+  
+    def test_create_new_red_flag_no_video(self):
+        input_data = incident3_data
+        input_data["status"] = "sfdfdas"
+        input_data["images"] = "sdafsdsad"
+        input_data["videos"] = " "
+        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data["message"], "Valid video link required. Vidoes should be of type string")
+        self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
+
+    def test_create_new_red_flag_no_status(self):
+        input_data = incident3_data
+        input_data["status"] = " "
+        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertEqual(
+            data["message"], "Valid status required. Status should be of type string")
+        self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
