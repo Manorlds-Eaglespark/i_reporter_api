@@ -9,13 +9,17 @@ register_user = {
                     "firstname": "Bob",
                     "lastname": "Marley",
                     "othernames": "",
-                    "email": "bob.mareley@gmail.com",
+                    "email": "bobmareley@gmail.com",
                     "password": "afsdfas2A1",
                     "phonenumber": "0414225555",
                     "username": "Bob Mar"
                     }
+login_user = {
+    "email": "bob.marley@gmail.com",
+    "password": "afsQdfas21"
+}
 user2_data = {"firstname": "Bob", "lastname": "Marley", "othernames": "",
-              "email": "bob.marley@gmail.com", "password": "afsdfas21", "phonenumber": "0414225555", "username": "Bob Mar"}
+              "email": "bob.marley@gmail.com", "password": "afsQdfas21", "phonenumber": "0414225555", "username": "Bob Mar"}
 user3_data = {"firstname": "Christine", "lastname": "Turky", "othernames": "Sweeri",
               "email": "christinet@gmail.com", "password": "asdfdsaf", "phonenumber": "013234565", "username": "Sweeri"}
 user2 = User(user2_data)

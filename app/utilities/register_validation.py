@@ -30,13 +30,12 @@ class Register_Validation():
             return [400, "Make sure to strings use only "]
         elif self.firstname.isspace() or self.lastname.isspace() or self.othernames.isspace() or self.email.isspace() or self.password.isspace() or self.phonenumber.isspace() or self.username.isspace():
             return [400, "Make sure to have no empty spaces in fields"]
-
-        elif not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", self.email) is not None:
-            return [401, "Please enter a valid Email."]
         elif len(self.password) < 4:
             return [401, "Make sure your password is at lest 4 letters"]
         elif re.search('[0-9]', self.password) is None:
             return [401, "Make sure your password has a number in it"]
         elif re.search('[A-Z]', self.password) is None:
             return [401, "Make sure your password has a capital letter in it"]
+        elif not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", self.email) is not None:
+            return [401, "Please enter a valid Email."]
         return [200, "All Good"]

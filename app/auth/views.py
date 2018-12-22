@@ -52,19 +52,20 @@ class LoginView(MethodView):
         if validated_input[0] == 200:
             try:
                 user = Helper_Functions.get_user(email)
-                if User.password_is_valid(user.password, password):
-     
-                    access_token = user.generate_token(user.id, user.isadmin)
-                    if access_token:
-                            response = {
-                                'message': 'You logged in successfully.',
-                                'access_token':  access_token.decode()
-                            }
-                            return make_response(jsonify(response)), 200
+                if user:
+                        if User.password_is_valid(user.password, password):
+            
+                            access_token = user.generate_token(user.id, user.isadmin)
+                            if access_token:
+                                    response = {
+                                        'message': 'You logged in successfully.',
+                                        'access_token':  access_token.decode()
+                                    }
+                                    return make_response(jsonify(response)), 200
+                        else:
+                            return Helper_Functions.the_return_method(401, None, "Enter a correct Password")
                 else:
-                    return Helper_Functions.the_return_method(400, None, "Enter a valid Password")
-
-
+                    return Helper_Functions.the_return_method(401, None, "Email not registered on any account.")
             except Exception as e:
                 response = {
                     'message': str(e)
