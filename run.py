@@ -1,0 +1,10 @@
+
+import os
+from app.views import create_app
+
+
+# config_name = os.getenv('APP_SETTINGS') # config_name = "development"
+app = create_app('development')
+
+if __name__ == '__main__':  
+    app.run()
