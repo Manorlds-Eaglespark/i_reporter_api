@@ -7,43 +7,22 @@ from datetime import datetime, timedelta
 
 
 class User:
-    user_info = {
-                    "firstname": "",
-                    "lastname": "",
-                    "othernames": "",
-                    "email": "",
-                    "password": "",
-                    "phonenumber": "",
-                    "username": ""
-                }
-
-    def __init__(self, user_info):
+    def __init__(self, *args):
             """Initialize an user object"""
             self.id = uuid.uuid4().clock_seq
-            self.firstname = user_info["firstname"]
-            self.lastname = user_info["lastname"]
-            self.othernames = user_info["othernames"]
-            self.email = user_info["email"]
-            self.password = Bcrypt().generate_password_hash(
-                user_info["password"]).decode()
-            self.phonenumber = user_info["phonenumber"]
-            self.username = user_info["username"]
+            self.firstname = args[0][0]
+            self.lastname = args[0][1]
+            self.othernames = args[0][2]
+            self.email = args[0][3]
+            self.password = Bcrypt().generate_password_hash(args[0][4]).decode()
+            self.phonenumber = args[0][5]
+            self.username = args[0][6]
             self.registered = datetime.now()
             self.isadmin = "False"
 
 
     def to_json_object(self):
-        return {
-            "id":self.id,
-            "firstname":self.firstname,
-            "lastname":self.lastname,
-            "othernames":self.othernames,
-            "email":self.email,
-            "phonenumber":self.phonenumber,
-            "username":self.username,
-            "registered":self.registered,
-            "isadmin":self.isadmin
-        }
+        return self.__dict__
 
     def password_is_valid(self, password):
         return Bcrypt().check_password_hash(self.password, password)

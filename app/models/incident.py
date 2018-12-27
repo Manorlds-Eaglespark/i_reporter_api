@@ -2,40 +2,19 @@
 import uuid
 from datetime import datetime
 
-class Incident:
-	init_dict ={
-				"created_by":"",
-				"type":"",
-				"location":"",
-				"status":"",
-				"images":"",
-				"videos":"",
-				"comment":""
-				}
 
-	def __init__(self, init_dict):
+class Incident:
+	def __init__(self, *args):
 		"""Initialize an incident object"""
 		self.id = uuid.uuid4().clock_seq
 		self.created_on = datetime.now()
-		self.created_by = init_dict["created_by"]
-		self.type = init_dict["type"]
-		self.location = init_dict["location"]
-		self.status = init_dict["status"]
-		self.images = init_dict["images"]
-		self.videos = init_dict["videos"]
-		self.comment = init_dict["comment"]
+		self.created_by = args[0][0]
+		self.type = args[0][1]
+		self.location = args[0][2]
+		self.status = args[0][3]
+		self.images = args[0][4]
+		self.videos = args[0][5]
+		self.comment = args[0][6]
 
 	def to_json_object(self):
-		return {
-			"id":self.id,
-			"created_on":self.created_on,
-			"created_by":self.created_by,
-			"type":self.type,
-			"location":self.location,
-			"status":self.status,
-			"images":self.images,
-			"videos":self.videos,
-			"comment":self.comment
-		}
-
-
+		return self.__dict__
