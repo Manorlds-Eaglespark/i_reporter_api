@@ -5,19 +5,11 @@ from app.models.incident import Incident
 #users
 
 # user1 = Admin(1, "Anorld", "Mukone", "Magister", "manorldsapiens@gmail.com", "123456", "0785555", "Manorld")
-register_user = {
-                    "firstname": "Bob",
-                    "lastname": "Marley",
-                    "othernames": "",
-                    "email": "bobmareley@gmail.com",
-                    "password": "afsdfas2A1",
-                    "phonenumber": "0414225555",
-                    "username": "Bob Mar"
-                    }
+register_user = ["Bob", "Marley", "", "bobmareley@gmail.com", "afsdfas2A1", "0414225555", "Bob Mar"]
 login_user = {
-    "email": "bob.marley@gmail.com",
-    "password": "afsQdfas21"
-}
+                "email": "bob.marley@gmail.com",
+                "password": "afsQdfas21"
+            }
 user2_data = ["Bob", "Marley", "","bob.marley@gmail.com", "afsQdfas21", "0414225555", "Bob Mar"]
 user3_data = ["Christine", "Turky", "Sweeri","christinet@gmail.com", "asdfdsaf", "013234565", "Sweeri"]
 user2 = User(user2_data)

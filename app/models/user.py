@@ -60,4 +60,3 @@ class User:
         payload = jwt.decode(token, str(
             os.getenv('SECRET')), algorithms='HS256')
         return payload['adn']
-

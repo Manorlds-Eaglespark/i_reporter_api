@@ -90,5 +90,4 @@ auth_blueprint.add_url_rule(
     '/api/v1/auth/login',
     view_func=login_view,
     methods=['POST']
-
 )
