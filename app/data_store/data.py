@@ -5,15 +5,16 @@ from app.models.incident import Incident
 #users
 
 # user1 = Admin(1, "Anorld", "Mukone", "Magister", "manorldsapiens@gmail.com", "123456", "0785555", "Manorld")
-register_user = ["Bob", "Marley", "", "bobmareley@gmail.com", "afsdfas2A1", "0414225555", "Bob Mar"]
+register_user = {"firstname":"Bob", "lastname":"Marley", "othernames":"", "email":"bobmareley@gmail.com", "password":"afsdfas2A1", "phonenumber":"0414225555", "username":"Bob Mar"}
 login_user = {
                 "email": "bob.marley@gmail.com",
                 "password": "afsQdfas21"
             }
 
 
-user2_data_dictionary = ["Bob", "Marley", "","bob.marley@gmail.com", "afsQdfas21", "0414225555", "Bob Mar"]
-user3_data_dictionary = ["Christine", "Turky", "Sweeri","christinet@gmail.com", "asdfdsaf", "013234565", "Sweeri"]
+user2_data_dictionary = {"firstname":"Bob", "lastname":"Marley", "othernames":"",
+                         "email":"bob.marley@gmail.com", "password":"afsQdfas21", "phonenumber":"0414225555", "username":"Bob Mar"}
+user3_data_dictionary = {"firstname":"Christine", "lastname":"Turky", "othernames":"Sweeri","email":"christinet@gmail.com", "password":"asdfdsaf", "phonenumber":"013234565", "username":"Sweeri"}
 
 user2_data = ["Bob", "Marley", "","bob.marley@gmail.com", "afsQdfas21", "0414225555", "Bob Mar"]
 user3_data = ["Christine", "Turky", "Sweeri","christinet@gmail.com", "asdfdsaf", "013234565", "Sweeri"]
