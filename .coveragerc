@@ -1,0 +1,14 @@
+[report]
+omit =
+  */python?.?/*
+  
+  */app/data_store/*
+  */app/database/*
+  */app/models/*
+  */instance/*
+  *data_store/*
+  */run.py
+  */tests/*
+  */app/utilities/*
+  *app/__init__.py             
+  *app/auth/__init__.py
