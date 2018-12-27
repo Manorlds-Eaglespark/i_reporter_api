@@ -38,6 +38,7 @@ def create_app(config_name):
     def create_redflag():
 
         input_data = json.loads(request.data)
+
         created_by = input_data['created_by']
         doc_type   = input_data['type']
         location   = input_data['location']
@@ -50,13 +51,19 @@ def create_app(config_name):
 
         validate_inputs = Incident_Validation(
             Helper_Functions.get_dict_data_from_list_incident(input_list))
+
         validated_inputs = validate_inputs.check_types()
-        if validated_inputs[0] == 200:
-            red_flag = Incident(input_list)
-            incidents.append(red_flag)
-            return make_response(jsonify({"status": 201, "data": [{"id":red_flag.id, "message":"Created red-flag record"}]}))
+        duplicate_exists = Helper_Functions.incident_exists_check(comment)
+        if not duplicate_exists:
+
+            if validated_inputs[0] == 200:
+                red_flag = Incident(input_list)
+                incidents.append(red_flag)
+                return make_response(jsonify({"status": 201, "data": [{"id":red_flag.id, "message":"Created red-flag record"}]}))
+            else:
+                return make_response(jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
         else:
-            return Helper_Functions.the_return_method(validated_inputs[0], None, validated_inputs[1])
+            return make_response(jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]}))
 
     @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):
@@ -65,7 +72,7 @@ def create_app(config_name):
         if data:
             return make_response(jsonify({"status": 200, "data": [{"id":data["id"], "message":"Updated red-flag record’s location"}]}))
         else:
-            return Helper_Functions.the_return_method(404, None, "Red-flag not found")
+            return make_response(jsonify({"status": 404, "error": "Resource not found."}))
 
     @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=['PATCH'])
     def update_redflag_comment(red_flag_id):
@@ -74,7 +81,7 @@ def create_app(config_name):
         if data:
             return make_response(jsonify({"status": 200, "data": [{"id": data["id"], "message":"Updated red-flag record’s comment"}]}))
         else:
-            return Helper_Functions.the_return_method(404, None, "Resource with that id not found")
+            return make_response(jsonify({"status": 404, "error": "Resource not found."}))
 
     @app.route('/api/v1/red-flags/<red_flag_id>', methods=['DELETE'])
     def delete_redflag(red_flag_id):
