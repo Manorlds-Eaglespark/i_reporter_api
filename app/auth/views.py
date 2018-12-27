@@ -15,13 +15,15 @@ class RegistrationView(MethodView):
     """This class registers a new user."""
     def post(self):
 
-        firstname = json.loads(request.data)['firstname']
-        lastname = json.loads(request.data)['lastname']
-        othernames = json.loads(request.data)['othernames']
-        email = json.loads(request.data)['email']
-        password = json.loads(request.data)['password']
-        phonenumber = json.loads(request.data)['phonenumber']
-        username = json.loads(request.data)['username']
+        input_data = json.loads(request.data)
+
+        firstname = input_data['firstname']
+        lastname = input_data['lastname']
+        othernames = input_data['othernames']
+        email = input_data['email']
+        password = input_data['password']
+        phonenumber = input_data['phonenumber']
+        username = input_data['username']
 
         validate_input = Register_Validation(
             {"firstname": firstname, "lastname": lastname, "othernames": othernames, "email": email, "password": password, "phonenumber": phonenumber, "username": username})
@@ -31,7 +33,7 @@ class RegistrationView(MethodView):
                 return make_response(jsonify({"status": 400, "message": "That Email already is registered. Login or use a different Email to register."})), 400
             else:
                 new_user_info_list = [ firstname, lastname, othernames, email, password, phonenumber, username]
-                new_user = User(Helper_Functions.get_dict_data_from_list_user(new_user_info_list))
+                new_user = User(new_user_info_list)
                 
                 users.append(new_user)
                 return make_response(jsonify({"status":201, "data":new_user.to_json_object(), "message":"You registered successfully. Login to continue."})), 201

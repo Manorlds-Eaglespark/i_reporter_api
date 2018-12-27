@@ -10,16 +10,15 @@ class User:
     def __init__(self, *args):
             """Initialize an user object"""
             self.id = uuid.uuid4().clock_seq
-            self.firstname = args[0][0]
-            self.lastname = args[0][1]
+            self.firstname  = args[0][0]
+            self.lastname   = args[0][1]
             self.othernames = args[0][2]
-            self.email = args[0][3]
-            self.password = Bcrypt().generate_password_hash(args[0][4]).decode()
+            self.email      = args[0][3]
+            self.password   = Bcrypt().generate_password_hash(args[0][4]).decode()
             self.phonenumber = args[0][5]
-            self.username = args[0][6]
+            self.username   = args[0][6]
             self.registered = datetime.now()
-            self.isadmin = "False"
-
+            self.isadmin    = "False"
 
     def to_json_object(self):
         return self.__dict__
