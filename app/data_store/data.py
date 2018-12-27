@@ -10,6 +10,11 @@ login_user = {
                 "email": "bob.marley@gmail.com",
                 "password": "afsQdfas21"
             }
+
+
+user2_data_dictionary = ["Bob", "Marley", "","bob.marley@gmail.com", "afsQdfas21", "0414225555", "Bob Mar"]
+user3_data_dictionary = ["Christine", "Turky", "Sweeri","christinet@gmail.com", "asdfdsaf", "013234565", "Sweeri"]
+
 user2_data = ["Bob", "Marley", "","bob.marley@gmail.com", "afsQdfas21", "0414225555", "Bob Mar"]
 user3_data = ["Christine", "Turky", "Sweeri","christinet@gmail.com", "asdfdsaf", "013234565", "Sweeri"]
 user2 = User(user2_data)

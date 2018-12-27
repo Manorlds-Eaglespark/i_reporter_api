@@ -10,7 +10,6 @@ class Helper_Functions:
     def the_return_method(status, data, message):
         return make_response(jsonify({"status": status, "data": data, "message": message})), status
 
-
     @staticmethod
     def get_red_flags():
         red_flags_list = []
@@ -18,6 +17,7 @@ class Helper_Functions:
             if incident.type == "red-flag":
                 red_flags_list.append(incident.to_json_object())
         return red_flags_list
+        
     @staticmethod
     def get_a_red_flag(id):
         for incident in incidents:
