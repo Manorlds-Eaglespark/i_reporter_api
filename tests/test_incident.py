@@ -12,20 +12,20 @@ class TestFlaskApi(unittest.TestCase):
     def test_get_list_of_users(self):
         response = self.client.get('/api/v1/red-flags')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(data["status"], 200)
 
     def test_get_an_incident(self):
         id = incidents[0].id
         response = self.client.get('/api/v1/red-flags/'+str(id))
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(data["data"]["location"], "0.215, 0.784")
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(data["data"][0]["location"], "0.215, 0.784")
 
     def test_get_an_incident_with_unknown_id(self):
         response = self.client.get('/api/v1/red-flags/'+str(1000010))
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
-        self.assertEqual(data["message"], "Resource not found with given id")
+        self.assertEqual(data["error"], "Resource not found.")
 
     def test_create_new_red_flag(self):
         response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
@@ -33,6 +33,13 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 201)
         self.assertEqual(data["data"][0]["message"], "Created red-flag record")
+
+    def test_create_new_red_flag_already_saved(self):
+        response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["error"], "a similar resource already exists.")
 
     def test_create_new_red_flag_no_creator_id(self):
         input_data = incident5_data_dictionary
@@ -73,7 +80,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 400)
         self.assertEqual(
             data["error"], "Valid status required. Status should be of type string")
-        self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_no_location(self):
         input_data = incident2_data_dictionary
@@ -84,7 +90,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 400)
         self.assertEqual(
             data["error"], "Valid location required. Location should be of type string")
-        self.assertEqual(str(type(data["data"])), "<class 'NoneType'>")
 
     def test_create_new_red_flag_no_comment(self):
         input_data = incident3_data_dictionary
