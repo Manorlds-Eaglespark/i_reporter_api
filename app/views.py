@@ -54,16 +54,19 @@ def create_app(config_name):
 
         validated_inputs = validate_inputs.check_types()
         duplicate_exists = Helper_Functions.incident_exists_check(comment)
-        if not duplicate_exists:
+        
+        if validated_inputs[0] == 200:
 
-            if validated_inputs[0] == 200:
+            if not duplicate_exists:
+                
                 red_flag = Incident(input_list)
                 incidents.append(red_flag)
                 return make_response(jsonify({"status": 201, "data": [{"id":red_flag.id, "message":"Created red-flag record"}]}))
             else:
-                return make_response(jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
+                return make_response(jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]}))
+                
         else:
-            return make_response(jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]}))
+            return make_response(jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
 
     @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):

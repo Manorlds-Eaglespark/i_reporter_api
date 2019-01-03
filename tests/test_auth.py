@@ -1,7 +1,7 @@
 import unittest
 import json
 from app.views import create_app
-from app.data_store.data import register_user, user2_data, login_user
+from app.data_store.data import register_user, user2_data_dictionary, login_user
 
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
@@ -83,7 +83,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_register_existing_user(self):
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(user2_data), content_type='application/json')
+            '/api/v1/auth/register', data=json.dumps(user2_data_dictionary), content_type='application/json')
         data = json.loads(response.data) 
         self.assertEqual(response.status_code, 400)
         self.assertIn(
