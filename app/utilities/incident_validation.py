@@ -29,10 +29,10 @@ class Incident_Validation():
             return [400, "Valid location required. Location should be of type string"]
         elif type(self.status) is not str or self.status.isspace() or len(self.status) < 4:
             return [400, "Valid status required. Status should be of type string"]
-        elif type(self.images) is not str or self.images.isspace() or len(self.images) < 4:
-            return [400, "Valid images link required. Images should be of type string"]
-        elif type(self.videos) is not str or self.videos.isspace() or len(self.videos) < 4:
-            return [400, "Valid video link required. Vidoes should be of type string"]
+        elif type(self.images) is not list or not self.images or len(self.images) < 1:
+            return [400, "Add images links in this format: [a, b, c]"]
+        elif type(self.videos) is not list or not self.videos or len(self.videos) < 1:
+            return [400, "Add video links in this format: [a, b, c]"]
         elif type(self.comment) is not str or self.comment.isspace() or len(self.comment) < 4:
             return [400, "Valid comment required. Comment should be of type string"]
         return [200, "All good"]
