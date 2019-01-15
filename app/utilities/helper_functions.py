@@ -1,7 +1,7 @@
 from app.models.incident import Incident
 from app.data_store.data import incidents
 from app.data_store.data import users
-from flask import make_response, jsonify
+from flask import make_response, jsonify, request
 
 
 class Helper_Functions:
@@ -9,6 +9,15 @@ class Helper_Functions:
     @staticmethod
     def the_return_method(status, message):
         return make_response(jsonify({"status": status, "error": message})), status
+
+    @staticmethod
+    def get_access_token():
+        """Get the access token from the header"""
+        auth_header = request.headers.get('Authorization')
+        if auth_header is None:
+            return None
+        access_token = str(auth_header).split(" ")[1][:-1]
+        return access_token
 
     @staticmethod
     def get_red_flags():
