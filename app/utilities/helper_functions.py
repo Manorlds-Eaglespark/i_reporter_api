@@ -7,8 +7,8 @@ from flask import make_response, jsonify
 class Helper_Functions:
 
     @staticmethod
-    def the_return_method(status, data, message):
-        return make_response(jsonify({"status": status, "data": data, "message": message})), status
+    def the_return_method(status, message):
+        return make_response(jsonify({"status": status, "error": message})), status
 
     @staticmethod
     def get_red_flags():
