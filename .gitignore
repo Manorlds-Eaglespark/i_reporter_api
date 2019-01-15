@@ -19,5 +19,7 @@ app/utilities/__pycache__/*
 tests/__pycache__/
 app/utilities/__pycache__/helper_functions.cpython-37.pyc
 app/utilities/__pycache__/*
-.vscode
+.vscode/
+.vscode/*
+/.vscode
 htmlcov/
