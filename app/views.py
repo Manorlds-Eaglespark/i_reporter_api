@@ -18,6 +18,18 @@ def create_app(config_name):
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
 
+    @app.route('/', methods=['GET'])
+    def welcome_to_api():
+        response = {"status":200, "data":[{
+                                            "message":"Welcome To iReporter API. Consume Using Endpoints Given Here.",
+                                            "endpoint 1": "GET     /api/v1/red-flags",
+                                            "endpoint 2": "GET     /api/v1/red-flags/<red-flag-id>",
+                                            "endpoint 3": "POST    /api/v1/red-flags",
+                                            "endpoint 4": "PATCH   /api/v1/red-flags/<red-flag-id>/location",
+                                            "endpoint 5": "PATCH   /api/v1/red-flags/<red-flag-id>/comment",
+                                            "endpoint 6": "DELETE  /red-flags/<red-flag-id>"}]}
+        return make_response(jsonify(response)), 200
+
     @app.route('/api/v1/red-flags', methods=['GET'])
     def get_redflags():
         data = Helper_Functions.get_red_flags()

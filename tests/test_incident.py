@@ -8,6 +8,11 @@ class TestFlaskApi(unittest.TestCase):
         self.app = create_app(config_name="testing")
         self.client = self.app.test_client()
 
+    def test_server_is_running(self):
+        response = self.client.get('/')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+
     def test_get_list_of_incidents_when_none_exists(self):
         incidents.clear()
         response = self.client.get('/api/v1/red-flags')
