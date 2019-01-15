@@ -21,7 +21,7 @@ def create_app(config_name):
     @app.route('/api/v1/red-flags', methods=['GET'])
     def get_redflags():
         data = Helper_Functions.get_red_flags()
-        if data:
+        if len(data) > 0:
             return make_response(jsonify({"status": 200, "data": data})), 200
         else:
             return make_response(jsonify({"status":404, "error":"No resource added yet."}))

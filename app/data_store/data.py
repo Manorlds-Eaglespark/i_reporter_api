@@ -49,8 +49,9 @@ incident3 = Incident(incident3_data)
 incident4 = Incident(incident4_data)
 incident5 = Incident(incident5_data)
 
-incidents = [incident1, incident2, incident3, incident4, incident5]
+trial_incidents_list = [incident1, incident2, incident3, incident4, incident5]
 
+incidents = []
 new_location = {
 	"location": "new location"
 }
