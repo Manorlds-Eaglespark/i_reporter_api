@@ -93,12 +93,15 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_create_new_red_flag_no_comment(self):
         input_data = incident3_data_dictionary
+        input_data["videos"] = ["sfsfsdf.com/video/fsdffsdfdsf"]
+        input_data["images"] = ["sfsfsdf.com/image/fsdffsdfdsf"]
         input_data["comment"] = ""
         response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
-        self.assertEqual(data["error"], "Valid comment required. Comment should be of type string")
+        self.assertEqual(
+            data["error"], "Valid comment required. Comment should be of type string")
 
     def test_update_red_flag_location(self):
         id = incidents[1].id
@@ -150,19 +153,19 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(
-            data["error"], "Valid images link required. Images should be of type string")
+            data["error"], "Add images links in this format: [a, b, c]")
   
     def test_create_new_red_flag_no_video(self):
         input_data = incident3_data_dictionary
-        input_data["status"] = "sfdfdas"
-        input_data["images"] = "sdafsdsad"
+        input_data["status"] = "red-flag"
+        input_data["images"] = ["dsfdsf.com/images/image.jpg"]
         input_data["videos"] = " "
         response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(
-            data["error"], "Valid video link required. Vidoes should be of type string")
+            data["error"], "Add video links in this format: [a, b, c]")
 
     def test_create_new_red_flag_no_status(self):
         input_data = incident3_data_dictionary
