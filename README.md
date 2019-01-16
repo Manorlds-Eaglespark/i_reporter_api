@@ -1,5 +1,5 @@
 # iReporter API
-[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api.svg?branch=hot-fix-auth)](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api)       [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/i_reporter_api/badge.svg?branch=hot-fix-auth)](https://coveralls.io/github/Manorlds-Eaglespark/i_reporter_api?branch=hot-fix-auth)       [![Maintainability](https://api.codeclimate.com/v1/badges/081ad690f6cad3b3ca9d/maintainability)](https://codeclimate.com/github/Manorlds-Eaglespark/i_reporter_api/maintainability)       [![Requirements Status](https://requires.io/github/Manorlds-Eaglespark/i_reporter_api/requirements.svg?branch=hot-fix-auth)](https://requires.io/github/Manorlds-Eaglespark/i_reporter_api/requirements/?branch=hot-fix-auth)
+[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api.svg?branch=hot-fix-auth)](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api)       [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/i_reporter_api/badge.svg?branch=hot-fix-auth)](https://coveralls.io/github/Manorlds-Eaglespark/i_reporter_api?branch=hot-fix-auth)       [![Maintainability](https://api.codeclimate.com/v1/badges/081ad690f6cad3b3ca9d/maintainability)](https://codeclimate.com/github/Manorlds-Eaglespark/i_reporter_api/maintainability)
 
 Corruption is a huge bane to Africa’s development. African countries must develop novel and localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
@@ -28,7 +28,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 * Switch to the appropriate branch and follow along.
 
 
-## RUNNING TESTS
+## RUNNING TESTS LOCALLY
 * Install Pytest to run the unittests
 ```pip install pyteset```
 * Run tests by entering pytest into your terimal.
