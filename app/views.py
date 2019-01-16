@@ -41,13 +41,9 @@ def create_app(config_name):
                 if len(data) > 0:
                     return make_response(jsonify({"status": 200, "data": data})), 200
                 else:
-                    return make_response(jsonify({"status":404, "error":"No resource added yet."}))
+                    return Helper_Functions.the_return_method(404, "No resource added yet.")
             else:
-                response = {
-                            'status':401,
-                            'error': message
-                            }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -63,13 +59,10 @@ def create_app(config_name):
                 if data:
                     return make_response(jsonify({"status": 200, "data": [data]})), 200
                 else:
-                    return make_response(jsonify({"status": 404, "error": "Resource not found."})), 404
+                    return Helper_Functions.the_return_method(404, "Resource not found.")
             else:
-                response = {
-                            'status':401,
-                            'error': message
-                            }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
+
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -114,11 +107,7 @@ def create_app(config_name):
                 else:
                     return make_response(jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
             else:
-                response = {
-                    'status':401,
-                    'error': message
-                }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -136,11 +125,7 @@ def create_app(config_name):
                 else:
                     return make_response(jsonify({"status": 404, "error": "Resource not found."}))
             else:
-                response = {
-                            'status':401,
-                            'error': message
-                            }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -160,11 +145,7 @@ def create_app(config_name):
                 else:
                     return make_response(jsonify({"status": 404, "error": "Resource not found."}))
             else:
-                response = {
-                            'status':401,
-                            'error': message
-                            }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -181,11 +162,7 @@ def create_app(config_name):
                 else:
                     return make_response(jsonify({"status":404, "error":"Resource not found."}))
             else:
-                response = {
-                            'status':401,
-                            'error': message
-                            }
-                return make_response(jsonify(response)), 401
+                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
