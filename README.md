@@ -54,4 +54,4 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 https://ireporter256.herokuapp.com
 
 ### AUTHOR
-* [Anorld Mukone](https://github.com/Manorlds-Eaglespark)
+ [Anorld Mukone](https://github.com/Manorlds-Eaglespark)
