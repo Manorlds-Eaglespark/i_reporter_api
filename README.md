@@ -28,20 +28,27 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 * Switch to the appropriate branch and follow along.
 
 
+## RUNNING TESTS
+* Install Pytest to run the unittests
+```pip install pyteset```
+* Run tests by enter #pytest into your terimal
+* To get your test coverage locally, use
+```pytest --cov=.```
+
+
 # Heroku API Endpoints
 
-| Left-Aligned  | Center Aligned  | Right Aligned |
-| :------------ |:---------------:| -----:|
-| col 3 is      | some wordy text | $1600 |
-| col 2 is      | centered        |   $12 |
-| zebra stripes | are neat        |    $1 |
+| HTTP Method  | End Point       | Public Access      |  Action            |
+| :------------ |:---------------:| :---------------:|---------------------:|
+| POST    | /api/v1/auth/register | TRUE |  Create an account.  |
+| POST    | /api/v1/auth/login | TRUE |  User login.  |
+| GET    | /api/v1/red-flags | TRUE |  Fetch all red-flag records.  |
+| GET    | /api/v1/red-flags/<red-flag-id>        |  TRUE |   Fetch a specific red-flag record.    |
+| POST   | /api/v1/red-flags        |    TRUE |   Create a red-flag record.   |
+| PATCH  | /api/v1/red-flags/<red-flag-id>/location  | TRUE  |   Edit the location of a specific red-flag record.  |
+| PATCH  | /api/v1/red-flags/<red-flag-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
+| DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
 
-* GET /api/v1/red-flags       - Fetch all red-flag records.
-* GET /api/v1/red-flags/<red-flag-id>       - Fetch a specific red-flag record.
-* POST /api/v1/red-flags      - Create a red-flag record.
-* PATCH /api/v1/red-flags/<red-flag-id>/location       - Edit the location of a specific red-flag record.
-* PATCH /api/v1/red-flags/<red-flag-id>/comment       - Edit the comment of a specific red-flag record.
-* DELETE /api/v1/red-flags/<red-flag-id>          - Delete a specific red flag record.
 
 # Hosted API
 https://ireporter256.herokuapp.com
