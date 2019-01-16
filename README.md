@@ -1,5 +1,5 @@
 # iReporter API
-[![Build Status](https://travis-ci.com/Manorlds-Eaglespark/i_reporter_api.svg?branch=ft-tests)](https://travis-ci.com/Manorlds-Eaglespark/i_reporter_api)       [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/i_reporter_api/badge.svg?branch=develop)](https://coveralls.io/github/Manorlds-Eaglespark/i_reporter_api?branch=develop)      [![Maintainability](https://api.codeclimate.com/v1/badges/081ad690f6cad3b3ca9d/maintainability)](https://codeclimate.com/github/Manorlds-Eaglespark/i_reporter_api/maintainability)
+[![Build Status](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api.svg?branch=hot-fix-auth)](https://travis-ci.org/Manorlds-Eaglespark/i_reporter_api)       [![Coverage Status](https://coveralls.io/repos/github/Manorlds-Eaglespark/i_reporter_api/badge.svg?branch=hot-fix-auth)](https://coveralls.io/github/Manorlds-Eaglespark/i_reporter_api?branch=hot-fix-auth)       [![Maintainability](https://api.codeclimate.com/v1/badges/081ad690f6cad3b3ca9d/maintainability)](https://codeclimate.com/github/Manorlds-Eaglespark/i_reporter_api/maintainability)
 
 Corruption is a huge bane to Africa’s development. African countries must develop novel and localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
@@ -28,17 +28,30 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 * Switch to the appropriate branch and follow along.
 
 
+## RUNNING TESTS LOCALLY
+* Install Pytest to run the unittests
+```pip install pyteset```
+* Run tests by entering pytest into your terimal.
+* To get your test coverage locally, use
+```pytest --cov=.```
+
+
 # Heroku API Endpoints
 
-* GET /api/v1/red-flags       - Fetch all red-flag records.
-* GET /api/v1/red-flags/<red-flag-id>       - Fetch a specific red-flag record.
-* POST /api/v1/red-flags      - Create a red-flag record.
-* PATCH /api/v1/red-flags/<red-flag-id>/location       - Edit the location of a specific red-flag record.
-* PATCH /api/v1/red-flags/<red-flag-id>/comment       - Edit the comment of a specific red-flag record.
-* DELETE /api/v1/red-flags/<red-flag-id>          - Delete a specific red flag record.
+| HTTP Method  | End Point       | Public Access      |  Action            |
+| :------------:|:---------------:| :---------------:|:---------------------:|
+| POST    | /api/v1/auth/register | TRUE |  Create an account.  |
+| POST    | /api/v1/auth/login | TRUE |  User login.  |
+| GET    | /api/v1/red-flags | TRUE |  Fetch all red-flag records.  |
+| GET    | /api/v1/red-flags/<red-flag-id>        |  TRUE |   Fetch a specific red-flag record.    |
+| POST   | /api/v1/red-flags        |    TRUE |   Create a red-flag record.   |
+| PATCH  | /api/v1/red-flags/<red-flag-id>/location  | TRUE  |   Edit the location of a specific red-flag record.  |
+| PATCH  | /api/v1/red-flags/<red-flag-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
+| DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
+
 
 # Hosted API
 https://ireporter256.herokuapp.com
 
 ### AUTHOR
-* [Anorld Mukone](https://github.com/Manorld-Eaglespark)
+ [Anorld Mukone](https://github.com/Manorlds-Eaglespark)

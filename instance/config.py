@@ -1,5 +1,3 @@
-# /instance/config.py
-
 import os
 
 class Config(object):
