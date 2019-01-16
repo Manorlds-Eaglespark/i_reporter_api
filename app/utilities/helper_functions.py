@@ -12,7 +12,6 @@ class Helper_Functions:
 
     @staticmethod
     def get_access_token():
-        """Get the access token from the header"""
         auth_header = request.headers.get('Authorization')
         if auth_header is None:
             return None
@@ -98,4 +97,3 @@ class Helper_Functions:
         for user in users:
             if user.email == email:
                 return user
-

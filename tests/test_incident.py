@@ -7,16 +7,17 @@ class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
         self.client = self.app.test_client()
-        login_this_user = {
-             "email": "bob.marley@gmail.com",
-             "password": "afsQdfas21"
-         }
+        login_this_user =   {
+                                "email": "bob.marley@gmail.com",
+                                "password": "afsQdfas21"
+                            }
         self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_this_user),
                                     content_type='application/json')
         data = json.loads(self.response.data)
         self.token = data["data"][0]["access_token"]
         self.headers=({"Authorization": "Bearer " + self.token + "_"})
-        self.header_old = ({"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"+ "_"})
+        self.header_old = (
+            {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA" + "_"})
 
 
     def test_server_is_running(self):
@@ -33,13 +34,13 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_get_list_of_incidents(self):
         redflag_incident = {
-                            "created_by": 5242,
-                            "type": "red-flag",
-                            "location": "0.112, 0.545",
-                            "status": " sdfsd",
-                            "images": ["sdfaf","vfdgdf"],
-                            "videos": ["video link","fgfdgs"],
-                            "comment": "This is the comment sgfd"
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf","vfdgdf"],
+                                "videos": ["video link","fgfdgs"],
+                                "comment": "This is the comment sgfd"
                             }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
@@ -139,14 +140,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_location(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         id = incidents[0].id
@@ -166,14 +167,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_comment(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         id = incidents[0].id
@@ -242,14 +243,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_get_list_of_incidents_no_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         response = self.client.get('/api/v1/red-flags')
@@ -280,14 +281,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_comment_no_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         id = incidents[0].id
@@ -319,14 +320,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_get_list_of_incidents_expired_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         response = self.client.get('/api/v1/red-flags', headers=self.header_old)
@@ -357,14 +358,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_comment_expired_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
-            "location": "0.112, 0.545",
-            "status": " sdfsd",
-            "images": ["sdfaf", "vfdgdf"],
-            "videos": ["video link", "fgfdgs"],
-            "comment": "This is the comment sgfd"
-        }
+                                "created_by": 5242,
+                                "type": "red-flag",
+                                "location": "0.112, 0.545",
+                                "status": " sdfsd",
+                                "images": ["sdfaf", "vfdgdf"],
+                                "videos": ["video link", "fgfdgs"],
+                                "comment": "This is the comment sgfd"
+                            }
         self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         id = incidents[0].id

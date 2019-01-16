@@ -1,4 +1,3 @@
-# app/views.py
 import re
 from flask import Flask, request, jsonify, make_response, json
 from datetime import datetime
@@ -11,7 +10,6 @@ from app.utilities.incident_validation import Incident_Validation
 def create_app(config_name):
 
     from app.models.incident import Incident
-    # from app.models.admin import Admin
     from app.models.user import User
 
     app = Flask(__name__, instance_relative_config=True)
@@ -35,8 +33,7 @@ def create_app(config_name):
         access_token = Helper_Functions.get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                        
+            if not isinstance(user_id, str):       
                 data = Helper_Functions.get_red_flags()
                 if len(data) > 0:
                     return make_response(jsonify({"status": 200, "data": data})), 200
@@ -53,8 +50,7 @@ def create_app(config_name):
         access_token = Helper_Functions.get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                        
+            if not isinstance(user_id, str):     
                 data = Helper_Functions.get_a_red_flag(red_flag_id)
                 if data:
                     return make_response(jsonify({"status": 200, "data": [data]})), 200
@@ -62,7 +58,6 @@ def create_app(config_name):
                     return Helper_Functions.the_return_method(404, "Resource not found.")
             else:
                 return Helper_Functions.the_return_method(401, user_id)
-
         else:
             return Helper_Functions.the_return_method(401, "A Resource Token is required. Sign-in or log-in")
 
@@ -70,14 +65,11 @@ def create_app(config_name):
 
     @app.route('/api/v1/red-flags', methods=['POST'])
     def create_redflag():
-        
         access_token = Helper_Functions.get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-        
                 input_data = json.loads(request.data)
-
                 created_by = input_data['created_by']
                 doc_type   = input_data['type']
                 location   = input_data['location']
@@ -85,7 +77,6 @@ def create_app(config_name):
                 images     = input_data['images']
                 videos     = input_data['videos']
                 comment    = input_data['comment']
-
                 input_list = [created_by, doc_type, location, status, images, videos, comment]
 
                 validate_inputs = Incident_Validation(
@@ -102,8 +93,7 @@ def create_app(config_name):
                         incidents.append(red_flag)
                         return make_response(jsonify({"status": 201, "data": [{"id":red_flag.id, "message":"Created red-flag record"}]}))
                     else:
-                        return make_response(jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]}))
-                        
+                        return make_response(jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]})) 
                 else:
                     return make_response(jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
             else:
@@ -140,6 +130,7 @@ def create_app(config_name):
                         
                 comment = json.loads(request.data)['comment']
                 data = Helper_Functions.update_comment(red_flag_id, comment)
+                
                 if data:
                     return make_response(jsonify({"status": 200, "data": [{"id": data["id"], "message":"Updated red-flag record’s comment"}]}))
                 else:
@@ -154,6 +145,7 @@ def create_app(config_name):
     def delete_redflag(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
+
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):

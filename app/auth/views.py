@@ -27,7 +27,9 @@ class RegistrationView(MethodView):
 
         validate_input = Register_Validation(
             {"firstname": firstname, "lastname": lastname, "othernames": othernames, "email": email, "password": password, "phonenumber": phonenumber, "username": username})
+        
         validated_input = validate_input.check_input()
+        
         if validated_input[0] == 200:
             if Helper_Functions.email_exists_already(email) is True:
                 return Helper_Functions.the_return_method(400, "That Email already is registered. Login or use a different Email to register.")
@@ -45,12 +47,16 @@ class LoginView(MethodView):
     """This class-based view handles user login and access token generation."""
 
     def post(self):
-        """Handle POST request for this view. Url ---> /v1/auth/login"""
-        password = json.loads(request.data)['password']
-        email = json.loads(request.data)['email']
+
+        input_data = json.loads(request.data)
+
+        password = input_data['password']
+        email = input_data['email']
 
         validate_input = Login_Validation({"email":email, "password":password})
+        
         validated_input = validate_input.check_inputs()
+        
         if validated_input[0] == 200:
             try:
                 user = Helper_Functions.get_user(email)
