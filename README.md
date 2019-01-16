@@ -31,7 +31,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 ## RUNNING TESTS
 * Install Pytest to run the unittests
 ```pip install pyteset```
-* Run tests by enter #pytest into your terimal
+* Run tests by entering pytest into your terimal.
 * To get your test coverage locally, use
 ```pytest --cov=.```
 
@@ -39,7 +39,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 # Heroku API Endpoints
 
 | HTTP Method  | End Point       | Public Access      |  Action            |
-| :------------ |:---------------:| :---------------:|---------------------:|
+| :------------:|:---------------:| :---------------:|:---------------------:|
 | POST    | /api/v1/auth/register | TRUE |  Create an account.  |
 | POST    | /api/v1/auth/login | TRUE |  User login.  |
 | GET    | /api/v1/red-flags | TRUE |  Fetch all red-flag records.  |
