@@ -30,6 +30,12 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 
 # Heroku API Endpoints
 
+| Left-Aligned  | Center Aligned  | Right Aligned |
+| :------------ |:---------------:| -----:|
+| col 3 is      | some wordy text | $1600 |
+| col 2 is      | centered        |   $12 |
+| zebra stripes | are neat        |    $1 |
+
 * GET /api/v1/red-flags       - Fetch all red-flag records.
 * GET /api/v1/red-flags/<red-flag-id>       - Fetch a specific red-flag record.
 * POST /api/v1/red-flags      - Create a red-flag record.
