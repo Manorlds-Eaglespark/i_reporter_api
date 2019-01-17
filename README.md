@@ -49,7 +49,7 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 | DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
 
 ## Hosted API
-[Link to API](https://ireporter256.herokuapp.com)
+[Follow this link](https://ireporter256.herokuapp.com)
 
 ## AUTHOR
 [Anorld Mukone](https://github.com/Manorlds-Eaglespark)
