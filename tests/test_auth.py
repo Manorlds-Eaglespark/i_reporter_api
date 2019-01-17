@@ -3,6 +3,7 @@ import json
 from app.views import create_app
 from app.data_store.data import register_user, user2_data_dictionary, login_user
 
+
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
@@ -20,7 +21,9 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
-        self.assertIn(data['error'], 'Make sure you fill all the required fields')
+        self.assertIn(
+            data['error'],
+            'Make sure you fill all the required fields')
 
     def test_register_new_user_firstname_number(self):
         register_user["firstname"] = 45
@@ -36,7 +39,9 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
-        self.assertIn(data['error'], 'Make sure to have no empty spaces in fields')
+        self.assertIn(
+            data['error'],
+            'Make sure to have no empty spaces in fields')
 
     def test_register_new_user_short_password(self):
         register_user["firstname"] = "my first name"
@@ -45,7 +50,9 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
-        self.assertIn(data['error'], 'Make sure your password is at lest 4 letters')
+        self.assertIn(
+            data['error'],
+            'Make sure your password is at lest 4 letters')
 
     def test_register_new_user_no_digit(self):
         register_user["firstname"] = "my first name"
@@ -54,7 +61,9 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-        self.assertIn(data['error'], 'Make sure your password has a number in it')
+        self.assertIn(
+            data['error'],
+            'Make sure your password has a number in it')
 
     def test_register_new_user_no_capital_letter(self):
         register_user["firstname"] = "my first name"
@@ -63,7 +72,9 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-        self.assertIn(data['error'], 'Make sure your password has a capital letter in it')
+        self.assertIn(
+            data['error'],
+            'Make sure your password has a capital letter in it')
 
     def test_register_new_user_invalid_email(self):
         register_user["firstname"] = "my first name"
@@ -77,9 +88,11 @@ class TestFlaskApi(unittest.TestCase):
     def test_register_existing_user(self):
         response = self.client.post(
             '/api/v1/auth/register', data=json.dumps(user2_data_dictionary), content_type='application/json')
-        data = json.loads(response.data) 
+        data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
-        self.assertIn(data['error'], 'That Email already is registered. Login or use a different Email to register.')
+        self.assertIn(
+            data['error'],
+            'That Email already is registered. Login or use a different Email to register.')
 
     def test_login_user(self):
         response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
@@ -101,7 +114,7 @@ class TestFlaskApi(unittest.TestCase):
 
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
-        self.assertIn(data['error'],'Provide an Email')
+        self.assertIn(data['error'], 'Provide an Email')
 
     def test_login_user_number_email(self):
         login_user["email"] = 5
@@ -109,7 +122,7 @@ class TestFlaskApi(unittest.TestCase):
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data['status'], 400)
-        self.assertIn(data['error'],'Type str required for email.')
+        self.assertIn(data['error'], 'Type str required for email.')
 
     def test_login_user_no_password(self):
         login_user["email"] = "bob.marley@gmail.com"
@@ -127,7 +140,7 @@ class TestFlaskApi(unittest.TestCase):
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-        self.assertIn(data["error"],'Enter a correct Password')
+        self.assertIn(data["error"], 'Enter a correct Password')
 
     def test_login_user_wrong_email(self):
         login_user["email"] = "bob.ley@gmail.com"
@@ -136,4 +149,4 @@ class TestFlaskApi(unittest.TestCase):
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-        self.assertIn(data['error'],'Email not registered on any account.')
+        self.assertIn(data['error'], 'Email not registered on any account.')

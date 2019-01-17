@@ -21,20 +21,20 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 
   ```. <virtual-env-name>/bin/activate```
 
-* Install all the dependencies
+* Switch to the appropriate branch and follow along.
+
+## REQUIREMENTS
+
+* Install all the dependencies in your virtual environment
   
   ```pip install requirements.txt```
 
-* Switch to the appropriate branch and follow along.
-
-
-## RUNNING TESTS LOCALLY
+## TESTING
 * Install Pytest to run the unittests
 ```pip install pyteset```
 * Run tests by entering pytest into your terimal.
 * To get your test coverage locally, use
 ```pytest --cov=.```
-
 
 # Heroku API Endpoints
 
@@ -49,9 +49,8 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 | PATCH  | /api/v1/red-flags/<red-flag-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
 | DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
 
-
 # Hosted API
 https://ireporter256.herokuapp.com
 
-### AUTHOR
+## AUTHOR
  [Anorld Mukone](https://github.com/Manorlds-Eaglespark)

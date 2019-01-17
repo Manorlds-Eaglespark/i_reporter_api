@@ -4,18 +4,19 @@ import jwt
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
 
+
 class User:
     def __init__(self, *args):
-            self.id = uuid.uuid4().clock_seq
-            self.firstname  = args[0][0]
-            self.lastname   = args[0][1]
-            self.othernames = args[0][2]
-            self.email      = args[0][3]
-            self.password   = Bcrypt().generate_password_hash(args[0][4]).decode()
-            self.phonenumber = args[0][5]
-            self.username   = args[0][6]
-            self.registered = datetime.now()
-            self.isadmin    = "False"
+        self.id = uuid.uuid4().clock_seq
+        self.firstname = args[0][0]
+        self.lastname = args[0][1]
+        self.othernames = args[0][2]
+        self.email = args[0][3]
+        self.password = Bcrypt().generate_password_hash(args[0][4]).decode()
+        self.phonenumber = args[0][5]
+        self.username = args[0][6]
+        self.registered = datetime.now()
+        self.isadmin = "False"
 
     def to_json_object(self):
         return self.__dict__
@@ -32,10 +33,10 @@ class User:
                 'adn': isadmin
             }
             jwt_string = jwt.encode(
-					payload,
-					str(os.getenv('SECRET')),
-					algorithm='HS256'
-				)
+                payload,
+                str(os.getenv('SECRET')),
+                algorithm='HS256'
+            )
             return jwt_string
 
         except Exception as e:
@@ -54,7 +55,9 @@ class User:
     @staticmethod
     def decode_token(token):
         try:
-            payload = jwt.decode( token, str(os.getenv('SECRET')), algorithms='HS256')
+            payload = jwt.decode(
+                token, str(
+                    os.getenv('SECRET')), algorithms='HS256')
             return payload['sub']
         except jwt.ExpiredSignatureError:
             return "Expired token. Please login to get a new token"
