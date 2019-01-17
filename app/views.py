@@ -18,6 +18,7 @@ def create_app(config_name):
 
     @app.route('/', methods=['GET'])
     def welcome_to_api():
+        return os.environ.get("SECRET_KEY")
         response = {"status": 200, "data": [{
             "message": "Welcome To iReporter API. Consume Using Endpoints Given Here.",
                                             "endpoint 1": "GET     /api/v1/red-flags",

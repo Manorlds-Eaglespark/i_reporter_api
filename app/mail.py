@@ -1,6 +1,7 @@
 import smtplib, ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+import os
 
 
 class Mail:
@@ -9,14 +10,14 @@ class Mail:
         self.receiver_email = receiver_email
         self.username = username
         self.comment = comment
-        self.sender_email = "manorlds.testmail.com"
-        self.password = os.environ.get("SECRET_KEY")
+        self.sender_email = "manorlds.testmail@gmail.com"
+        self.password = os.environ['MAIL_PASSWORD']
 
     def notify_change_in_incident_status(self):
         message = MIMEMultipart("alternative")
-        message["Subject"] = "multipart test"
-        message["From"] = sender_email
-        message["To"] = receiver_email
+        message["Subject"] = "iReporter - status change"
+        message["From"] = self.sender_email
+        message["To"] = self.receiver_email
  
         html = """\
         <html>
@@ -32,28 +33,26 @@ class Mail:
         </html>
         """.format(self.username, self.comment)
 
-        part_mail = MIMEText(html, "html")
-
-        message.attach(part_mail)
+        message.attach(MIMEText(html, "html"))
 
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login(sender_email, password)
+            server.login(self.sender_email, self.password)
             server.sendmail(
-                sender_email, receiver_email, message.as_string()
+                self.sender_email, self.receiver_email, message.as_string()
             )
 
     def welcome_new_user(self):
         message = MIMEMultipart("alternative")
-        message["Subject"] = "multipart test"
-        message["From"] = sender_email
-        message["To"] = receiver_email
+        message["Subject"] = "iReporter - Welcome"
+        message["From"] = self.sender_email
+        message["To"] = self.receiver_email
 
         html = """\
         <html>
         <body>
             <p>Hello {0},<br>
-            Greetings. Hope this mail from iReporter finds you in good health.<br>
+            Greetings.<br>
             <h2> Welcome To iReporter! A Stand against corruption.</h2>
             <a href="http://www.iReporter.com">iReporter</a> 
             </p>
@@ -61,13 +60,11 @@ class Mail:
         </html>
         """.format(self.username, self.comment)
 
-        part_mail = MIMEText(html, "html")
-
-        message.attach(part_mail)
+        message.attach(MIMEText(html, "html"))
 
         context = ssl.create_default_context()
         with smtplib.SMTP_SSL("smtp.gmail.com", 465, context=context) as server:
-            server.login(sender_email, password)
+            server.login(self.sender_email, self.password)
             server.sendmail(
-                sender_email, receiver_email, message.as_string()
+                self.sender_email, self.receiver_email, message.as_string()
             )
