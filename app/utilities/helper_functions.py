@@ -16,7 +16,7 @@ class Helper_Functions:
         auth_header = request.headers.get('Authorization')
         if auth_header is None:
             return None
-        access_token = str(auth_header).split(" ")[1][:-1]
+        access_token = str(auth_header).split(" ")[1]
         return access_token
 
     @staticmethod

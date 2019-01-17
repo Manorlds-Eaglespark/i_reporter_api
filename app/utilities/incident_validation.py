@@ -37,4 +37,5 @@ class Incident_Validation():
             return [400, "Add video links in this format: [a, b, c]"]
         elif not isinstance(self.comment, str) or self.comment.isspace() or len(self.comment) < 4:
             return [400, "Valid comment required. Comment should be of type string"]
-        return [200, "All good"]
+        else:
+            return [200, "All good"]
