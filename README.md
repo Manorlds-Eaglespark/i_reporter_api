@@ -3,7 +3,6 @@
 
 Corruption is a huge bane to Africa’s development. African countries must develop novel and localised solutions that will curb this menace, hence the birth of iReporter. iReporter enables any/every citizen to bring any form of corruption to the notice of appropriate authorities and the general public. Users can also report on things that needs government intervention.
 
-
 ## GETTING STARTED
 * Clone this repo using 
 
@@ -49,8 +48,8 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 | PATCH  | /api/v1/red-flags/<red-flag-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
 | DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
 
-# Hosted API
-https://ireporter256.herokuapp.com
+## Hosted API
+[Link to API](https://ireporter256.herokuapp.com)
 
 ## AUTHOR
- [Anorld Mukone](https://github.com/Manorlds-Eaglespark)
+[Anorld Mukone](https://github.com/Manorlds-Eaglespark)
