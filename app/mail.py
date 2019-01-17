@@ -1,4 +1,5 @@
-import smtplib, ssl
+import smtplib
+import ssl
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import os
@@ -18,7 +19,7 @@ class Mail:
         message["Subject"] = "iReporter - status change"
         message["From"] = self.sender_email
         message["To"] = self.receiver_email
- 
+
         html = """\
         <html>
         <body>
@@ -26,7 +27,7 @@ class Mail:
             Greetings. Hope this mail from iReporter finds you in good health.<br>
             <h2 > This email is to notify you that your redflag has got some good attention from the iReporter admin. Go to platform for further details.
         Red-flag detail: {1}</h2>
-            <a href="http://www.iReporter.com">iReporter</a> 
+            <a href="http://www.iReporter.com">iReporter</a>
             for more details
             </p>
         </body>
@@ -54,7 +55,7 @@ class Mail:
             <p>Hello {0},<br>
             Greetings.<br>
             <h2> Welcome To iReporter! A Stand against corruption.</h2>
-            <a href="http://www.iReporter.com">iReporter</a> 
+            <a href="http://www.iReporter.com">iReporter</a>
             </p>
         </body>
         </html>

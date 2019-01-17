@@ -6,7 +6,6 @@ class Config(object):
     DEBUG = True
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
-    SECRET_KEY = os.environ['MAIL_PASSWORD']
 
 
 class DevelopmentConfig(Config):
