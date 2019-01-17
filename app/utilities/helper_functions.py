@@ -8,7 +8,8 @@ class Helper_Functions:
 
     @staticmethod
     def the_return_method(status, message):
-        return make_response(jsonify({"status": status, "error": message})), status
+        return make_response(
+            jsonify({"status": status, "error": message})), status
 
     @staticmethod
     def get_access_token():
@@ -25,42 +26,42 @@ class Helper_Functions:
             if incident.type == "red-flag":
                 red_flags_list.append(incident.to_json_object())
         return red_flags_list
-        
+
     @staticmethod
     def get_a_red_flag(id):
         for incident in incidents:
             if incident.id == int(id):
                 return incident.to_json_object()
-    
+
     @staticmethod
     def incident_exists_check(comment):
         for incident in incidents:
             if incident.comment == comment:
                 return [400, "a similar resource already exists."]
         return False
-    
+
     @staticmethod
     def get_dict_data_from_list_incident(list_data):
         return {
-         			"created_by": list_data[0],
-         			"type": list_data[1],
-         			"location": list_data[2],
-         			"status": list_data[3],
-         			"images": list_data[4],
-         			"videos": list_data[5],
-         			"comment": list_data[6]
+            "created_by": list_data[0],
+            "type": list_data[1],
+            "location": list_data[2],
+            "status": list_data[3],
+            "images": list_data[4],
+            "videos": list_data[5],
+            "comment": list_data[6]
         }
 
     @staticmethod
     def get_dict_data_from_list_user(list_data):
         return {
-         			"firstname": list_data[0],
-         			"lastname": list_data[1],
-         			"othernames": list_data[2],
-         			"email": list_data[3],
-         			"password": list_data[4],
-         			"phonenumber": list_data[5],
-         			"username": list_data[6]
+            "firstname": list_data[0],
+            "lastname": list_data[1],
+            "othernames": list_data[2],
+            "email": list_data[3],
+            "password": list_data[4],
+            "phonenumber": list_data[5],
+            "username": list_data[6]
         }
 
     @staticmethod
@@ -91,7 +92,7 @@ class Helper_Functions:
             if user.email == email:
                 return True
         return False
-    
+
     @staticmethod
     def get_user(email):
         for user in users:

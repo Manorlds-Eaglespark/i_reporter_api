@@ -2,15 +2,15 @@ import re
 
 
 init_dict = {
-        "firstname": "",
-        "lastname": "",
-        "othernames": "",
-        "email": "",
-        "password": "",
-        "phonenumber": "",
-        "username": ""
-    }
-    
+    "firstname": "",
+    "lastname": "",
+    "othernames": "",
+    "email": "",
+    "password": "",
+    "phonenumber": "",
+    "username": ""
+}
+
 
 class Register_Validation():
 
@@ -26,7 +26,7 @@ class Register_Validation():
     def check_input(self):
         if not (self.firstname and self.lastname and self.email and self.password and self.phonenumber and self.username):
             return [400, "Make sure you fill all the required fields"]
-        elif (type(self.firstname) is not str or type(self.lastname) is not str or type(self.othernames) is not str or type(self.email) is not str or type(self.password) is not str or type(self.phonenumber) is not str or type(self.username) is not str):
+        elif (not isinstance(self.firstname, str) or not isinstance(self.lastname, str) or not isinstance(self.othernames, str) or not isinstance(self.email, str) or not isinstance(self.password, str) or not isinstance(self.phonenumber, str) or not isinstance(self.username, str)):
             return [400, "Make sure to strings use only "]
         elif self.firstname.isspace() or self.lastname.isspace() or self.othernames.isspace() or self.email.isspace() or self.password.isspace() or self.phonenumber.isspace() or self.username.isspace():
             return [400, "Make sure to have no empty spaces in fields"]
