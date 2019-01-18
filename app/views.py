@@ -1,4 +1,5 @@
 import re
+import os
 from flask import Flask, request, jsonify, make_response, json
 from datetime import datetime
 from instance.config import app_config
@@ -7,6 +8,7 @@ from app.utilities.helper_functions import Helper_Functions
 from app.utilities.incident_validation import Incident_Validation
 from app.models.user import User
 from app.mail import Mail
+
 
 
 def create_app(config_name):
@@ -20,7 +22,6 @@ def create_app(config_name):
 
     @app.route('/', methods=['GET'])
     def welcome_to_api():
-        return os.environ.get("SECRET_KEY")
         response = {"status": 200, "data": [{
             "message": "Welcome To iReporter API. Consume Using Endpoints Given Here.",
                                             "endpoint 1": "GET     /api/v1/red-flags",
