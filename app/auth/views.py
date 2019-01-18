@@ -4,6 +4,7 @@ from app.utilities.login_validation import Login_Validation
 from app.utilities.helper_functions import Helper_Functions
 from app.data_store.data import users
 from app.models.user import User
+from app.mail import Mail
 from flask import make_response, request, jsonify, abort, json
 from flask.views import MethodView
 from . import auth_blueprint
@@ -44,7 +45,8 @@ class RegistrationView(MethodView):
                     email,
                     password,
                     phonenumber,
-                    username]
+                    username,
+                    "False"]
                 new_user = User(new_user_info_list)
 
                 users.append(new_user)
