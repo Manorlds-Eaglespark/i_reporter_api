@@ -198,22 +198,23 @@ def create_app(config_name):
                     data = Helper_Functions.update_status(red_flag_id, status)
 
                     if data:
-                        user_data = Helper_Functions.get_user_by_id(data["created_by"])
+                        user_data = Helper_Functions.get_user_by_id(
+                            data["created_by"])
                         mail = Mail(user_data["email"], user_data["firstname"],
                                     data["comment"]).notify_change_in_incident_status()
                         return make_response(jsonify({"status": 200, "data": [
-                                            {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
+                            {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
                     else:
                         return make_response(
                             jsonify({"status": 404, "error": "Resource not found."}))
                 else:
                     return Helper_Functions.the_return_method(401, user_id)
             else:
-                return Helper_Functions.the_return_method(401, "Access denied.")
+                return Helper_Functions.the_return_method(
+                    401, "Access denied.")
         else:
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
-        
 
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
