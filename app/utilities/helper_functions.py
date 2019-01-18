@@ -87,7 +87,6 @@ class Helper_Functions:
                 incident_data = incident.to_json_object()
                 return incident_data
 
-
     @staticmethod
     def delete_redflag(id):
         for incident in incidents:
@@ -108,7 +107,7 @@ class Helper_Functions:
         for user in users:
             if user.email == email:
                 return user
-    
+
     @staticmethod
     def get_user_by_id(id):
         for user in users:

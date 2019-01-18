@@ -198,18 +198,18 @@ def create_app(config_name):
 
                     if data:
                         return make_response(jsonify({"status": 200, "data": [
-                                            {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
+                            {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
                     else:
                         return make_response(
                             jsonify({"status": 404, "error": "Resource not found."}))
                 else:
                     return Helper_Functions.the_return_method(401, user_id)
             else:
-                return Helper_Functions.the_return_method(401, "Access denied.")
+                return Helper_Functions.the_return_method(
+                    401, "Access denied.")
         else:
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
-        
 
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)

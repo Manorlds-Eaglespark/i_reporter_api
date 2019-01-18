@@ -21,7 +21,8 @@ class Incident_Validation():
         self.comment = init_dict["comment"]
 
     def check_types(self):
-        if not isinstance(self.type, str) or self.type.isspace() or len(self.type) < 8:
+        if not isinstance(self.type, str) or self.type.isspace() or len(
+                self.type) < 8:
             return [
                 400, "Type should be of type string: Either 'red-flag' or 'intervation'"]
         elif not isinstance(self.location, str) or self.location.isspace() or len(self.location) < 4:

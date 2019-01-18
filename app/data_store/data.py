@@ -45,7 +45,7 @@ user3_data = [
     "013234565",
     "Sweeri",
     "True"]
-    
+
 user2 = User(user2_data)
 user3 = User(user3_data)
 

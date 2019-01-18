@@ -19,7 +19,8 @@ class TestFlaskApi(unittest.TestCase):
         self.headers = ({"Authorization": "Bearer " + self.token})
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
-        self.header_admin_old = ({"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc3OTQ1ODEsImlhdCI6MTU0Nzc5NDUyMSwic3ViIjoxNTA4MSwiYWRuIjoiVHJ1ZSJ9.nXch2BuYdsNYo_e4Lf28Lgr2479wsAQvviIXjh19TV4"})
+        self.header_admin_old = (
+            {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc3OTQ1ODEsImlhdCI6MTU0Nzc5NDUyMSwic3ViIjoxNTA4MSwiYWRuIjoiVHJ1ZSJ9.nXch2BuYdsNYo_e4Lf28Lgr2479wsAQvviIXjh19TV4"})
 
     def test_get_list_of_incidents_no_token_header(self):
         redflag_incident = {
@@ -169,7 +170,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
-
     def test_update_red_flag_status_no_token_header(self):
         redflag_incident = {
             "created_by": 5242,
@@ -204,4 +204,3 @@ class TestFlaskApi(unittest.TestCase):
                                      content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-

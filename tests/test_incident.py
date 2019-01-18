@@ -1,7 +1,7 @@
 import unittest
 import json
 from app.views import create_app
-from app.data_store.data import incidents, login_user, incident5_data_dictionary,new_status, incident1_data_dictionary, incident2_data_dictionary, incident6_data_dictionary, incident3_data_dictionary, new_location, new_comment, incident3
+from app.data_store.data import incidents, login_user, incident5_data_dictionary, new_status, incident1_data_dictionary, incident2_data_dictionary, incident6_data_dictionary, incident3_data_dictionary, new_location, new_comment, incident3
 
 
 class TestFlaskApi(unittest.TestCase):
@@ -13,18 +13,18 @@ class TestFlaskApi(unittest.TestCase):
             "password": "afsQdfas21"
         }
         login_this_admin = {
-                            "email":"christinet@gmail.com",
-                            "password":"asdfdsaf"
+            "email": "christinet@gmail.com",
+            "password": "asdfdsaf"
         }
         self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_this_user),
                                          content_type='application/json')
         self.response_2 = self.client.post('/api/v1/auth/login', data=json.dumps(login_this_admin),
-                                         content_type='application/json')
+                                           content_type='application/json')
         data = json.loads(self.response.data)
         data_2 = json.loads(self.response_2.data)
         self.token = data["data"][0]["access_token"]
         self.headers = ({"Authorization": "Bearer " + self.token})
-        
+
         self.token_2 = data_2["data"][0]["access_token"]
         self.headers_admin = ({"Authorization": "Bearer " + self.token_2})
         self.header_old = (
@@ -149,7 +149,6 @@ class TestFlaskApi(unittest.TestCase):
             data["data"][0]["message"],
             "Updated red-flag record’s location")
 
-    
     def test_update_red_flag_status(self):
         redflag_incident = {
             "type": "red-flag",
@@ -170,7 +169,6 @@ class TestFlaskApi(unittest.TestCase):
             data["data"][0]["message"],
             "Updated red-flag record’s status")
 
-
     def test_update_red_flag_status_non_existent_id(self):
         response = self.client.patch('/api/v1/red-flags/' + str(100001002220) + '/status', data=json.dumps(new_status),
                                      content_type='application/json', headers=self.headers_admin)
@@ -178,8 +176,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 404)
         self.assertEqual(
             data["error"], "Resource not found.")
-
-
 
     def test_update_red_flag_location_id_not_found(self):
         id = 15155200
