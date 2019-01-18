@@ -23,10 +23,10 @@ class Mail:
         html = """\
         <html>
         <body>
-            <p>Hello {0},<br>
+            <p><h6>Hello {0},</h6><br>
             Greetings. Hope this mail from iReporter finds you in good health.<br>
-            <h2 > This email is to notify you that your redflag has got some good attention from the iReporter admin. Go to platform for further details.
-        Red-flag detail: {1}</h2>
+            <h3> This email is to notify you that your redflag has got some good attention from the iReporter admin. Go to platform for further details.
+        <br><span style="margin: 0 auto !important; color:#0f97d0">Red-flag detail: {1}</span></h3>
             <a href="http://www.iReporter.com">iReporter</a>
             for more details
             </p>
@@ -52,7 +52,7 @@ class Mail:
         html = """\
         <html>
         <body>
-            <p>Hello {0},<br>
+            <p><h6>Hello {0},</h6><br>
             Greetings.<br>
             <h2> Welcome To iReporter! A Stand against corruption.</h2>
             <a href="http://www.iReporter.com">iReporter</a>

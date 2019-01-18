@@ -45,7 +45,8 @@ class RegistrationView(MethodView):
                     email,
                     password,
                     phonenumber,
-                    username]
+                    username,
+                    "False"]
                 new_user = User(new_user_info_list)
 
                 users.append(new_user)

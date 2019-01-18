@@ -33,7 +33,9 @@ user2_data = [
     "bob.marley@gmail.com",
     "afsQdfas21",
     "0414225555",
-    "Bob Mar"]
+    "Bob Mar",
+    "False"]
+
 user3_data = [
     "Christine",
     "Turky",
@@ -41,7 +43,9 @@ user3_data = [
     "christinet@gmail.com",
     "asdfdsaf",
     "013234565",
-    "Sweeri"]
+    "Sweeri",
+    "True"]
+    
 user2 = User(user2_data)
 user3 = User(user3_data)
 

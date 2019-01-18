@@ -2,6 +2,7 @@ from app.models.incident import Incident
 from app.data_store.data import incidents
 from app.data_store.data import users
 from flask import make_response, jsonify, request
+from app.models.user import User
 
 
 class Helper_Functions:
@@ -79,6 +80,15 @@ class Helper_Functions:
                 return incident.to_json_object()
 
     @staticmethod
+    def update_status(id, status):
+        for incident in incidents:
+            if incident.id == int(id):
+                incident.status = status
+                incident_data = incident.to_json_object()
+                return incident_data
+
+
+    @staticmethod
     def delete_redflag(id):
         for incident in incidents:
             if incident.id == int(id):
@@ -98,3 +108,16 @@ class Helper_Functions:
         for user in users:
             if user.email == email:
                 return user
+    
+    @staticmethod
+    def get_user_by_id(id):
+        for user in users:
+            if user.id == id:
+                return user.to_json_object()
+
+    @staticmethod
+    def get_admin_status(token):
+        if User.decode_admin_status(token) == "True":
+            return True
+        else:
+            return False
