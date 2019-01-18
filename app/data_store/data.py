@@ -139,3 +139,7 @@ new_location = {
 new_comment = {
     "comment": "This is the new comment"
 }
+
+new_status = {
+    "status": "Resolved"
+}

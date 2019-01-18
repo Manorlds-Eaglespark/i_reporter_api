@@ -20,7 +20,6 @@ def create_app(config_name):
 
     @app.route('/', methods=['GET'])
     def welcome_to_api():
-        return os.environ.get("SECRET_KEY")
         response = {"status": 200, "data": [{
             "message": "Welcome To iReporter API. Consume Using Endpoints Given Here.",
                                             "endpoint 1": "GET     /api/v1/red-flags",
@@ -198,9 +197,6 @@ def create_app(config_name):
                     data = Helper_Functions.update_status(red_flag_id, status)
 
                     if data:
-                        user_data = Helper_Functions.get_user_by_id(data["created_by"])
-                        mail = Mail(user_data["email"], user_data["firstname"],
-                                    data["comment"]).notify_change_in_incident_status()
                         return make_response(jsonify({"status": 200, "data": [
                                             {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
                     else:

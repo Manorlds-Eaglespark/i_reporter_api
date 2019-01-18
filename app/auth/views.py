@@ -50,7 +50,6 @@ class RegistrationView(MethodView):
                 new_user = User(new_user_info_list)
 
                 users.append(new_user)
-                mail = Mail(email, firstname, "Welcome").welcome_new_user()
                 return make_response(jsonify(
                     {"status": 201, "data": [{"id": (new_user.to_json_object())["id"]}]})), 201
         else:

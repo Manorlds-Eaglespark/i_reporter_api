@@ -1,7 +1,7 @@
 import unittest
 import json
 from app.views import create_app
-from app.data_store.data import incidents, login_user, incident5_data_dictionary, incident1_data_dictionary, incident2_data_dictionary, incident6_data_dictionary, incident3_data_dictionary, new_location, new_comment, incident3
+from app.data_store.data import incidents, login_user, incident5_data_dictionary,new_status, incident1_data_dictionary, incident2_data_dictionary, incident6_data_dictionary, incident3_data_dictionary, new_location, new_comment, incident3
 
 
 class TestFlaskApi(unittest.TestCase):
@@ -12,13 +12,23 @@ class TestFlaskApi(unittest.TestCase):
             "email": "bob.marley@gmail.com",
             "password": "afsQdfas21"
         }
+        login_this_admin = {
+                            "email":"christinet@gmail.com",
+                            "password":"asdfdsaf"
+        }
         self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_this_user),
                                          content_type='application/json')
+        self.response_2 = self.client.post('/api/v1/auth/login', data=json.dumps(login_this_admin),
+                                         content_type='application/json')
         data = json.loads(self.response.data)
+        data_2 = json.loads(self.response_2.data)
         self.token = data["data"][0]["access_token"]
-        self.headers = ({"Authorization": "Bearer " + self.token + "_"})
+        self.headers = ({"Authorization": "Bearer " + self.token})
+        
+        self.token_2 = data_2["data"][0]["access_token"]
+        self.headers_admin = ({"Authorization": "Bearer " + self.token_2})
         self.header_old = (
-            {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA" + "_"})
+            {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
     def test_server_is_running(self):
         response = self.client.get('/')
@@ -75,26 +85,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["error"], "a similar resource already exists.")
-
-    def test_create_new_red_flag_no_creator_id(self):
-        input_data = incident5_data_dictionary
-        input_data["created_by"] = ""
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
-                                    content_type='application/json', headers=self.headers)
-        data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
-        self.assertEqual(
-            data["error"], "created_by field should be of type int")
-
-    def test_create_new_red_flag_string_creator_id(self):
-        input_data = incident5_data_dictionary
-        input_data["created_by"] = "fsadfas"
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
-                                    content_type='application/json', headers=self.headers)
-        data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
-        self.assertEqual(
-            data["error"], "created_by field should be of type int")
 
     def test_create_new_red_flag_no_doc_type(self):
         input_data = incident1_data_dictionary
@@ -158,6 +148,38 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["data"][0]["message"],
             "Updated red-flag record’s location")
+
+    
+    def test_update_red_flag_status(self):
+        redflag_incident = {
+            "type": "red-flag",
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This is the comment sgfd"
+        }
+        self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+                         content_type='application/json', headers=self.headers)
+        id = incidents[0].id
+        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/status', data=json.dumps(new_status),
+                                     content_type='application/json', headers=self.headers_admin)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+        self.assertEqual(
+            data["data"][0]["message"],
+            "Updated red-flag record’s status")
+
+
+    def test_update_red_flag_status_non_existent_id(self):
+        response = self.client.patch('/api/v1/red-flags/' + str(100001002220) + '/status', data=json.dumps(new_status),
+                                     content_type='application/json', headers=self.headers_admin)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(
+            data["error"], "Resource not found.")
+
+
 
     def test_update_red_flag_location_id_not_found(self):
         id = 15155200
