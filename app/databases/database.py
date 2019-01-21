@@ -38,6 +38,14 @@ class Database:
         self.cursor.execute(sql_command_incidents_table)
         self.cursor.connection.commit()
 
+    def save_user(self, user):
+        postgres_insert_user_query = ("INSERT INTO users ("
+                                          "firstname, lastname, othernames, email, password,"
+                                          "phonenumber, username, isadmin, registered) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+        record_to_insert = (user.firstname, user.lastname, user.othernames, user.email, user.password, user.phonenumber, user.username, user.isadmin, user.registered)
+        self.cursor.execute(postgres_insert_user_query, record_to_insert)
+
+
 
     def delete_all_tables(self):
             sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
