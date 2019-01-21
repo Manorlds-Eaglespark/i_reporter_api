@@ -7,14 +7,15 @@ from datetime import datetime, timedelta
 
 class User:
     def __init__(self, *args):
+        user_info = args[0]
         self.id = uuid.uuid4().clock_seq
-        self.firstname = args[0][0]
-        self.lastname = args[0][1]
-        self.othernames = args[0][2]
-        self.email = args[0][3]
-        self.password = Bcrypt().generate_password_hash(args[0][4]).decode()
-        self.phonenumber = args[0][5]
-        self.username = args[0][6]
+        self.firstname = user_info[0]
+        self.lastname = user_info[1]
+        self.othernames = user_info[2]
+        self.email = user_info[3]
+        self.password = Bcrypt().generate_password_hash(user_info[4]).decode()
+        self.phonenumber = user_info[5]
+        self.username = user_info[6]
         self.registered = datetime.now()
         self.isadmin = "False"
 

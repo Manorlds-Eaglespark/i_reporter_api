@@ -5,15 +5,16 @@ from datetime import datetime
 class Incident:
     def __init__(self, *args):
         """Initialize an incident object"""
+        incident_info = args[0]
         self.id = uuid.uuid4().clock_seq
         self.created_on = datetime.now()
-        self.created_by = args[0][0]
-        self.type = args[0][1]
-        self.location = args[0][2]
-        self.status = args[0][3]
-        self.images = args[0][4]
-        self.videos = args[0][5]
-        self.comment = args[0][6]
+        self.created_by = incident_info[0]
+        self.type = incident_info[1]
+        self.location = incident_info[2]
+        self.status = incident_info[3]
+        self.images = incident_info[4]
+        self.videos = incident_info[5]
+        self.comment = incident_info[6]
 
     def to_json_object(self):
         return self.__dict__
