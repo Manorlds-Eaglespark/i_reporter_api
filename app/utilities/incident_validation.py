@@ -13,7 +13,6 @@ init_dict = {
 
 class Incident_Validation():
     def __init__(self, init_dict):
-        self.created_by = init_dict["created_by"]
         self.type = init_dict["type"]
         self.location = init_dict["location"]
         self.status = init_dict["status"]
@@ -22,9 +21,8 @@ class Incident_Validation():
         self.comment = init_dict["comment"]
 
     def check_types(self):
-        if not isinstance(self.created_by, int):
-            return [400, "created_by field should be of type int"]
-        elif not isinstance(self.type, str) or self.type.isspace() or len(self.type) < 8:
+        if not isinstance(self.type, str) or self.type.isspace() or len(
+                self.type) < 8:
             return [
                 400, "Type should be of type string: Either 'red-flag' or 'intervation'"]
         elif not isinstance(self.location, str) or self.location.isspace() or len(self.location) < 4:
@@ -37,4 +35,5 @@ class Incident_Validation():
             return [400, "Add video links in this format: [a, b, c]"]
         elif not isinstance(self.comment, str) or self.comment.isspace() or len(self.comment) < 4:
             return [400, "Valid comment required. Comment should be of type string"]
-        return [200, "All good"]
+        else:
+            return [200, "All good"]

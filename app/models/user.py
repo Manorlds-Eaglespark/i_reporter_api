@@ -17,7 +17,7 @@ class User:
         self.phonenumber = user_info[5]
         self.username = user_info[6]
         self.registered = datetime.now()
-        self.isadmin = "False"
+        self.isadmin = args[0][7]
 
     def to_json_object(self):
         return self.__dict__
