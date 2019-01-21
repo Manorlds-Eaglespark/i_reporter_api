@@ -23,3 +23,17 @@ class Database:
                                    "phonenumber TEXT NOT NULL,"
                                    "username TEXT NOT NULL,"
                                    "isadmin TEXT NOT NULL,"
+                                   "registered TIMESTAMP NOT NULL)")
+        sql_command_incidents_table = ("CREATE TABLE IF NOT EXISTS incidents"
+                                       "(id SERIAL PRIMARY KEY,"
+                                       "created_on TIMESTAMP NOT NULL,"
+                                       "created_by INTEGER NOT NULL,"
+                                       "type TEXT NULL,"
+                                       "location TEXT NOT NULL,"
+                                       "status TEXT NOT NULL,"
+                                       "images TEXT NOT NULL,"
+                                       "videos TEXT NOT NULL,"
+                                       "comment TEXT NOT NULL)")
+        self.cursor.execute(sql_command_users_table)
+        self.cursor.execute(sql_command_incidents_table)
+        self.cursor.connection.commit()
