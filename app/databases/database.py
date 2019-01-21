@@ -45,6 +45,11 @@ class Database:
         record_to_insert = (user.firstname, user.lastname, user.othernames, user.email, user.password, user.phonenumber, user.username, user.isadmin, user.registered)
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
 
+    def get_user_by_email(self, email):
+        postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(email)
+        self.cursor.execute(postgresql_select_user_query)
+        user = self.cursor.fetchone()
+        return user
 
 
     def delete_all_tables(self):
