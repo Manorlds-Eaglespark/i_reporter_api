@@ -2,6 +2,7 @@
 from app.utilities.register_validation import Register_Validation
 from app.utilities.login_validation import Login_Validation
 from app.utilities.helper_functions import Helper_Functions
+from app.databases.database import Database
 from app.data_store.data import users
 from app.models.user import User
 from flask import make_response, request, jsonify, abort, json
@@ -47,9 +48,11 @@ class RegistrationView(MethodView):
                     username]
                 new_user = User(new_user_info_list)
 
-                users.append(new_user)
+                database = Database()
+                database.save_user(new_user)
+                saved_user = database.get_user_by_email(email)
                 return make_response(jsonify(
-                    {"status": 201, "data": [{"id": (new_user.to_json_object())["id"]}]})), 201
+                    {"status": 201, "data": [{"id": saved_user[0]}]})), 201
         else:
             return Helper_Functions.the_return_method(
                 validated_input[0], validated_input[1])
