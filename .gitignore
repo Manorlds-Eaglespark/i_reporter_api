@@ -21,4 +21,6 @@ app/utilities/__pycache__/helper_functions.cpython-37.pyc
 app/utilities/__pycache__/*
 .vscode/
 htmlcov/
+.coverage
 .env
+app/databases/__pycache__/
