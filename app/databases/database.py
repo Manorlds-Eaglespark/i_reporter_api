@@ -37,3 +37,10 @@ class Database:
         self.cursor.execute(sql_command_users_table)
         self.cursor.execute(sql_command_incidents_table)
         self.cursor.connection.commit()
+
+
+    def delete_all_tables(self):
+            sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
+            sql_clean_command_incidents_table = "TRUNCATE TABLE incidents RESTART IDENTITY CASCADE"
+            self.cursor.execute(sql_clean_command_users_table)
+            self.cursor.execute(sql_clean_command_incidents_table)
