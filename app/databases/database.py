@@ -55,6 +55,27 @@ class Database:
         user = self.cursor.fetchone()
         return user
 
+    def get_all_red_flags(self):
+        sql_get_red_flags_query = """SELECT * FROM incidents where type='red-flag'"""
+        self.cursor.execute(sql_get_red_flags_query)
+        red_flags = self.cursor.fetchall()
+        return red_flags
+    
+    def save_incident(self, incident):
+        postgres_insert_incident_query = ("INSERT INTO incidents ("
+                                          "created_on, created_by, type, location, status,"
+                                          "images, videos, comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
+        record_to_insert = (incident.created_on, incident.created_by,
+                            incident.type, incident.location, incident.status, incident.images, incident.videos, incident.comment)
+        self.cursor.execute(postgres_insert_incident_query, record_to_insert)
+        return self.cursor.fetchone()
+
+    def get_like_this_in_database(self, comment, created_by):
+        postgresql_select_incidents_query = """SELECT * FROM incidents where comment = %s and created_by = %s"""
+        self.cursor.execute(
+            postgresql_select_incidents_query, (comment, created_by))
+        incident = self.cursor.fetchone()
+        return incident
 
     def delete_all_tables(self):
             sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
