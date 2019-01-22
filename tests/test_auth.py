@@ -69,7 +69,62 @@ class TestFlaskApi(unittest.TestCase):
         self.assertIn(
             data['error'],
             'Make sure your password has a number in it')
-            
+
+    def test_register_new_user_no_capital_letter(self):
+        register_user["firstname"] = "my first name"
+        register_user["password"] = "sdf7sds"
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+        self.assertIn(
+            data['error'],
+            'Make sure your password has a capital letter in it')
+
+    def test_register_new_user_invalid_email(self):
+        register_user["firstname"] = "my first name"
+        register_user["email"] = "sdf7sds"
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+        self.assertIn(data['error'], 'Please enter a valid Email.')
+
+    def test_register_existing_user(self):
+        self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertIn(
+            data['error'],
+            'That Email already is registered. Login or use a different Email to register.')
+
+    def test_login_user(self):
+        self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        self.assertEqual(response.status_code, 200)
+
+    def test_login_user_email_space(self):
+        login_user["email"] = " "
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertIn(data['error'], 'Provide an Email')
+
+    
+    def test_login_user_no_email(self):
+        login_user["email"] = ""
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertIn(data['error'], 'Provide an Email')
     
     def tearDown(self):
         self.database.delete_all_tables()
