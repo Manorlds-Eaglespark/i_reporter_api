@@ -80,12 +80,17 @@ class LoginView(MethodView):
         
         if validated_input[0] == 200:
             try:
-                user = database.get_user_by_email(email)
-                if user:
-                    if User.password_is_valid(user.password, password):
+                user_data = database.get_user_by_email(email)
+                
+                if user_data:
+                    user_info = list(user_data)
+                    user = User(user_info[1:])
+                    user.password = user_info[5]
+                    user_id = user_info[0]
+                    if user.password_is_valid(password):
 
                         access_token = user.generate_token(
-                            user.id, user.isadmin)
+                            user_id, user.isadmin)
                         if access_token:
                             response = {
                                 'status': 200,

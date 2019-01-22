@@ -6,7 +6,6 @@ class Incident:
     def __init__(self, *args):
         """Initialize an incident object"""
         incident_info = args[0]
-        self.id = uuid.uuid4().clock_seq
         self.created_on = datetime.now()
         self.created_by = incident_info[0]
         self.type = incident_info[1]
