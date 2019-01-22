@@ -34,6 +34,7 @@ class RegistrationView(MethodView):
 
         validated_input = validate_input.check_input()
         database = Database()
+        
 
         if validated_input[0] == 200:
             if database.get_user_by_email(email):
@@ -50,7 +51,6 @@ class RegistrationView(MethodView):
                     username,
                     "False"]
                 new_user = User(new_user_info_list)
-
                 
                 user_id = database.save_user(new_user)
                 saved_user = database.get_user_by_email(email)

@@ -20,6 +20,7 @@ class TestingConfig(Config):
     DEBUG = True
 
 
+
 class StagingConfig(Config):
     """Configurations for Staging."""
     DEBUG = True
