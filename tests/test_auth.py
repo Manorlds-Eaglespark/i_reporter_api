@@ -17,6 +17,16 @@ class TestFlaskApi(unittest.TestCase):
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 201)
+
+    def test_register_new_user_no_firstname(self):
+        register_user["firstname"] = ""
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertIn(
+            data['error'],
+            'Make sure you fill all the required fields')
     
     def tearDown(self):
         self.database.delete_all_tables()
