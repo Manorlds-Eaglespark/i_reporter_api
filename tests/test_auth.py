@@ -1,19 +1,23 @@
 import unittest
 import json
 from app.views import create_app
-from app.data_store.data import register_user, user2_data_dictionary, login_user
+from app.databases.database import Database
+from tests.data_test import *
 
 
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
         self.client = self.app.test_client()
+        self.database = Database()
+        self.database.create_all_tables()
 
     def test_register_new_user(self):
         response = self.client.post(
             '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 201)
+        # self.assertEqual(data["status"], 201)
+        self.assertEqual(data["error"], "sfsdf")
 
     def test_register_new_user_no_firstname(self):
         register_user["firstname"] = ""
@@ -95,6 +99,8 @@ class TestFlaskApi(unittest.TestCase):
             'That Email already is registered. Login or use a different Email to register.')
 
     def test_login_user(self):
+        self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
         response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
@@ -150,3 +156,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
         self.assertIn(data['error'], 'Email not registered on any account.')
+
+    def tearDown(self):
+        self.database.delete_all_tables()

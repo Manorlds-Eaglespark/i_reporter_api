@@ -4,8 +4,8 @@ from app.models.incident import Incident
 register_user = {
     "firstname": "Bob",
     "lastname": "Marley",
-    "othernames": "",
-    "email": "bobmareley@gmail.com",
+    "othernames": "dfgdfs",
+    "email": "bob.marley@gmail",
     "password": "afsdfas2A1",
     "phonenumber": "0414225555",
     "username": "Bob Mar"}
