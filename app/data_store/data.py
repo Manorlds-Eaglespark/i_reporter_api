@@ -5,13 +5,13 @@ register_user = {
     "firstname": "Bob",
     "lastname": "Marley",
     "othernames": "dfgdfs",
-    "email": "bob.marley@gmail",
+    "email": "bob.marley@gmail.com",
     "password": "afsdfas2A1",
     "phonenumber": "0414225555",
     "username": "Bob Mar"}
 login_user = {
     "email": "bob.marley@gmail.com",
-    "password": "afsQdfas21"
+    "password": "afsdfas2A1"
 }
 
 

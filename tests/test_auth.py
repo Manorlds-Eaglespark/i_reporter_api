@@ -116,7 +116,6 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 400)
         self.assertIn(data['error'], 'Provide an Email')
 
-    
     def test_login_user_no_email(self):
         login_user["email"] = ""
         response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
@@ -125,6 +124,44 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertIn(data['error'], 'Provide an Email')
+
+    def test_login_user_number_email(self):
+        login_user["email"] = 5
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data['status'], 400)
+        self.assertIn(data['error'], 'Type str required for email.')
+
+    def test_login_user_no_password(self):
+        login_user["email"] = "bob.marley@gmail.com"
+        login_user["password"] = ""
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertIn(data["error"], 'Provide a Password')
+
+    def test_login_user_wrong_password(self):
+        register_user["email"] = "bob_marley@gmail.com"
+        self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        login_user["email"] = "bob_marley@gmail.com"
+        login_user["password"] = "afsQdas21"
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+        self.assertIn(data["error"], 'Enter a correct Password')
+
+    def test_login_user_wrong_email(self):
+        login_user["email"] = "bob.ley@gmail.com"
+        login_user["password"] = "afsdfas2A1"
+        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+                                    content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+        self.assertIn(data['error'], 'Email not registered on any account.')
     
     def tearDown(self):
         self.database.delete_all_tables()

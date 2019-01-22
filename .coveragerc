@@ -13,3 +13,4 @@ omit =
   *app/__init__.py             
   *app/auth/__init__.py
   *app/mail.py
+  *app/databases/*
