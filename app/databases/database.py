@@ -7,8 +7,10 @@ class Database:
     """docstring for Database class"""
 
     def __init__(self):
+        # db_name = os.getenv("DATABASE")  
+        db_name = "ireporter"
         self.connection = psycopg2.connect(user="postgres", password="", host="127.0.0.1", port="5432",
-                                           database="ireporter")
+                                           database=db_name)
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
 
@@ -41,9 +43,11 @@ class Database:
     def save_user(self, user):
         postgres_insert_user_query = ("INSERT INTO users ("
                                           "firstname, lastname, othernames, email, password,"
-                                          "phonenumber, username, isadmin, registered) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s)")
+                                          "phonenumber, username, isadmin, registered) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
         record_to_insert = (user.firstname, user.lastname, user.othernames, user.email, user.password, user.phonenumber, user.username, user.isadmin, user.registered)
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
+        user_id = self.cursor.fetchone()
+        return user_id
 
     def get_user_by_email(self, email):
         postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(email)

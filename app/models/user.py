@@ -8,7 +8,6 @@ from datetime import datetime, timedelta
 class User:
     def __init__(self, *args):
         user_info = args[0]
-        self.id = uuid.uuid4().clock_seq
         self.firstname = user_info[0]
         self.lastname = user_info[1]
         self.othernames = user_info[2]
@@ -17,7 +16,7 @@ class User:
         self.phonenumber = user_info[5]
         self.username = user_info[6]
         self.registered = datetime.now()
-        self.isadmin = args[0][7]
+        self.isadmin = user_info[7]
 
     def to_json_object(self):
         return self.__dict__
@@ -43,9 +42,9 @@ class User:
         except Exception as e:
             return str(e)
 
-    @staticmethod
-    def password_is_valid(password1, password2):
-        return Bcrypt().check_password_hash(password1, password2)
+    # @staticmethod
+    # def password_is_valid(password1, password2):
+    #     return Bcrypt().check_password_hash(password1, password2)
 
     @staticmethod
     def decode_admin_status(token):

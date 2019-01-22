@@ -33,9 +33,11 @@ class RegistrationView(MethodView):
             {"firstname": firstname, "lastname": lastname, "othernames": othernames, "email": email, "password": password, "phonenumber": phonenumber, "username": username})
 
         validated_input = validate_input.check_input()
+        database = Database()
+        
 
         if validated_input[0] == 200:
-            if Helper_Functions.email_exists_already(email) is True:
+            if database.get_user_by_email(email):
                 return Helper_Functions.the_return_method(
                     400, "That Email already is registered. Login or use a different Email to register.")
             else:
@@ -49,12 +51,11 @@ class RegistrationView(MethodView):
                     username,
                     "False"]
                 new_user = User(new_user_info_list)
-
-                database = Database()
-                database.save_user(new_user)
+                
+                user_id = database.save_user(new_user)
                 saved_user = database.get_user_by_email(email)
                 return make_response(jsonify(
-                    {"status": 201, "data": [{"id": saved_user[0]}]})), 201
+                    {"status": 201, "data": [{"id": user_id}]})), 201
         else:
             return Helper_Functions.the_return_method(
                 validated_input[0], validated_input[1])
@@ -75,14 +76,21 @@ class LoginView(MethodView):
 
         validated_input = validate_input.check_inputs()
 
+        database = Database()
+        
         if validated_input[0] == 200:
             try:
-                user = Helper_Functions.get_user(email)
-                if user:
-                    if User.password_is_valid(user.password, password):
+                user_data = database.get_user_by_email(email)
+                
+                if user_data:
+                    user_info = list(user_data)
+                    user = User(user_info[1:])
+                    user.password = user_info[5]
+                    user_id = user_info[0]
+                    if user.password_is_valid(password):
 
                         access_token = user.generate_token(
-                            user.id, user.isadmin)
+                            user_id, user.isadmin)
                         if access_token:
                             response = {
                                 'status': 200,
