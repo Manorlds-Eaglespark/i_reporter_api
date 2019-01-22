@@ -27,6 +27,49 @@ class TestFlaskApi(unittest.TestCase):
         self.assertIn(
             data['error'],
             'Make sure you fill all the required fields')
+
+    def test_register_new_user_firstname_number(self):
+        register_user["firstname"] = 45
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(data['error'], 'Make sure to strings use only ')
+
+    
+    def test_register_new_user_firstname_space(self):
+        register_user["firstname"] = " "
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn(
+            data['error'],
+            'Make sure to have no empty spaces in fields')
+
+    def test_register_new_user_short_password(self):
+        register_user["firstname"] = "my first name"
+        register_user["password"] = "5A"
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 401)
+        self.assertIn(
+            data['error'],
+            'Make sure your password is at lest 4 letters')
+
+    
+    def test_register_new_user_no_digit(self):
+        register_user["firstname"] = "my first name"
+        register_user["password"] = "sdfsds"
+        response = self.client.post(
+            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+        self.assertIn(
+            data['error'],
+            'Make sure your password has a number in it')
+            
     
     def tearDown(self):
         self.database.delete_all_tables()
