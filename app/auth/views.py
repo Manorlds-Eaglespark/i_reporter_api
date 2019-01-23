@@ -118,12 +118,12 @@ registration_view = RegistrationView.as_view('registration_view')
 login_view = LoginView.as_view('login_view')
 
 auth_blueprint.add_url_rule(
-    '/api/v1/auth/register',
+    '/api/v2/auth/signup',
     view_func=registration_view,
     methods=['POST'])
 
 auth_blueprint.add_url_rule(
-    '/api/v1/auth/login',
+    '/api/v2/auth/login',
     view_func=login_view,
     methods=['POST']
 )
