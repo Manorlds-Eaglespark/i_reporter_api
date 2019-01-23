@@ -15,6 +15,22 @@ login_user = {
     "password": "afsdfas2A1"
 }
 
+
+register_user_2 = {
+    "firstname": "Bob 2",
+    "lastname": "Marley 2",
+    "othernames": "dfgdfs 2",
+    "email": "bob_marley2@gmail.com",
+    "password": "afsdfas2A12",
+    "phonenumber": "04142255552",
+    "username": "Bob Mar 2"
+}
+
+login_user_2 = {
+    "email": "bob_marley2@gmail.com",
+    "password": "afsdfas2A12"
+}
+
 incident6_data_dictionary = {"created_by": 5, "type": "red-flag", "location": "0.113, 0.344", "status": "Resolved", "images": ["images-link-1", "images-link-1"],
                              "videos": ["videos-link-1", "videos-link-2"], "comment": "Land grabbing in Gulu district!!"}
 

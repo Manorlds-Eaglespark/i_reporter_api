@@ -12,10 +12,10 @@ class TestFlaskApi(unittest.TestCase):
         self.database.create_all_tables()
         self.database.create_default_admin()
 
-        self.response = self.client.post('/api/v1/auth/register', data=json.dumps(register_user),
+        self.response = self.client.post('/api/v1/auth/register', data=json.dumps(register_user_2),
                                          content_type='application/json')
     
-        self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user_2),
                                          content_type='application/json')
         data = json.loads(self.response.data)
         self.token = data["data"][0]["access_token"]
@@ -23,6 +23,7 @@ class TestFlaskApi(unittest.TestCase):
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
+        
     def test_server_is_running(self):
         response = self.client.get('/')
         data = json.loads(response.data)
