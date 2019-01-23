@@ -13,10 +13,10 @@ class TestFlaskApi(unittest.TestCase):
         self.database.create_all_tables()
         self.database.create_default_admin()
 
-        self.response = self.client.post('/api/v1/auth/register', data=json.dumps(register_user_2),
+        self.response = self.client.post('/api/v2/auth/signup', data=json.dumps(register_user_2),
                                          content_type='application/json')
 
-        self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user_2),
+        self.response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user_2),
                                          content_type='application/json')
         data = json.loads(self.response.data)
         self.token = data["data"][0]["access_token"]

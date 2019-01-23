@@ -14,14 +14,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_register_new_user(self):
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 201)
 
     def test_register_new_user_no_firstname(self):
         register_user["firstname"] = ""
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertIn(
@@ -31,7 +31,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_register_new_user_firstname_number(self):
         register_user["firstname"] = 45
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(data['error'], 'Make sure to strings use only ')
@@ -40,7 +40,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_register_new_user_firstname_space(self):
         register_user["firstname"] = " "
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 400)
         self.assertIn(
@@ -51,7 +51,7 @@ class TestFlaskApi(unittest.TestCase):
         register_user["firstname"] = "my first name"
         register_user["password"] = "5A"
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 401)
         self.assertIn(
@@ -63,7 +63,7 @@ class TestFlaskApi(unittest.TestCase):
         register_user["firstname"] = "my first name"
         register_user["password"] = "sdfsds"
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
         self.assertIn(
@@ -74,7 +74,7 @@ class TestFlaskApi(unittest.TestCase):
         register_user["firstname"] = "my first name"
         register_user["password"] = "sdf7sds"
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
         self.assertIn(
@@ -85,16 +85,16 @@ class TestFlaskApi(unittest.TestCase):
         register_user["firstname"] = "my first name"
         register_user["email"] = "sdf7sds"
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
         self.assertIn(data['error'], 'Please enter a valid Email.')
 
     def test_register_existing_user(self):
         self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         response = self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertIn(
@@ -103,14 +103,14 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_login_user(self):
         self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         self.assertEqual(response.status_code, 200)
 
     def test_login_user_email_space(self):
         login_user["email"] = " "
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -118,7 +118,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_login_user_no_email(self):
         login_user["email"] = ""
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
 
         data = json.loads(response.data)
@@ -127,7 +127,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_login_user_number_email(self):
         login_user["email"] = 5
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data['status'], 400)
@@ -136,7 +136,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_login_user_no_password(self):
         login_user["email"] = "bob.marley@gmail.com"
         login_user["password"] = ""
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -145,10 +145,10 @@ class TestFlaskApi(unittest.TestCase):
     def test_login_user_wrong_password(self):
         register_user["email"] = "bob_marley@gmail.com"
         self.client.post(
-            '/api/v1/auth/register', data=json.dumps(register_user), content_type='application/json')
+            '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         login_user["email"] = "bob_marley@gmail.com"
         login_user["password"] = "afsQdas21"
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
@@ -157,7 +157,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_login_user_wrong_email(self):
         login_user["email"] = "bob.ley@gmail.com"
         login_user["password"] = "afsdfas2A1"
-        response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user),
+        response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)

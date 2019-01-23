@@ -79,7 +79,7 @@ def create_app(config_name):
             if not isinstance(user_id, str):
                 input_data = json.loads(request.data)
                 created_by = int(user_id)
-                doc_type = input_data['type']
+                doc_type = 'red-flag'
                 location = input_data['location']
                 status = input_data['status']
                 images = input_data['images']
@@ -217,6 +217,60 @@ def create_app(config_name):
         else:
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
+
+
+    @app.route('/api/v2/interventions', methods=['POST'])
+    def create_intervention_record():
+        access_token = Helper_Functions.get_access_token()
+        if access_token:
+            user_id = User.decode_token(access_token)
+            if not isinstance(user_id, str):
+                input_data = json.loads(request.data)
+                created_by = int(user_id)
+                doc_type = 'intervention'
+                location = input_data['location']
+                status = input_data['status']
+                images = input_data['images']
+                videos = input_data['videos']
+                comment = input_data['comment']
+                input_list = [
+                    created_by,
+                    doc_type,
+                    location,
+                    status,
+                    images,
+                    videos,
+                    comment
+                ]
+
+                validate_inputs = Incident_Validation(
+                    Helper_Functions.get_dict_data_from_list_incident(input_list))
+
+                validated_inputs = validate_inputs.check_types()
+                duplicate_exists = database.get_like_this_in_database(comment, created_by)
+
+                if validated_inputs[0] == 200:
+
+                    if not duplicate_exists:
+
+                        red_flag = Incident(input_list)
+                        incident_id = database.save_incident(red_flag)
+                        return make_response(jsonify({"status": 201, "data": [
+                                             {"id": incident_id, "message": "Created red-flag record"}]}))
+                    else:
+                        return make_response(
+                            jsonify({"status": 400, "error": "a similar resource already exists."}))
+                else:
+                    return make_response(
+                        jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
+            else:
+                return Helper_Functions.the_return_method(401, user_id)
+        else:
+            return Helper_Functions.the_return_method(
+                401, "A Resource Token is required. Sign-in or log-in")
+
+
+
 
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
