@@ -311,6 +311,30 @@ def create_app(config_name):
                 401, "A Resource Token is required. Sign-in or log-in")
 
 
+    @app.route('/api/v2/interventions/<intervention_id>/comment', methods=['PATCH'])
+    def intervention_comment(intervention_id):
+
+            access_token = Helper_Functions.get_access_token()
+            if access_token:
+                user_id = User.decode_token(access_token)
+                if not isinstance(user_id, str):
+
+                    comment = json.loads(request.data)['comment']
+                    data = database.update_comment_of_incident(
+                        intervention_id, comment)
+
+                    if data:
+                        return make_response(jsonify({"status": 200, "data": [
+                                            {"id": data, "message": "Updated intervention record’s comment"}]}))
+                    else:
+                        return make_response(
+                            jsonify({"status": 404, "error": "Resource not found."}))
+                else:
+                    return Helper_Functions.the_return_method(401, user_id)
+            else:
+                return Helper_Functions.the_return_method(
+                    401, "A Resource Token is required. Sign-in or log-in")
+
 
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)

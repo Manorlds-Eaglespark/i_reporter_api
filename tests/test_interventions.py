@@ -142,6 +142,35 @@ class TestFlaskApi(unittest.TestCase):
 
 
 
+    def test_update_intervention_comment(self):
+            intervention_incident = {
+                "location": "0.112, 0.545",
+                "status": " sdfsd",
+                "images": ["sdfaf", "vfdgdf"],
+                "videos": ["video link", "fgfdgs"],
+                "comment": "This is thesdfds dsfds comment sgfd"
+            }
+            response_ = self.client.post('/api/v2/interventions', data=json.dumps(intervention_incident),
+                            content_type='application/json', headers=self.headers)
+            data_ = json.loads(response_.data)
+            id = data_["data"][0]["id"][0]
+            response = self.client.patch('/api/v2/interventions/' + str(id) + '/comment', data=json.dumps(new_comment),
+                                        content_type='application/json', headers=self.headers)
+            data = json.loads(response.data)
+            self.assertEqual(data["status"], 200)
+            self.assertEqual(
+                data["data"][0]["message"], "Updated intervention record’s comment")
+
+    def test_update_intervention_comment_id_not_found(self):
+        id = 15155200
+        response = self.client.patch('/api/v2/interventions/' + str(id) + '/comment', data=json.dumps(new_comment),
+                                     content_type='application/json', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(
+            data["error"], "Resource not found.")
+
+
     def tearDown(self):
         self.database.delete_all_tables()
 
