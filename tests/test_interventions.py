@@ -115,6 +115,32 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
 
+    def test_get_an_intervention(self):
+        intervention_incident = {
+            "type": "intervention",
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This is the sfsdf comment s fd gfd"
+        }
+        response_ = self.client.post('/api/v2/interventions', data=json.dumps(intervention_incident),
+                                     content_type='application/json', headers=self.headers)
+        data_ = json.loads(response_.data)
+        id = data_["data"][0]["id"][0]
+        response = self.client.get(
+            '/api/v2/interventions/' + str(id), headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+
+    def test_get_an_incident_with_unknown_id(self):
+        response = self.client.get(
+            '/api/v2/interventions/' + str(1000010), headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(data["error"], "Resource not found.")
+
+
 
     def tearDown(self):
         self.database.delete_all_tables()
