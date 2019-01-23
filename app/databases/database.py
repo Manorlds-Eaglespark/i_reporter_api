@@ -54,8 +54,12 @@ class Database:
     def create_default_admin(self):
         postgres_insert_user_query = ("INSERT INTO users ("
                                       "firstname, lastname, othernames, email, password,"
-                                      "phonenumber, username, isadmin, registered) VALUES (  'Christine','Turky','Sweeri','christinet@gmail.com','{0}','013234565','Sweeri','True', '{1}') ON CONFLICT (email) DO NOTHING;".format(Bcrypt().generate_password_hash("asdfdsaf").decode(), datetime.now()))
-        self.cursor.execute(postgres_insert_user_query)
+                                      "phonenumber, username, isadmin, registered) SELECT 'Christine','Turky','Sweeri',%s,%s,'013234565','Sweeri','True', %s WHERE NOT EXISTS (SELECT id FROM users WHERE email= %s );")
+        password = Bcrypt().generate_password_hash("asdfdsaf").decode()
+        time_registered = datetime.now()
+        email = 'christinet@gmail.com'
+        extra_info = (email, password, time_registered, email)
+        self.cursor.execute(postgres_insert_user_query, extra_info)
 
     def get_user_by_email(self, email):
         postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(email)
