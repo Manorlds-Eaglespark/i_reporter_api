@@ -179,6 +179,12 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["error"], "Resource not found.")
 
+    def test_delete_intervention_given_wrong_id(self):
+        response = self.client.delete(
+            '/api/v2/interventions/' + str(12241), headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(data["error"], "Resource not found.")
 
     def tearDown(self):
         self.database.delete_all_tables()
