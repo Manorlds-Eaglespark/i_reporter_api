@@ -1,4 +1,6 @@
 import psycopg2
+from datetime import datetime
+from flask_bcrypt import Bcrypt
 import os
 
 
@@ -20,7 +22,7 @@ class Database:
                                    "firstname TEXT NOT NULL,"
                                    "lastname TEXT NOT NULL,"
                                    "othernames TEXT NULL,"
-                                   "email TEXT NOT NULL,"
+                                   "email TEXT UNIQUE NOT NULL,"
                                    "password TEXT NOT NULL,"
                                    "phonenumber TEXT NOT NULL,"
                                    "username TEXT NOT NULL,"
@@ -48,6 +50,12 @@ class Database:
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
         user_id = self.cursor.fetchone()
         return user_id
+    
+    def create_default_admin(self):
+        postgres_insert_user_query = ("INSERT INTO users ("
+                                      "firstname, lastname, othernames, email, password,"
+                                      "phonenumber, username, isadmin, registered) VALUES (  'Christine','Turky','Sweeri','christinet@gmail.com','{0}','013234565','Sweeri','True', '{1}') ON CONFLICT (email) DO NOTHING;".format(Bcrypt().generate_password_hash("asdfdsaf").decode(), datetime.now()))
+        self.cursor.execute(postgres_insert_user_query)
 
     def get_user_by_email(self, email):
         postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(email)
@@ -55,6 +63,61 @@ class Database:
         user = self.cursor.fetchone()
         return user
 
+    def get_all_red_flags(self):
+        sql_get_red_flags_query = """SELECT * FROM incidents where type='red-flag'"""
+        self.cursor.execute(sql_get_red_flags_query)
+        red_flags = self.cursor.fetchall()
+        return red_flags
+    
+    def save_incident(self, incident):
+        postgres_insert_incident_query = ("INSERT INTO incidents ("
+                                          "created_on, created_by, type, location, status,"
+                                          "images, videos, comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
+        record_to_insert = (incident.created_on, incident.created_by,
+                            incident.type, incident.location, incident.status, incident.images, incident.videos, incident.comment)
+        self.cursor.execute(postgres_insert_incident_query, record_to_insert)
+        return self.cursor.fetchone()
+
+    def get_like_this_in_database(self, comment, created_by):
+        postgresql_select_incidents_query = """SELECT * FROM incidents where comment = %s and created_by = %s"""
+        self.cursor.execute(
+            postgresql_select_incidents_query, (comment, created_by))
+        incident = self.cursor.fetchone()
+        return incident
+
+    def get_incident_by_id(self, id):
+        sql_select_incident_query = """SELECT * FROM incidents WHERE id = {0}""".format(
+            id)
+        self.cursor.execute(sql_select_incident_query)
+        incident = self.cursor.fetchone()
+        return incident
+
+    def update_location_of_incident(self, incident_id, new_location):
+        sql_update_incident_location = """UPDATE incidents SET location = %s WHERE id = %s RETURNING id"""
+        self.cursor.execute(sql_update_incident_location,
+                            (new_location, incident_id))
+        incident_id = self.cursor.fetchone()
+        return incident_id
+
+    def update_comment_of_incident(self, incident_id, new_comment):
+        sql_update_incident_comment = """UPDATE incidents SET comment = %s WHERE id = %s RETURNING id"""
+        self.cursor.execute(sql_update_incident_comment,
+                            (new_comment, incident_id))
+        incident = self.cursor.fetchone()
+        return incident
+
+    def update_status_of_incident(self, incident_id, new_status):
+        sql_update_incident_status = """UPDATE incidents SET status = %s WHERE id = %s RETURNING id"""
+        self.cursor.execute(sql_update_incident_status,
+                            (new_status, incident_id))
+        incident_id = self.cursor.fetchone()
+        return incident_id
+
+    def delete_incident(self, incident_id):
+        sql_delete_incident = "DELETE FROM incidents WHERE id = {0}".format(
+            incident_id)
+        self.cursor.execute(sql_delete_incident)
+        return True
 
     def delete_all_tables(self):
             sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"

@@ -6,6 +6,7 @@ app = create_app('development')
 
 database = Database()
 database.create_all_tables()
+database.create_default_admin()
 
 if __name__ == '__main__':
     app.run()

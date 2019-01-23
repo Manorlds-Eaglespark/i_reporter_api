@@ -13,10 +13,13 @@ def create_app(config_name):
 
     from app.models.incident import Incident
     from app.models.user import User
+    from app.databases.database import Database
 
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(app_config['development'])
     app.config.from_pyfile('config.py')
+
+    database = Database()
 
     @app.route('/', methods=['GET'])
     def welcome_to_api():
@@ -36,7 +39,7 @@ def create_app(config_name):
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-                data = Helper_Functions.get_red_flags()
+                data = database.get_all_red_flags()
                 if len(data) > 0:
                     return make_response(
                         jsonify({"status": 200, "data": data})), 200
@@ -55,7 +58,7 @@ def create_app(config_name):
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-                data = Helper_Functions.get_a_red_flag(red_flag_id)
+                data = database.get_incident_by_id(red_flag_id)
                 if data:
                     return make_response(
                         jsonify({"status": 200, "data": [data]})), 200
@@ -96,20 +99,19 @@ def create_app(config_name):
                     Helper_Functions.get_dict_data_from_list_incident(input_list))
 
                 validated_inputs = validate_inputs.check_types()
-                duplicate_exists = Helper_Functions.incident_exists_check(
-                    comment)
+                duplicate_exists = database.get_like_this_in_database(comment, created_by)
 
                 if validated_inputs[0] == 200:
 
                     if not duplicate_exists:
 
                         red_flag = Incident(input_list)
-                        incidents.append(red_flag)
+                        incident_id = database.save_incident(red_flag)
                         return make_response(jsonify({"status": 201, "data": [
-                                             {"id": red_flag.id, "message": "Created red-flag record"}]}))
+                                             {"id": incident_id, "message": "Created red-flag record"}]}))
                     else:
                         return make_response(
-                            jsonify({"status": duplicate_exists[0], "error": duplicate_exists[1]}))
+                            jsonify({"status": 400, "error": "a similar resource already exists."}))
                 else:
                     return make_response(
                         jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
@@ -126,10 +128,11 @@ def create_app(config_name):
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
                 location = json.loads(request.data)['location']
-                data = Helper_Functions.update_location(red_flag_id, location)
+                data = database.update_location_of_incident(
+                    red_flag_id, location)
                 if data:
                     return make_response(jsonify({"status": 200, "data": [
-                                         {"id": data["id"], "message":"Updated red-flag record’s location"}]}))
+                                         {"id": data, "message":"Updated red-flag record’s location"}]}))
                 else:
                     return make_response(
                         jsonify({"status": 404, "error": "Resource not found."}))
@@ -148,11 +151,12 @@ def create_app(config_name):
             if not isinstance(user_id, str):
 
                 comment = json.loads(request.data)['comment']
-                data = Helper_Functions.update_comment(red_flag_id, comment)
+                data = database.update_comment_of_incident(
+                    red_flag_id, comment)
 
                 if data:
                     return make_response(jsonify({"status": 200, "data": [
-                                         {"id": data["id"], "message":"Updated red-flag record’s comment"}]}))
+                                         {"id": data, "message":"Updated red-flag record’s comment"}]}))
                 else:
                     return make_response(
                         jsonify({"status": 404, "error": "Resource not found."}))
@@ -170,7 +174,7 @@ def create_app(config_name):
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-                if Helper_Functions.delete_redflag(red_flag_id):
+                if database.delete_incident(red_flag_id):
                     return make_response(jsonify({"status": 200, "data": [
                                          {"id": red_flag_id, "message": "red-flag record has been deleted"}]}))
                 else:
@@ -194,11 +198,12 @@ def create_app(config_name):
                 if not isinstance(user_id, str):
 
                     status = json.loads(request.data)['status']
-                    data = Helper_Functions.update_status(red_flag_id, status)
+                    data = database.update_status_of_incident(
+                        red_flag_id, status)
 
                     if data:
                         return make_response(jsonify({"status": 200, "data": [
-                            {"id": data["id"], "message":"Updated red-flag record’s status"}]}))
+                            {"id": data, "message":"Updated red-flag record’s status"}]}))
                     else:
                         return make_response(
                             jsonify({"status": 404, "error": "Resource not found."}))

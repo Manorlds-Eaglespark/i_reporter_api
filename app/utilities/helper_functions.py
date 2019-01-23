@@ -35,13 +35,6 @@ class Helper_Functions:
                 return incident.to_json_object()
 
     @staticmethod
-    def incident_exists_check(comment):
-        for incident in incidents:
-            if incident.comment == comment:
-                return [400, "a similar resource already exists."]
-        return False
-
-    @staticmethod
     def get_dict_data_from_list_incident(list_data):
         return {
             "created_by": list_data[0],
