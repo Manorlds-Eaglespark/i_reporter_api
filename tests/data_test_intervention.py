@@ -70,3 +70,6 @@ incident1_data_dictionary = {"created_by": 3, "type": "intervention", "location"
     "images-link-1", "images-link-1"], "videos": ["videos-link-1", "videos-link-2"], "comment": "Traffic office James Komac, requested for money"}
 
 
+new_comment = {
+    "comment": "This is the new comment to test on"
+}
