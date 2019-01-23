@@ -94,6 +94,27 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["error"], "Valid status required. Status should be of type string")
 
+    
+    def test_get_list_of_interventions_when_none_exists(self):
+        response = self.client.get('/api/v2/interventions', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(data["error"], "No resource added yet.")
+
+    def test_get_list_of_interventions(self):
+        intervention_incident = {
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This is the awesome comment sgfd"
+        }
+        self.client.post('/api/v2/interventions', data=json.dumps(intervention_incident),
+                         content_type='application/json', headers=self.headers)
+        response = self.client.get('/api/v2/interventions', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 200)
+
 
     def tearDown(self):
         self.database.delete_all_tables()
