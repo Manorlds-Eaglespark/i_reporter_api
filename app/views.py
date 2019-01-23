@@ -132,7 +132,7 @@ def create_app(config_name):
                     red_flag_id, location)
                 if data:
                     return make_response(jsonify({"status": 200, "data": [
-                                         {"id": data, "message":"Updated red-flag record’s location"}]}))
+                                         {"id": data[0], "message":"Updated red-flag record’s location"}]}))
                 else:
                     return make_response(
                         jsonify({"status": 404, "error": "Resource not found."}))
@@ -174,7 +174,8 @@ def create_app(config_name):
         if access_token:
             user_id = User.decode_token(access_token)
             if not isinstance(user_id, str):
-                if database.delete_incident(red_flag_id):
+                if database.get_incident_by_id(red_flag_id):
+                    database.delete_incident(red_flag_id)
                     return make_response(jsonify({"status": 200, "data": [
                                          {"id": red_flag_id, "message": "red-flag record has been deleted"}]}))
                 else:
@@ -198,10 +199,11 @@ def create_app(config_name):
                 if not isinstance(user_id, str):
 
                     status = json.loads(request.data)['status']
-                    data = database.update_status_of_incident(
-                        red_flag_id, status)
+                    
 
-                    if data:
+                    if database.get_incident_by_id(red_flag_id):
+                        data = database.update_status_of_incident(
+                            red_flag_id, status)
                         return make_response(jsonify({"status": 200, "data": [
                             {"id": data, "message":"Updated red-flag record’s status"}]}))
                     else:
