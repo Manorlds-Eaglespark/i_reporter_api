@@ -47,6 +47,14 @@ class Helper_Functions:
         }
 
     @staticmethod
+    def convert_to_dictionary_list(list_incidents):
+        dictionary_list = []
+        for incident in list_incidents:
+            dictionary_list.append(Incident.convert_to_dictionary(incident))
+        return dictionary_list
+
+
+    @staticmethod
     def get_dict_data_from_list_user(list_data):
         return {
             "firstname": list_data[0],
