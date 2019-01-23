@@ -12,10 +12,10 @@ class TestFlaskApi(unittest.TestCase):
         self.database.create_all_tables()
         self.database.create_default_admin()
 
-        self.response = self.client.post('/api/v1/auth/register', data=json.dumps(register_user_2),
+        self.response = self.client.post('/api/v2/auth/signup', data=json.dumps(register_user_2),
                                          content_type='application/json')
     
-        self.response = self.client.post('/api/v1/auth/login', data=json.dumps(login_user_2),
+        self.response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user_2),
                                          content_type='application/json')
         data = json.loads(self.response.data)
         self.token = data["data"][0]["access_token"]
@@ -90,16 +90,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["error"], "a similar resource already exists.")
-
-    def test_create_new_red_flag_no_doc_type(self):
-        input_data = incident1_data_dictionary
-        input_data["type"] = ""
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
-                                    content_type='application/json', headers=self.headers)
-        data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
-        self.assertEqual(
-            data["error"], "Type should be of type string: Either 'red-flag' or 'intervation'")
 
     def test_create_new_red_flag_other_doc_type(self):
         input_data = incident1_data_dictionary
