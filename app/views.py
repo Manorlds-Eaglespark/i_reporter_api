@@ -270,6 +270,25 @@ def create_app(config_name):
                 401, "A Resource Token is required. Sign-in or log-in")
 
 
+    @app.route('/api/v2/interventions', methods=['GET'])
+    def get_intervention_records():
+        access_token = Helper_Functions.get_access_token()
+        if access_token:
+            user_id = User.decode_token(access_token)
+            if not isinstance(user_id, str):
+                data = database.get_all_interventions()
+                if len(data) > 0:
+                    return make_response(
+                        jsonify({"status": 200, "data": data})), 200
+                else:
+                    return Helper_Functions.the_return_method(
+                        404, "No resource added yet.")
+            else:
+                return Helper_Functions.the_return_method(401, user_id)
+        else:
+            return Helper_Functions.the_return_method(
+                401, "A Resource Token is required. Sign-in or log-in")
+
 
 
     from .auth import auth_blueprint

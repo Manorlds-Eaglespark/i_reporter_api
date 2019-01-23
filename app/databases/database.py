@@ -123,6 +123,12 @@ class Database:
         self.cursor.execute(sql_delete_incident)
         return True
 
+    def get_all_interventions(self):
+        sql_get_red_flags_query = """SELECT * FROM incidents where type='intervention'"""
+        self.cursor.execute(sql_get_red_flags_query)
+        incidents = self.cursor.fetchall()
+        return incidents
+
     def delete_all_tables(self):
             sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
             sql_clean_command_incidents_table = "TRUNCATE TABLE incidents RESTART IDENTITY CASCADE"
