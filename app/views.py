@@ -341,30 +341,7 @@ def create_app(config_name):
                     401, "A Resource Token is required. Sign-in or log-in")
 
     @app.route('/api/v2/interventions/<intervention_id>', methods=['DELETE'])
-    def delete_interventions(interventions_id):
-
-        access_token = Helper_Functions.get_access_token()
-
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                if database.get_incident_by_id(red_flag_id):
-                    database.delete_incident(red_flag_id)
-                    return make_response(jsonify({"status": 200, "data": [
-                                         {"id": red_flag_id, "message": "red-flag record has been deleted"}]}))
-                else:
-                    return make_response(
-                        jsonify({"status": 404, "error": "Resource not found."}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
-        else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
-
-
-    @app.route('/api/v2/interventions/<intervention_id>', methods=['DELETE'])
-    def delete_intervention(intervention_id):
+    def delete_interventions(intervention_id):
 
         access_token = Helper_Functions.get_access_token()
 
@@ -384,7 +361,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-
+  
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
     return app
