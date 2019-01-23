@@ -7,10 +7,12 @@ from tests.data_test import *
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
+        self.email = self.app.config["ADMIN_EMAIL"]
+        self.password = self.app.config["ADMIN_PASSWORD"]
         self.client = self.app.test_client()
         self.database = Database()
         self.database.create_all_tables()
-        self.database.create_default_admin()
+        self.database.create_default_admin(self.email, self.password)
 
         self.response = self.client.post('/api/v2/auth/signup', data=json.dumps(register_user_2),
                                          content_type='application/json')

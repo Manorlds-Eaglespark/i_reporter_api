@@ -51,14 +51,15 @@ class Database:
         user_id = self.cursor.fetchone()
         return user_id
     
-    def create_default_admin(self):
+    def create_default_admin(self, email, password):
         postgres_insert_user_query = ("INSERT INTO users ("
                                       "firstname, lastname, othernames, email, password,"
                                       "phonenumber, username, isadmin, registered) SELECT 'Christine','Turky','Sweeri',%s,%s,'013234565','Sweeri','True', %s WHERE NOT EXISTS (SELECT id FROM users WHERE email= %s );")
-        password = Bcrypt().generate_password_hash("asdfdsaf").decode()
+        
+        password_ = Bcrypt().generate_password_hash(
+            password).decode()
         time_registered = datetime.now()
-        email = 'christinet@gmail.com'
-        extra_info = (email, password, time_registered, email)
+        extra_info = (email, password_, time_registered, email)
         self.cursor.execute(postgres_insert_user_query, extra_info)
 
     def get_user_by_email(self, email):

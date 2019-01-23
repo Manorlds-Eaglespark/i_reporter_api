@@ -1,4 +1,7 @@
 import os
+from os.path import join, dirname
+from dotenv import load_dotenv
+
 
 
 class Config(object):
@@ -12,12 +15,16 @@ class DevelopmentConfig(Config):
     """Configurations for Development."""
     DEBUG = True
     use_reloader = True
+    ADMIN_EMAIL = os.getenv('ADMIN_EMAIL')
+    ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD')
 
 
 class TestingConfig(Config):
     """Configurations for Testing, with a separate test database."""
     TESTING = True
     DEBUG = True
+    ADMIN_EMAIL = 'christinet@gmail.com',
+    ADMIN_PASSWORD = 'asdfdsaf'
 
 
 
