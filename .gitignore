@@ -23,4 +23,5 @@ app/utilities/__pycache__/*
 htmlcov/
 .coverage
 .env
+.coverage
 app/databases/__pycache__/

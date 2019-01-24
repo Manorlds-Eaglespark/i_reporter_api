@@ -1,3 +1,4 @@
+import os
 import re
 from flask import Flask, request, jsonify, make_response, json
 from datetime import datetime
@@ -7,7 +8,8 @@ from app.utilities.helper_functions import Helper_Functions
 from app.utilities.incident_validation import Incident_Validation
 from app.models.user import User
 from app.mail import Mail
-
+from os.path import join, dirname
+from dotenv import load_dotenv
 
 def create_app(config_name):
 
@@ -16,7 +18,7 @@ def create_app(config_name):
     from app.databases.database import Database
 
     app = Flask(__name__, instance_relative_config=True)
-    app.config.from_object(app_config['development'])
+    app.config.from_object(app_config[config_name])
     app.config.from_pyfile('config.py')
 
     database = Database()
@@ -33,8 +35,11 @@ def create_app(config_name):
                                             "endpoint 6": "DELETE  /red-flags/<red-flag-id>"}]}
         return make_response(jsonify(response)), 200
 
-    @app.route('/api/v1/red-flags', methods=['GET'])
+    @app.route('/api/v2/red-flags', methods=['GET'])
     def get_redflags():
+        
+      
+
         access_token = Helper_Functions.get_access_token()
         if access_token:
             user_id = User.decode_token(access_token)
@@ -52,7 +57,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['GET'])
+    @app.route('/api/v2/red-flags/<red_flag_id>', methods=['GET'])
     def get_a_redflag(red_flag_id):
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -71,7 +76,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags', methods=['POST'])
+    @app.route('/api/v2/red-flags', methods=['POST'])
     def create_redflag():
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -121,7 +126,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -142,7 +147,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/comment', methods=['PATCH'])
     def update_redflag_comment(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
@@ -166,7 +171,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['DELETE'])
+    @app.route('/api/v2/red-flags/<red_flag_id>', methods=['DELETE'])
     def delete_redflag(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
@@ -187,7 +192,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/status', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/status', methods=['PATCH'])
     def update_redflag_status(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
@@ -335,7 +340,28 @@ def create_app(config_name):
                 return Helper_Functions.the_return_method(
                     401, "A Resource Token is required. Sign-in or log-in")
 
+    @app.route('/api/v2/interventions/<intervention_id>', methods=['DELETE'])
+    def delete_interventions(intervention_id):
 
+        access_token = Helper_Functions.get_access_token()
+
+        if access_token:
+            user_id = User.decode_token(access_token)
+            if not isinstance(user_id, str):
+                if database.get_incident_by_id(intervention_id):
+                    database.delete_incident(intervention_id)
+                    return make_response(jsonify({"status": 200, "data": [
+                                         {"id": intervention_id, "message": "Intervention record has been deleted"}]}))
+                else:
+                    return make_response(
+                        jsonify({"status": 404, "error": "Resource not found."}))
+            else:
+                return Helper_Functions.the_return_method(401, user_id)
+        else:
+            return Helper_Functions.the_return_method(
+                401, "A Resource Token is required. Sign-in or log-in")
+
+  
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
     return app

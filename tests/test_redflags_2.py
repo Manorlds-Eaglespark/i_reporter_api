@@ -8,10 +8,12 @@ from tests.data_test import *
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
+        self.email = self.app.config["ADMIN_EMAIL"]
+        self.password = self.app.config["ADMIN_PASSWORD"]
         self.client = self.app.test_client()
         self.database = Database()
         self.database.create_all_tables()
-        self.database.create_default_admin()
+        self.database.create_default_admin(self.email, self.password)
 
         self.response = self.client.post('/api/v2/auth/signup', data=json.dumps(register_user_2),
                                          content_type='application/json')
@@ -26,28 +28,26 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_get_list_of_incidents_no_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
             "location": "0.112, 0.545",
             "status": " sdfsd",
             "images": ["sdfaf", "vfdgdf"],
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment sgfd"
         }
-        self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
-        response = self.client.get('/api/v1/red-flags')
+        response = self.client.get('/api/v2/red-flags')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_get_an_incident_no_token_header(self):
         response = self.client.get(
-            '/api/v1/red-flags/' + str(id))
+            '/api/v2/red-flags/' + str(id))
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_create_new_red_flag_no_token_header(self):
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(incident6_data_dictionary),
                                     content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
@@ -55,36 +55,34 @@ class TestFlaskApi(unittest.TestCase):
     def test_delete_red_flag_given_id_no_token_header(self):
         
         response = self.client.delete(
-            '/api/v1/red-flags/' + str(id))
+            '/api/v2/red-flags/' + str(id))
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_update_red_flag_comment_no_token_header(self):
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
                                      content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_update_red_flag_location_no_header_token(self):
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
                                      content_type='application/json')
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_get_list_of_incidents_expired_token_header(self):
         redflag_incident = {
-            "created_by": 5242,
-            "type": "red-flag",
             "location": "0.112, 0.545",
             "status": " sdfsd",
             "images": ["sdfaf", "vfdgdf"],
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment sgfd"
         }
-        self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         response = self.client.get(
-            '/api/v1/red-flags',
+            '/api/v2/red-flags',
             headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
@@ -92,12 +90,12 @@ class TestFlaskApi(unittest.TestCase):
     def test_get_an_incident_expired_token_header(self):
         
         response = self.client.get(
-            '/api/v1/red-flags/' + str(id), headers=self.header_old)
+            '/api/v2/red-flags/' + str(id), headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_create_new_red_flag_expired_token_header(self):
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(incident6_data_dictionary),
                                     content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
@@ -105,18 +103,18 @@ class TestFlaskApi(unittest.TestCase):
     def test_delete_red_flag_given_id_expired_token_header(self):
         
         response = self.client.delete(
-            '/api/v1/red-flags/' + str(id), headers=self.header_old)
+            '/api/v2/red-flags/' + str(id), headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_update_red_flag_comment_expired_token_header(self):
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
     def test_update_red_flag_location_expired_token_header(self):
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
