@@ -83,7 +83,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 401)
 
     def test_update_intervention_comment_expired_token_header(self):
-        response = self.client.patch('/api/v2/interventios/' + str(id) + '/comment', data=json.dumps(new_comment),
+        response = self.client.patch('/api/v2/interventions/' + str(id) + '/comment', data=json.dumps(new_comment),
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)

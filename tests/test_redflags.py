@@ -188,7 +188,7 @@ class TestFlaskApi(unittest.TestCase):
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.delete(
-            '/api/v1/red-flags/' + str(id),
+            '/api/v2/red-flags/' + str(id),
             headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
@@ -206,7 +206,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_create_new_red_flag_no_image(self):
         input_data = incident3_data_dictionary
         input_data["images"] = " "
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
