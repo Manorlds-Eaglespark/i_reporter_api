@@ -13,9 +13,9 @@ class Login_Validation():
 
     def check_inputs(self):
         if not isinstance(self.email, str):
-            return [400, "Type str required for email."]
+            return [405, "Type str required for email."]
         elif self.email.isspace() or not self.email:
-            return [400, "Provide an Email"]
+            return [405, "Provide an Email"]
         elif self.password.isspace() or not self.password or not isinstance(self.password, str):
-            return [400, "Provide a Password"]
+            return [405, "Provide a Password"]
         return [200, "All good"]

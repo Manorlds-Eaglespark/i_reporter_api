@@ -27,15 +27,15 @@ class Register_Validation():
         if not (self.firstname and self.lastname and self.email and self.password and self.phonenumber and self.username):
             return [400, "Make sure you fill all the required fields"]
         elif (not isinstance(self.firstname, str) or not isinstance(self.lastname, str) or not isinstance(self.othernames, str) or not isinstance(self.email, str) or not isinstance(self.password, str) or not isinstance(self.phonenumber, str) or not isinstance(self.username, str)):
-            return [400, "Make sure to strings use only "]
+            return [405, "Make sure to strings use only "]
         elif self.firstname.isspace() or self.lastname.isspace() or self.othernames.isspace() or self.email.isspace() or self.password.isspace() or self.phonenumber.isspace() or self.username.isspace():
-            return [400, "Make sure to have no empty spaces in fields"]
+            return [405, "Make sure to have no empty spaces in fields"]
         elif len(self.password) < 4:
-            return [401, "Make sure your password is at lest 4 letters"]
+            return [405, "Make sure your password is at lest 4 letters"]
         elif re.search('[0-9]', self.password) is None:
-            return [401, "Make sure your password has a number in it"]
+            return [405, "Make sure your password has a number in it"]
         elif re.search('[A-Z]', self.password) is None:
-            return [401, "Make sure your password has a capital letter in it"]
+            return [405, "Make sure your password has a capital letter in it"]
         elif not re.match("^.+\\@(\\[?)[a-zA-Z0-9\\-\\.]+\\.([a-zA-Z]{2,3}|[0-9]{1,3})(\\]?)$", self.email) is not None:
-            return [401, "Please enter a valid Email."]
+            return [405, "Please enter a valid Email."]
         return [200, "All Good"]
