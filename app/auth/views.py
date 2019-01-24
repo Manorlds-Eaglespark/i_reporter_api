@@ -38,7 +38,7 @@ class RegistrationView(MethodView):
         if validated_input[0] == 200:
             if database.get_user_by_email(email):
                 return Helper_Functions.the_return_method(
-                    400, "That Email already is registered. Login or use a different Email to register.")
+                    401, "That Email is already taken.")
             else:
                 new_user_info_list = [
                     firstname,
@@ -51,10 +51,9 @@ class RegistrationView(MethodView):
                     "False"]
                 new_user = User(new_user_info_list)
 
-                user_id = database.save_user(new_user)
-                saved_user = database.get_user_by_email(email)
+                user_data = database.save_user(new_user)
                 return make_response(jsonify(
-                    {"status": 201, "data": [{"id": user_id}]})), 201
+                    {"status": 201, "data": Helper_Functions.get_dict_user(user_data), "message": "Successfully registered"})), 201
         else:
             return Helper_Functions.the_return_method(
                 validated_input[0], validated_input[1])

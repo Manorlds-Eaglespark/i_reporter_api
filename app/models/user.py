@@ -41,10 +41,4 @@ class User:
         except Exception as e:
             return str(e)
 
-    @staticmethod
-    def decode_admin_status(token):
-        payload = jwt.decode(token, str(
-            os.getenv('SECRET')), algorithms='HS256')
-        return payload['adn']
-
     

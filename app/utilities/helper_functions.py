@@ -46,15 +46,15 @@ class Helper_Functions:
         return dictionary_list
 
     @staticmethod
-    def get_dict_data_from_list_user(list_data):
+    def get_dict_user(list_data):
         return {
-            "firstname": list_data[0],
-            "lastname": list_data[1],
-            "othernames": list_data[2],
-            "email": list_data[3],
-            "password": list_data[4],
-            "phonenumber": list_data[5],
-            "username": list_data[6]
+            "id":list_data[0],
+            "firstname": list_data[1],
+            "lastname": list_data[2],
+            "othernames": list_data[3],
+            "email": list_data[4],
+            "phonenumber": list_data[6],
+            "username": list_data[7]
         }
 
     @staticmethod
