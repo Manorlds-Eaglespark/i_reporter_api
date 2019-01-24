@@ -9,9 +9,9 @@ class Database:
     """docstring for Database class"""
 
     def __init__(self):
-        # db_name = os.getenv("DATABASE")  
         db_name = "ireporter"
-        self.connection = psycopg2.connect("postgres://mkziseeaiyhwns:33efb7470ab650941cd4bce888eb6ee10d5856a6e1c55a2662e3f536536560b1@ec2-54-225-89-195.compute-1.amazonaws.com:5432/d3rm6fbihs9qag")
+        self.connection = psycopg2.connect(user="postgres", password="", host="127.0.0.1", port="5432",
+                                           database=db_name)
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
 
@@ -43,18 +43,27 @@ class Database:
 
     def save_user(self, user):
         postgres_insert_user_query = ("INSERT INTO users ("
-                                          "firstname, lastname, othernames, email, password,"
-                                          "phonenumber, username, isadmin, registered) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
-        record_to_insert = (user.firstname, user.lastname, user.othernames, user.email, user.password, user.phonenumber, user.username, user.isadmin, user.registered)
+                                      "firstname, lastname, othernames, email, password,"
+                                      "phonenumber, username, isadmin, registered) VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
+        record_to_insert = (
+            user.firstname,
+            user.lastname,
+            user.othernames,
+            user.email,
+            user.password,
+            user.phonenumber,
+            user.username,
+            user.isadmin,
+            user.registered)
         self.cursor.execute(postgres_insert_user_query, record_to_insert)
         user_id = self.cursor.fetchone()
         return user_id
-    
+
     def create_default_admin(self, email, password):
         postgres_insert_user_query = ("INSERT INTO users ("
                                       "firstname, lastname, othernames, email, password,"
                                       "phonenumber, username, isadmin, registered) SELECT 'Christine','Turky','Sweeri',%s,%s,'013234565','Sweeri','True', %s WHERE NOT EXISTS (SELECT id FROM users WHERE email= %s );")
-        
+
         password_ = Bcrypt().generate_password_hash(
             password).decode()
         time_registered = datetime.now()
@@ -62,7 +71,8 @@ class Database:
         self.cursor.execute(postgres_insert_user_query, extra_info)
 
     def get_user_by_email(self, email):
-        postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(email)
+        postgresql_select_user_query = """SELECT * FROM users where email = '{0}' """.format(
+            email)
         self.cursor.execute(postgresql_select_user_query)
         user = self.cursor.fetchone()
         return user
@@ -72,7 +82,7 @@ class Database:
         self.cursor.execute(sql_get_red_flags_query)
         red_flags = self.cursor.fetchall()
         return red_flags
-    
+
     def save_incident(self, incident):
         postgres_insert_incident_query = ("INSERT INTO incidents ("
                                           "created_on, created_by, type, location, status,"
@@ -130,7 +140,7 @@ class Database:
         return incidents
 
     def delete_all_tables(self):
-            sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
-            sql_clean_command_incidents_table = "TRUNCATE TABLE incidents RESTART IDENTITY CASCADE"
-            self.cursor.execute(sql_clean_command_users_table)
-            self.cursor.execute(sql_clean_command_incidents_table)
+        sql_clean_command_users_table = "TRUNCATE TABLE users RESTART IDENTITY CASCADE"
+        sql_clean_command_incidents_table = "TRUNCATE TABLE incidents RESTART IDENTITY CASCADE"
+        self.cursor.execute(sql_clean_command_users_table)
+        self.cursor.execute(sql_clean_command_incidents_table)

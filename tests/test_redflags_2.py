@@ -53,7 +53,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 401)
 
     def test_delete_red_flag_given_id_no_token_header(self):
-        
+
         response = self.client.delete(
             '/api/v2/red-flags/' + str(id))
         data = json.loads(response.data)
@@ -88,7 +88,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 401)
 
     def test_get_an_incident_expired_token_header(self):
-        
+
         response = self.client.get(
             '/api/v2/red-flags/' + str(id), headers=self.header_old)
         data = json.loads(response.data)
@@ -101,7 +101,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 401)
 
     def test_delete_red_flag_given_id_expired_token_header(self):
-        
+
         response = self.client.delete(
             '/api/v2/red-flags/' + str(id), headers=self.header_old)
         data = json.loads(response.data)
@@ -118,7 +118,6 @@ class TestFlaskApi(unittest.TestCase):
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-
 
     def tearDown(self):
         self.database.delete_all_tables()

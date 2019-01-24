@@ -53,7 +53,6 @@ class Helper_Functions:
             dictionary_list.append(Incident.convert_to_dictionary(incident))
         return dictionary_list
 
-
     @staticmethod
     def get_dict_data_from_list_user(list_data):
         return {

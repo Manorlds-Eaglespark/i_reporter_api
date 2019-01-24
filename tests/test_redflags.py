@@ -4,6 +4,7 @@ from app.views import create_app
 from app.databases.database import Database
 from tests.data_test import *
 
+
 class TestFlaskApi(unittest.TestCase):
     def setUp(self):
         self.app = create_app(config_name="testing")
@@ -16,7 +17,7 @@ class TestFlaskApi(unittest.TestCase):
 
         self.response = self.client.post('/api/v2/auth/signup', data=json.dumps(register_user_2),
                                          content_type='application/json')
-    
+
         self.response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user_2),
                                          content_type='application/json')
         data = json.loads(self.response.data)
@@ -25,7 +26,6 @@ class TestFlaskApi(unittest.TestCase):
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
-        
     def test_server_is_running(self):
         response = self.client.get('/')
         data = json.loads(response.data)
@@ -69,7 +69,7 @@ class TestFlaskApi(unittest.TestCase):
             "comment": "This is the comment s fd gfd"
         }
         response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
-                         content_type='application/json', headers=self.headers)
+                                     content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.get(
@@ -92,7 +92,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
         self.assertEqual(data["error"], "a similar resource already exists.")
-
 
     def test_create_new_red_flag_no_location(self):
         input_data = incident2_data_dictionary
@@ -126,7 +125,7 @@ class TestFlaskApi(unittest.TestCase):
             "comment": "This is the nkn comment sgfd"
         }
         response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
-                         content_type='application/json', headers=self.headers)
+                                     content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.patch('/api/v2/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
@@ -155,7 +154,7 @@ class TestFlaskApi(unittest.TestCase):
             "comment": "This is the comment sgfd"
         }
         response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
-                         content_type='application/json', headers=self.headers)
+                                     content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.patch('/api/v2/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
@@ -184,7 +183,7 @@ class TestFlaskApi(unittest.TestCase):
             "comment": "This is the comment sdsdsa sgfd"
         }
         response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
-                         content_type='application/json', headers=self.headers)
+                                     content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.delete(
@@ -235,9 +234,5 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["error"], "Valid status required. Status should be of type string")
 
-
     def tearDown(self):
         self.database.delete_all_tables()
-
-
-   

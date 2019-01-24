@@ -55,8 +55,7 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
 
-
-    def test_get_list_of_incidents_expired_token_header(self):        
+    def test_get_list_of_incidents_expired_token_header(self):
         response = self.client.get(
             '/api/v2/interventions',
             headers=self.header_old)
@@ -87,7 +86,6 @@ class TestFlaskApi(unittest.TestCase):
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
-
 
     def tearDown(self):
         self.database.delete_all_tables()

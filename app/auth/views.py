@@ -34,7 +34,6 @@ class RegistrationView(MethodView):
 
         validated_input = validate_input.check_input()
         database = Database()
-        
 
         if validated_input[0] == 200:
             if database.get_user_by_email(email):
@@ -51,7 +50,7 @@ class RegistrationView(MethodView):
                     username,
                     "False"]
                 new_user = User(new_user_info_list)
-                
+
                 user_id = database.save_user(new_user)
                 saved_user = database.get_user_by_email(email)
                 return make_response(jsonify(
@@ -77,11 +76,11 @@ class LoginView(MethodView):
         validated_input = validate_input.check_inputs()
 
         database = Database()
-        
+
         if validated_input[0] == 200:
             try:
                 user_data = database.get_user_by_email(email)
-                
+
                 if user_data:
                     user_info = list(user_data)
                     user = User(user_info[1:])
