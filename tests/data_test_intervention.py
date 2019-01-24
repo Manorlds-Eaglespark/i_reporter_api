@@ -1,35 +1,40 @@
 
 
-register_user = {
-    "firstname": "Bob",
-    "lastname": "Marley",
-    "othernames": "dfgdfs",
-    "email": "bob_marley@gmail.com",
-    "password": "afsdfas2A1",
-    "phonenumber": "0414225555",
-    "username": "Bob Mar"
+login_user_1 = {
+    "email": "pabob_marleyna2@gmail.com",
+    "password": "afsdfas2Aa12"
 }
 
-login_user = {
-    "email": "bob_marley@gmail.com",
-    "password": "afsdfas2A1"
-}
-
-
-register_user_2 = {
-    "firstname": "Bob 2",
-    "lastname": "Marley 2",
-    "othernames": "dfgdfs 2",
-    "email": "bob_marley2@gmail.com",
-    "password": "afsdfas2A12",
+register_user_1 = {
+    "firstname": "Bobbana",
+    "lastname": "Marleyanba",
+    "othernames": "dfgdfana",
+    "email": "pabob_marleyna2@gmail.com",
+    "password": "afsdfas2Aa12",
     "phonenumber": "04142255552",
-    "username": "Bob Mar 2"
+    "username": "Bob Mpara"
 }
+
+
+
 
 login_user_2 = {
-    "email": "bob_marley2@gmail.com",
-    "password": "afsdfas2A12"
+    "email": "pbob_marleyna2@gmail.com",
+    "password": "afsdfas2Aa12"
 }
+
+register_user_2 = {
+    "firstname": "Bobbaa",
+    "lastname": "Marleyaba",
+    "othernames": "dfgdfaa",
+    "email": "pbob_marleyna2@gmail.com",
+    "password": "afsdfas2Aa12",
+    "phonenumber": "04142255552",
+    "username": "Bob Mara"
+}
+
+
+
 
 incident6_data_dictionary = {"created_by": 5, "type": "intervention", "location": "0.113, 0.344", "status": "Resolved", "images": ["images-link-1", "images-link-1"],
                              "videos": ["videos-link-1", "videos-link-2"], "comment": "Land grabbing in Gulu district!!"}

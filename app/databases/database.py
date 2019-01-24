@@ -1,6 +1,7 @@
 import psycopg2
 from datetime import datetime
 from flask_bcrypt import Bcrypt
+from instance.config import app_config
 import os
 
 
@@ -9,7 +10,12 @@ class Database:
     """docstring for Database class"""
 
     def __init__(self):
-        db_name = "ireporter"
+        
+        if app_config == 'testing':
+            db_name = 'ireporter_test_db'
+        else:
+            db_name = "ireporter"
+
         self.connection = psycopg2.connect(user="postgres", password="", host="127.0.0.1", port="5432",
                                            database=db_name)
         self.cursor = self.connection.cursor()

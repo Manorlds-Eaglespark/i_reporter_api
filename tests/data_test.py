@@ -16,18 +16,37 @@ login_user = {
 }
 
 
-register_user_2 = {
-    "firstname": "Bob 2",
-    "lastname": "Marley 2",
-    "othernames": "dfgdfs 2",
-    "email": "bob_marley2@gmail.com",
-    "password": "afsdfas2A12",
-    "phonenumber": "04142255552",
-    "username": "Bob Mar 2"
+register_user_x = {
+    "firstname": "Bob",
+    "lastname": "Marley",
+    "othernames": "dfgdfs",
+    "email": "bob_marley@gmail.com",
+    "password": "afsdfas2A1",
+    "phonenumber": "0414225555",
+    "username": "Bob Mar"
 }
 
+login_user_x = {
+    "email": "bob_marley@gmail.com",
+    "password": "afsdfas2A1"
+}
+
+
+
+
+register_user_2 = {
+    "firstname": "Bobba",
+    "lastname": "Marleyba",
+    "othernames": "dfgdfa",
+    "email": "bob_marleyn2@gmail.com",
+    "password": "afsdfas2A12",
+    "phonenumber": "04142255552",
+    "username": "Bob Mar"
+}
+
+
 login_user_2 = {
-    "email": "bob_marley2@gmail.com",
+    "email": "bob_marleyn2@gmail.com",
     "password": "afsdfas2A12"
 }
 

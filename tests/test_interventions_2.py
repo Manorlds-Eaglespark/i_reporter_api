@@ -2,7 +2,7 @@ import unittest
 import json
 from app.views import create_app
 from app.databases.database import Database
-from tests.data_test import *
+from tests.data_test_intervention import *
 
 
 class TestFlaskApi(unittest.TestCase):

@@ -11,15 +11,7 @@ class Helper_Functions:
     def the_return_method(status, message):
         return make_response(
             jsonify({"status": status, "error": message})), status
-
-    @staticmethod
-    def get_access_token():
-        auth_header = request.headers.get('Authorization')
-        if auth_header is None:
-            return None
-        access_token = str(auth_header).split(" ")[1]
-        return access_token
-
+ 
     @staticmethod
     def get_red_flags():
         red_flags_list = []
