@@ -35,7 +35,7 @@ def create_app(config_name):
                                             "endpoint 6": "DELETE  /red-flags/<red-flag-id>"}]}
         return make_response(jsonify(response)), 200
 
-    @app.route('/api/v1/red-flags', methods=['GET'])
+    @app.route('/api/v2/red-flags', methods=['GET'])
     def get_redflags():
         
       
@@ -57,7 +57,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['GET'])
+    @app.route('/api/v2/red-flags/<red_flag_id>', methods=['GET'])
     def get_a_redflag(red_flag_id):
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -76,7 +76,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags', methods=['POST'])
+    @app.route('/api/v2/red-flags', methods=['POST'])
     def create_redflag():
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -126,7 +126,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/location', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/location', methods=['PATCH'])
     def update_redflag_location(red_flag_id):
         access_token = Helper_Functions.get_access_token()
         if access_token:
@@ -147,7 +147,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/comment', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/comment', methods=['PATCH'])
     def update_redflag_comment(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
@@ -171,7 +171,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>', methods=['DELETE'])
+    @app.route('/api/v2/red-flags/<red_flag_id>', methods=['DELETE'])
     def delete_redflag(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()
@@ -192,7 +192,7 @@ def create_app(config_name):
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")
 
-    @app.route('/api/v1/red-flags/<red_flag_id>/status', methods=['PATCH'])
+    @app.route('/api/v2/red-flags/<red_flag_id>/status', methods=['PATCH'])
     def update_redflag_status(red_flag_id):
 
         access_token = Helper_Functions.get_access_token()

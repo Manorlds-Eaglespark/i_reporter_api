@@ -32,7 +32,7 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 200)
 
     def test_get_list_of_incidents_when_none_exists(self):
-        response = self.client.get('/api/v1/red-flags', headers=self.headers)
+        response = self.client.get('/api/v2/red-flags', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 404)
         self.assertEqual(data["error"], "No resource added yet.")
@@ -46,14 +46,14 @@ class TestFlaskApi(unittest.TestCase):
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment sgfd"
         }
-        self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
-        response = self.client.get('/api/v1/red-flags', headers=self.headers)
+        response = self.client.get('/api/v2/red-flags', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
 
     def test_create_new_red_flag(self):
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(incident6_data_dictionary),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 201)
@@ -68,26 +68,26 @@ class TestFlaskApi(unittest.TestCase):
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment s fd gfd"
         }
-        response_ = self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.get(
-            '/api/v1/red-flags/' + str(id), headers=self.headers)
+            '/api/v2/red-flags/' + str(id), headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
 
     def test_get_an_incident_with_unknown_id(self):
         response = self.client.get(
-            '/api/v1/red-flags/' + str(1000010), headers=self.headers)
+            '/api/v2/red-flags/' + str(1000010), headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(response.status_code, 404)
         self.assertEqual(data["error"], "Resource not found.")
 
     def test_create_new_red_flag_already_saved(self):
-        self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+        self.client.post('/api/v2/red-flags', data=json.dumps(incident6_data_dictionary),
                          content_type='application/json', headers=self.headers)
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(incident6_data_dictionary),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(incident6_data_dictionary),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -97,7 +97,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_create_new_red_flag_no_location(self):
         input_data = incident2_data_dictionary
         input_data["location"] = ""
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -109,7 +109,7 @@ class TestFlaskApi(unittest.TestCase):
         input_data["videos"] = ["sfsfsdf.com/video/fsdffsdfdsf"]
         input_data["images"] = ["sfsfsdf.com/image/fsdffsdfdsf"]
         input_data["comment"] = ""
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -125,11 +125,11 @@ class TestFlaskApi(unittest.TestCase):
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the nkn comment sgfd"
         }
-        response_ = self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
                                      content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
@@ -139,7 +139,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_location_id_not_found(self):
         id = 15155200
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/location', data=json.dumps(new_location),
                                      content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 404)
@@ -154,11 +154,11 @@ class TestFlaskApi(unittest.TestCase):
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment sgfd"
         }
-        response_ = self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
                                      content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
@@ -167,7 +167,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_update_red_flag_comment_id_not_found(self):
         id = 15155200
-        response = self.client.patch('/api/v1/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/comment', data=json.dumps(new_comment),
                                      content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 404)
@@ -183,12 +183,12 @@ class TestFlaskApi(unittest.TestCase):
             "videos": ["video link", "fgfdgs"],
             "comment": "This is the comment sdsdsa sgfd"
         }
-        response_ = self.client.post('/api/v1/red-flags', data=json.dumps(redflag_incident),
+        response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
                          content_type='application/json', headers=self.headers)
         data_ = json.loads(response_.data)
         id = data_["data"][0]["id"][0]
         response = self.client.delete(
-            '/api/v1/red-flags/' + str(id),
+            '/api/v2/red-flags/' + str(id),
             headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 200)
@@ -198,7 +198,7 @@ class TestFlaskApi(unittest.TestCase):
 
     def test_delete_red_flag_given_wrong_id(self):
         response = self.client.delete(
-            '/api/v1/red-flags/' + str(12241), headers=self.headers)
+            '/api/v2/red-flags/' + str(12241), headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 404)
         self.assertEqual(data["error"], "Resource not found.")
@@ -206,7 +206,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_create_new_red_flag_no_image(self):
         input_data = incident3_data_dictionary
         input_data["images"] = " "
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -218,7 +218,7 @@ class TestFlaskApi(unittest.TestCase):
         input_data["status"] = "red-flag"
         input_data["images"] = ["dsfdsf.com/images/image.jpg"]
         input_data["videos"] = " "
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
@@ -228,7 +228,7 @@ class TestFlaskApi(unittest.TestCase):
     def test_create_new_red_flag_no_status(self):
         input_data = incident3_data_dictionary
         input_data["status"] = " "
-        response = self.client.post('/api/v1/red-flags', data=json.dumps(input_data),
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
                                     content_type='application/json', headers=self.headers)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 400)
