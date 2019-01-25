@@ -7,10 +7,8 @@ dotenv_path = join(dirname(__file__), '.env')
 load_dotenv(dotenv_path)
 
 
-
-psswd =  os.ge("ADMIN_PASSWORD")
+psswd = os.getenv("ADMIN_PASSWORD")
 eml = os.getenv("ADMIN_EMAIL")
-
 
 app = create_app('development')
 

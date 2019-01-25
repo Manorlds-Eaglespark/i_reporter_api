@@ -11,14 +11,11 @@ class Database:
 
     def __init__(self):
         
-        if app_config == 'testing':
-            db_name = 'ireporter_test_db'
-        else:
-            db_name = "ireporter"
-
-        self.connection = psycopg2.connect("postgres://mkziseeaiyhwns:33efb7470ab650941cd4bce888eb6ee10d5856a6e1c55a2662e3f536536560b1@ec2-54-225-89-195.compute-1.amazonaws.com:5432/d3rm6fbihs9qag")
+        self.connection = psycopg2.connect(
+            "postgres://mkziseeaiyhwns:33efb7470ab650941cd4bce888eb6ee10d5856a6e1c55a2662e3f536536560b1@ec2-54-225-89-195.compute-1.amazonaws.com:5432/d3rm6fbihs9qag")
         self.cursor = self.connection.cursor()
         self.connection.autocommit = True
+
 
     def create_all_tables(self):
         sql_command_users_table = ("CREATE TABLE IF NOT EXISTS users"
