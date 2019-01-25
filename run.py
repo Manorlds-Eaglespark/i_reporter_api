@@ -8,8 +8,9 @@ load_dotenv(dotenv_path)
 
 
 
-psswd =  os.getenv("ADMIN_PASSWORD")
+psswd =  os.ge("ADMIN_PASSWORD")
 eml = os.getenv("ADMIN_EMAIL")
+
 
 app = create_app('development')
 
