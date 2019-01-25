@@ -28,6 +28,12 @@ Corruption is a huge bane to Africa’s development. African countries must deve
   
   ```pip install requirements.txt```
 
+## PREREQUITES
+- A Working computer. Linnux, windows or Mac OS
+- Postman, to test endpoints
+- Git, to follow different repo branches smoothly.
+- Text Editor, preferably Visual Studio Code.
+
 ## TESTING
 * Install Pytest to run the unittests
 ```pip install pyteset```
@@ -48,8 +54,28 @@ Corruption is a huge bane to Africa’s development. African countries must deve
 | PATCH  | /api/v1/red-flags/<red-flag-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
 | DELETE | /api/v1/red-flags/<red-flag-id>  |  TRUE  |   Delete a specific red flag record.   |
 
+| GET    | /api/v1/interventions/<intervention-id>        |  TRUE |   Fetch a specific red-flag record.    |
+| POST   | /api/v1/interventions        |    TRUE |   Create a red-flag record.   |
+| PATCH  | /api/v1/interventions/<intervention-id>/location  | TRUE  |   Edit the location of a specific red-flag record.  |
+| PATCH  | /api/v1/interventions/<intervention-id>/comment  | TRUE   |   Edit the comment of a specific red-flag record.  |
+| DELETE | /api/v1/interventions/<intervention-id>  |  TRUE  |   Delete a specific red flag record.   |
+
+## Built With
+Python 3.6, Flask Micro-framework
+
+## Tools Used
+-Pylint
+-Pytest
+-Virtual environment
+
+## Documentation
+Find Documentation [here](https://app.swaggerhub.com/apis/Manorlds-Eaglespark/iReporter/1.0.0)
+
 ## Hosted API
-[Follow this link](https://ireporter256.herokuapp.com)
+Follow this [link](https://ireporter256.herokuapp.com)
+
+## Host UI Demo
+This app has a UI, in HTML, CSS and Javascript. find it [here](https://manorlds-eaglespark.github.io/i_reporter/)
 
 ## AUTHOR
-[Anorld Mukone](https://github.com/Manorlds-Eaglespark)
+Anorld Mukone - [Github profile here](https://github.com/Manorlds-Eaglespark)
