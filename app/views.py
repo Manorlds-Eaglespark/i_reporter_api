@@ -248,6 +248,9 @@ def create_app(config_name):
         if database.get_incident_by_id(intervention_id, 'intervention'):
             data = database.update_status_of_incident(
                 intervention_id, status, 'intervention')
+            message_data = Incident.convert_to_dictionary(data)
+            Mail(user_data["email"], user_data["firstname"],
+                 message_data["comment"]).notify_change_in_incident_status()
             return make_response(jsonify({"status": 200, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s status"}))
         else:
             return make_response(

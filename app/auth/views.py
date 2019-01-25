@@ -52,6 +52,7 @@ class RegistrationView(MethodView):
                 new_user = User(new_user_info_list)
 
                 user_data = database.save_user(new_user)
+                Mail(email, firstname, "Welcome").welcome_new_user()
                 return make_response(jsonify(
                     {"status": 201, "data": Helper_Functions.get_dict_user(user_data), "message": "Successfully registered"})), 201
         else:
