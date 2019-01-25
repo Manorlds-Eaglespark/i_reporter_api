@@ -11,6 +11,7 @@ def admin_required(f):
     def wrap(*args, **kwargs):
         access_token = get_token()
         if access_token:
+            access_token = str(access_token).split(" ")[1]
             status = decode_admin_status(access_token)
             if status == 'True':
                 if isinstance(status, str) and status != 'True':
@@ -30,6 +31,7 @@ def login_required(f):
     def wrap(*args, **kwargs):
         access_token = get_token()
         if access_token:
+            access_token = str(access_token).split(" ")[1]
             user_id = decode_token(access_token)
             if isinstance(user_id, str):
                 return Helper_Functions.the_return_method(401, user_id)
@@ -42,10 +44,9 @@ def login_required(f):
 
 
 
-def get_token():
+def get_token(): 
     auth_header = request.headers.get('Authorization')
-    access_token = str(auth_header).split(" ")[1]
-    return access_token
+    return auth_header
 
 def decode_token(token):
         try:

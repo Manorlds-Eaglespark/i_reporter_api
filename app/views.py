@@ -234,7 +234,7 @@ def create_app(config_name):
     @login_required 
     def delete_interventions(current_user, intervention_id):
         if database.get_incident_by_id(intervention_id, 'intervention'):
-            database.delete_incident(intervention_id)
+            database.delete_incident(intervention_id, 'intervention')
             return make_response(jsonify({"status": 200, "data": [
                                 {"id": intervention_id, "message": "Intervention record has been deleted"}]}))
         else:

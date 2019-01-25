@@ -94,10 +94,10 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["status"], 401)
         self.assertIn(
             data['error'],
-            'That Email already is registered. Login or use a different Email to register.')
+            'That Email is already taken.')
 
     def test_login_user(self):
         self.client.post(

@@ -1,7 +1,7 @@
 
 
 login_user_1 = {
-    "email": "pabob_marleyna2@gmail.com",
+    "email": "paabob_marleyna2@gmail.com",
     "password": "afsdfas2Aa12"
 }
 
@@ -9,7 +9,7 @@ register_user_1 = {
     "firstname": "Bobbana",
     "lastname": "Marleyanba",
     "othernames": "dfgdfana",
-    "email": "pabob_marleyna2@gmail.com",
+    "email": "paabob_marleyna2@gmail.com",
     "password": "afsdfas2Aa12",
     "phonenumber": "04142255552",
     "username": "Bob Mpara"
