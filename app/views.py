@@ -10,6 +10,8 @@ from app.models.user import User
 from app.mail import Mail
 from os.path import join, dirname
 from dotenv import load_dotenv
+from app.utilities.login_required import login_required, admin_required
+
 
 def create_app(config_name):
 
@@ -36,61 +38,37 @@ def create_app(config_name):
         return make_response(jsonify(response)), 200
 
     @app.route('/api/v2/red-flags', methods=['GET'])
-    def get_redflags():
-        
-      
-
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                data = database.get_all_red_flags()
-                if len(data) > 0:
-                    return make_response(
-                        jsonify({"status": 200, "data": data})), 200
-                else:
-                    return Helper_Functions.the_return_method(
-                        404, "No resource added yet.")
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
+    @login_required
+    def get_redflags(current_user):
+        data = database.get_all_red_flags()
+        if len(data) > 0:
+            return make_response(jsonify({"status": 200, "data": Helper_Functions.get_dict_incidents(data)})), 200
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
+            return Helper_Functions.the_return_method(404, "No resource added yet.")
+         
     @app.route('/api/v2/red-flags/<red_flag_id>', methods=['GET'])
-    def get_a_redflag(red_flag_id):
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                data = database.get_incident_by_id(red_flag_id)
-                if data:
-                    return make_response(
-                        jsonify({"status": 200, "data": [data]})), 200
-                else:
-                    return Helper_Functions.the_return_method(
-                        404, "Resource not found.")
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
+    @login_required
+    def get_a_redflag(current_user, red_flag_id):
+        data = database.get_incident_by_id(red_flag_id, "red_flag")
+        if data:
+            return make_response(
+                jsonify({"status": 200, "data": Incident.convert_to_dictionary(data)})), 200
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
+            return Helper_Functions.the_return_method(404, "Resource not found.")
+            
 
-    @app.route('/api/v2/red-flags', methods=['POST'])
-    def create_redflag():
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                input_data = json.loads(request.data)
-                created_by = int(user_id)
-                doc_type = 'red-flag'
-                location = input_data['location']
-                status = input_data['status']
-                images = input_data['images']
-                videos = input_data['videos']
-                comment = input_data['comment']
-                input_list = [
+    @app.route('/api/v2/red-flags', methods=['POST']) 
+    @login_required
+    def create_redflag(current_user):
+        input_data = json.loads(request.data)
+        created_by = current_user
+        doc_type = 'red_flag'
+        location = input_data['location']
+        status = input_data['status']
+        images = input_data['images']
+        videos = input_data['videos']
+        comment = input_data['comment']
+        input_list = [
                     created_by,
                     doc_type,
                     location,
@@ -100,145 +78,83 @@ def create_app(config_name):
                     comment
                 ]
 
-                validate_inputs = Incident_Validation(
+        validate_inputs = Incident_Validation(
                     Helper_Functions.get_dict_data_from_list_incident(input_list))
-
-                validated_inputs = validate_inputs.check_types()
-                duplicate_exists = database.get_like_this_in_database(comment, created_by)
-
-                if validated_inputs[0] == 200:
-
-                    if not duplicate_exists:
-
-                        red_flag = Incident(input_list)
-                        incident_id = database.save_incident(red_flag)
-                        return make_response(jsonify({"status": 201, "data": [
-                                             {"id": incident_id, "message": "Created red-flag record"}]}))
-                    else:
-                        return make_response(
-                            jsonify({"status": 400, "error": "a similar resource already exists."}))
-                else:
-                    return make_response(
-                        jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
+        validated_inputs = validate_inputs.check_types()
+        duplicate_exists = database.get_like_this_in_database(
+                    comment, created_by)
+        if validated_inputs[0] == 200:
+            if not duplicate_exists:
+                red_flag = Incident(input_list)
+                saved_incident = database.save_incident(red_flag)
+                return make_response(jsonify({"status": 201, "data": Incident.convert_to_dictionary(saved_incident), "message": "Created red-flag record"}))
             else:
-                return Helper_Functions.the_return_method(401, user_id)
+                return make_response(
+                            jsonify({"status": 400, "error": "a similar resource already exists."}))
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
+            return make_response(
+                        jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
+
 
     @app.route('/api/v2/red-flags/<red_flag_id>/location', methods=['PATCH'])
-    def update_redflag_location(red_flag_id):
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                location = json.loads(request.data)['location']
-                data = database.update_location_of_incident(
-                    red_flag_id, location)
-                if data:
-                    return make_response(jsonify({"status": 200, "data": [
-                                         {"id": data[0], "message":"Updated red-flag record’s location"}]}))
-                else:
-                    return make_response(
-                        jsonify({"status": 404, "error": "Resource not found."}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
+    @login_required
+    def update_redflag_location(current_user, red_flag_id):
+        location = json.loads(request.data)['location']
+        data = database.update_location_of_incident(
+                    red_flag_id, location, 'red_flag')
+        if data:
+            return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message":"Updated red-flag record’s location"})),202
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
+            return make_response(
+                        jsonify({"status": 404, "error": "Resource not found."}))
+            
     @app.route('/api/v2/red-flags/<red_flag_id>/comment', methods=['PATCH'])
-    def update_redflag_comment(red_flag_id):
-
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-
-                comment = json.loads(request.data)['comment']
-                data = database.update_comment_of_incident(
-                    red_flag_id, comment)
-
-                if data:
-                    return make_response(jsonify({"status": 200, "data": [
-                                         {"id": data, "message":"Updated red-flag record’s comment"}]}))
-                else:
-                    return make_response(
-                        jsonify({"status": 404, "error": "Resource not found."}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
+    @login_required
+    def update_redflag_comment(current_user, red_flag_id):
+        comment = json.loads(request.data)['comment']
+        data = database.update_comment_of_incident(
+                    red_flag_id, comment, 'red_flag')
+        if data:
+            return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s comment"})), 202
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
+            return make_response(
+                        jsonify({"status": 404, "error": "Resource not found."}))
+            
     @app.route('/api/v2/red-flags/<red_flag_id>', methods=['DELETE'])
-    def delete_redflag(red_flag_id):
-
-        access_token = Helper_Functions.get_access_token()
-
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                if database.get_incident_by_id(red_flag_id):
-                    database.delete_incident(red_flag_id)
-                    return make_response(jsonify({"status": 200, "data": [
+    @login_required
+    def delete_redflag(current_user, red_flag_id):
+        if database.get_incident_by_id(red_flag_id, 'red_flag'):
+            database.delete_incident(red_flag_id, 'red_flag')
+            return make_response(jsonify({"status": 200, "data": [
                                          {"id": red_flag_id, "message": "red-flag record has been deleted"}]}))
-                else:
-                    return make_response(
+        else:
+            return make_response(
                         jsonify({"status": 404, "error": "Resource not found."}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
-        else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
+        
     @app.route('/api/v2/red-flags/<red_flag_id>/status', methods=['PATCH'])
-    def update_redflag_status(red_flag_id):
-
-        access_token = Helper_Functions.get_access_token()
-
-        if access_token:
-            is_admin = Helper_Functions.get_admin_status(access_token)
-            if is_admin:
-                user_id = User.decode_token(access_token)
-                if not isinstance(user_id, str):
-
-                    status = json.loads(request.data)['status']
-                    
-
-                    if database.get_incident_by_id(red_flag_id):
-                        data = database.update_status_of_incident(
-                            red_flag_id, status)
-                        return make_response(jsonify({"status": 200, "data": [
-                            {"id": data, "message":"Updated red-flag record’s status"}]}))
-                    else:
-                        return make_response(
-                            jsonify({"status": 404, "error": "Resource not found."}))
-                else:
-                    return Helper_Functions.the_return_method(401, user_id)
-            else:
-                return Helper_Functions.the_return_method(
-                    401, "Access denied.")
+    @admin_required
+    def update_redflag_status(current_user, red_flag_id):
+        status = json.loads(request.data)['status']
+        if database.get_incident_by_id(red_flag_id, 'red_flag'):
+            data = database.update_status_of_incident(
+                            red_flag_id, status, 'red_flag')
+            return make_response(jsonify({"status": 200, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s status"}))
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
-
+            return make_response(
+                            jsonify({"status": 404, "error": "Resource not found."}))
+            
     @app.route('/api/v2/interventions', methods=['POST'])
-    def create_intervention_record():
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                input_data = json.loads(request.data)
-                created_by = int(user_id)
-                doc_type = 'intervention'
-                location = input_data['location']
-                status = input_data['status']
-                images = input_data['images']
-                videos = input_data['videos']
-                comment = input_data['comment']
-                input_list = [
+    @login_required
+    def create_intervention_record(current_user):
+        input_data = json.loads(request.data)
+        created_by = current_user
+        doc_type = 'intervention'
+        location = input_data['location']
+        status = input_data['status']
+        images = input_data['images']
+        videos = input_data['videos']
+        comment = input_data['comment']
+        input_list = [
                     created_by,
                     doc_type,
                     location,
@@ -248,120 +164,97 @@ def create_app(config_name):
                     comment
                 ]
 
-                validate_inputs = Incident_Validation(
+        validate_inputs = Incident_Validation(
                     Helper_Functions.get_dict_data_from_list_incident(input_list))
 
-                validated_inputs = validate_inputs.check_types()
-                duplicate_exists = database.get_like_this_in_database(comment, created_by)
-
-                if validated_inputs[0] == 200:
-
-                    if not duplicate_exists:
-
-                        red_flag = Incident(input_list)
-                        incident_id = database.save_incident(red_flag)
-                        return make_response(jsonify({"status": 201, "data": [
-                                             {"id": incident_id, "message": "Created red-flag record"}]}))
-                    else:
-                        return make_response(
+        validated_inputs = validate_inputs.check_types()
+        duplicate_exists = database.get_like_this_in_database(
+                    comment, created_by)
+        if validated_inputs[0] == 200:
+            if not duplicate_exists:
+                saved_intervention = Incident(input_list)
+                saved_incident = database.save_incident(saved_intervention)
+                return make_response(jsonify({"status": 201, "data": Incident.convert_to_dictionary(saved_incident), "message": "Created Intervention record"})),201
+            else:
+                return make_response(
                             jsonify({"status": 400, "error": "a similar resource already exists."}))
-                else:
-                    return make_response(
+        else:
+            return make_response(
                         jsonify({"status": validated_inputs[0], "error": validated_inputs[1]}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
-        else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
-
+        
     @app.route('/api/v2/interventions', methods=['GET'])
-    def get_intervention_records():
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                data = database.get_all_interventions()
-                if len(data) > 0:
-                    return make_response(
-                        jsonify({"status": 200, "data": Helper_Functions.convert_to_dictionary_list(data)})), 200
-                else:
-                    return Helper_Functions.the_return_method(
+    @login_required
+    def get_intervention_records(current_user):
+        data = database.get_all_interventions()
+        if len(data) > 0:
+            return make_response(
+                jsonify({"status": 200, "data": Helper_Functions.get_dict_incidents(data)})), 200
+        else:
+            return Helper_Functions.the_return_method(
                         404, "No resource added yet.")
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
-        else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
-
-
+        
     @app.route('/api/v2/interventions/<intervention_id>', methods=['GET'])
-    def get_an_intervention_record(intervention_id):
-        access_token = Helper_Functions.get_access_token()
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                data = database.get_incident_by_id(intervention_id)
-                
-                if data:
-                    return make_response(
+    @login_required
+    def get_an_intervention_record(current_user, intervention_id):
+        data = database.get_incident_by_id(intervention_id, 'intervention')
+        if data:
+            return make_response(
                         jsonify({"status": 200, "data": [Incident.convert_to_dictionary(data)]})), 200
-                else:
-                    return Helper_Functions.the_return_method(
-                        404, "Resource not found.")
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
         else:
             return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
+                        404, "Resource not found.")
+        
+    @app.route('/api/v2/interventions/<intervention_id>/comment',
+               methods=['PATCH'])
+    @login_required
+    def intervention_comment(current_user, intervention_id):
+        comment = json.loads(request.data)['comment']
+        data = database.update_comment_of_incident(
+            intervention_id, comment, 'intervention')
+        if data:
+            return make_response(jsonify({"status": 200, "data":Incident.convert_to_dictionary(data), "message": "Updated intervention record’s comment"}))
+        else:
+            return make_response(
+                        jsonify({"status": 404, "error": "Resource not found."}))
 
+    @app.route('/api/v2/interventions/<intervention_id>/location', methods=['PATCH'])
+    @login_required
+    def update_intervention_location(current_user, intervention_id):
+        location = json.loads(request.data)['location']
+        data = database.update_location_of_incident(
+            intervention_id, location, 'intervention')
+        if data:
+            return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message": "Updated Intervention record’s location"})), 202
+        else:
+            return make_response(
+                jsonify({"status": 404, "error": "Resource not found."}))
 
-    @app.route('/api/v2/interventions/<intervention_id>/comment', methods=['PATCH'])
-    def intervention_comment(intervention_id):
-
-            access_token = Helper_Functions.get_access_token()
-            if access_token:
-                user_id = User.decode_token(access_token)
-                if not isinstance(user_id, str):
-
-                    comment = json.loads(request.data)['comment']
-                    data = database.update_comment_of_incident(
-                        intervention_id, comment)
-
-                    if data:
-                        return make_response(jsonify({"status": 200, "data": [
-                                            {"id": data, "message": "Updated intervention record’s comment"}]}))
-                    else:
-                        return make_response(
-                            jsonify({"status": 404, "error": "Resource not found."}))
-                else:
-                    return Helper_Functions.the_return_method(401, user_id)
-            else:
-                return Helper_Functions.the_return_method(
-                    401, "A Resource Token is required. Sign-in or log-in")
 
     @app.route('/api/v2/interventions/<intervention_id>', methods=['DELETE'])
-    def delete_interventions(intervention_id):
-
-        access_token = Helper_Functions.get_access_token()
-
-        if access_token:
-            user_id = User.decode_token(access_token)
-            if not isinstance(user_id, str):
-                if database.get_incident_by_id(intervention_id):
-                    database.delete_incident(intervention_id)
-                    return make_response(jsonify({"status": 200, "data": [
-                                         {"id": intervention_id, "message": "Intervention record has been deleted"}]}))
-                else:
-                    return make_response(
-                        jsonify({"status": 404, "error": "Resource not found."}))
-            else:
-                return Helper_Functions.the_return_method(401, user_id)
+    @login_required 
+    def delete_interventions(current_user, intervention_id):
+        if database.get_incident_by_id(intervention_id, 'intervention'):
+            database.delete_incident(intervention_id, 'intervention')
+            return make_response(jsonify({"status": 200, "data": [
+                                {"id": intervention_id, "message": "Intervention record has been deleted"}]}))
         else:
-            return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")
+            return make_response(
+                    jsonify({"status": 404, "error": "Resource not found."}))
 
-  
+    @app.route('/api/v2/interventions/<intervention_id>/status', methods=['PATCH'])
+    @admin_required
+    def update_intervention_status(current_user, intervention_id):
+        status = json.loads(request.data)['status']
+        if database.get_incident_by_id(intervention_id, 'intervention'):
+            data = database.update_status_of_incident(
+                intervention_id, status, 'intervention')
+            return make_response(jsonify({"status": 200, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s status"}))
+        else:
+            return make_response(
+                jsonify({"status": 404, "error": "Resource not found."}))
+
+
     from .auth import auth_blueprint
     app.register_blueprint(auth_blueprint)
     return app
+

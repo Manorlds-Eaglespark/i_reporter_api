@@ -3,7 +3,6 @@ from os.path import join, dirname
 from dotenv import load_dotenv
 
 
-
 class Config(object):
     """Parent configuration class."""
     DEBUG = True
@@ -25,7 +24,6 @@ class TestingConfig(Config):
     DEBUG = True
     ADMIN_EMAIL = 'christinet@gmail.com',
     ADMIN_PASSWORD = 'asdfdsaf'
-
 
 
 class StagingConfig(Config):

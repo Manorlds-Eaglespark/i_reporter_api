@@ -33,19 +33,18 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 406)
         self.assertIn(data['error'], 'Make sure to strings use only ')
 
-    
     def test_register_new_user_firstname_space(self):
         register_user["firstname"] = " "
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 400)
+        self.assertEqual(response.status_code, 406)
         self.assertIn(
             data['error'],
-            'Make sure to have no empty spaces in fields')
+            'Make sure to use the English alphabert in the fields')
 
     def test_register_new_user_short_password(self):
         register_user["firstname"] = "my first name"
@@ -53,19 +52,18 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(response.status_code, 401)
+        self.assertEqual(response.status_code, 406)
         self.assertIn(
             data['error'],
-            'Make sure your password is at lest 4 letters')
+            'Make sure your password has atlest 4 letters')
 
-    
     def test_register_new_user_no_digit(self):
         register_user["firstname"] = "my first name"
         register_user["password"] = "sdfsds"
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 401)
+        self.assertEqual(data["status"], 406)
         self.assertIn(
             data['error'],
             'Make sure your password has a number in it')
@@ -76,7 +74,7 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 401)
+        self.assertEqual(data["status"], 406)
         self.assertIn(
             data['error'],
             'Make sure your password has a capital letter in it')
@@ -87,7 +85,7 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 401)
+        self.assertEqual(data["status"], 406)
         self.assertIn(data['error'], 'Please enter a valid Email.')
 
     def test_register_existing_user(self):
@@ -96,10 +94,10 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post(
             '/api/v2/auth/signup', data=json.dumps(register_user), content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["status"], 401)
         self.assertIn(
             data['error'],
-            'That Email already is registered. Login or use a different Email to register.')
+            'That Email is already taken.')
 
     def test_login_user(self):
         self.client.post(
@@ -113,7 +111,7 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["status"], 406)
         self.assertIn(data['error'], 'Provide an Email')
 
     def test_login_user_no_email(self):
@@ -122,7 +120,7 @@ class TestFlaskApi(unittest.TestCase):
                                     content_type='application/json')
 
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["status"], 406)
         self.assertIn(data['error'], 'Provide an Email')
 
     def test_login_user_number_email(self):
@@ -130,7 +128,7 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data['status'], 400)
+        self.assertEqual(data['status'], 406)
         self.assertIn(data['error'], 'Type str required for email.')
 
     def test_login_user_no_password(self):
@@ -139,7 +137,7 @@ class TestFlaskApi(unittest.TestCase):
         response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user),
                                     content_type='application/json')
         data = json.loads(response.data)
-        self.assertEqual(data["status"], 400)
+        self.assertEqual(data["status"], 406)
         self.assertIn(data["error"], 'Provide a Password')
 
     def test_login_user_wrong_password(self):
@@ -162,9 +160,6 @@ class TestFlaskApi(unittest.TestCase):
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
         self.assertIn(data['error'], 'Email not registered on any account.')
-    
+
     def tearDown(self):
         self.database.delete_all_tables()
-
-
-   

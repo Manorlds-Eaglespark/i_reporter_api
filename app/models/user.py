@@ -1,5 +1,4 @@
 import os
-import uuid
 import jwt
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
@@ -42,25 +41,4 @@ class User:
         except Exception as e:
             return str(e)
 
-    # @staticmethod
-    # def password_is_valid(password1, password2):
-    #     return Bcrypt().check_password_hash(password1, password2)
-
-    @staticmethod
-    def decode_admin_status(token):
-        payload = jwt.decode(token, str(
-            os.getenv('SECRET')), algorithms='HS256')
-        return payload['adn']
-
-    @staticmethod
-    def decode_token(token):
-        try:
-            payload = jwt.decode(
-                token, str(
-                    os.getenv('SECRET')), algorithms='HS256')
-            return payload['sub']
-        except jwt.ExpiredSignatureError:
-            return "Expired token. Please login to get a new token"
-        except jwt.InvalidTokenError:
-            return "Invalid token. Please register or login"
-        return None
+    
