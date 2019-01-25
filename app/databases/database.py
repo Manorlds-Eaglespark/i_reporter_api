@@ -127,7 +127,7 @@ class Database:
         return incident
 
     def update_status_of_incident(self, incident_id, new_status, _type):
-        sql_update_incident_status = """UPDATE incidents SET status = %s WHERE id = %s AND type = %s RETURNING *;"""
+        sql_update_incident_status = """UPDATE incidents SET status = %s WHERE id = %s AND t_ype = %s RETURNING *;"""
         self.cursor.execute(sql_update_incident_status,
                             (new_status, incident_id, _type))
         incident_id = self.cursor.fetchone()
@@ -140,7 +140,7 @@ class Database:
         return True
 
     def get_all_interventions(self):
-        sql_get_red_flags_query = """SELECT * FROM incidents where type='intervention'"""
+        sql_get_red_flags_query = """SELECT * FROM incidents where t_ype='intervention'"""
         self.cursor.execute(sql_get_red_flags_query)
         incidents = self.cursor.fetchall()
         return incidents

@@ -135,9 +135,9 @@ def create_app(config_name):
     @admin_required
     def update_redflag_status(current_user, red_flag_id):
         status = json.loads(request.data)['status']
-        if database.get_incident_by_id(red_flag_id):
+        if database.get_incident_by_id(red_flag_id, 'red_flag'):
             data = database.update_status_of_incident(
-                            red_flag_id, status)
+                            red_flag_id, status, 'red_flag')
             return make_response(jsonify({"status": 200, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s status"}))
         else:
             return make_response(
@@ -247,7 +247,7 @@ def create_app(config_name):
         status = json.loads(request.data)['status']
         if database.get_incident_by_id(intervention_id, 'intervention'):
             data = database.update_status_of_incident(
-                intervention_id, status)
+                intervention_id, status, 'intervention')
             return make_response(jsonify({"status": 200, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s status"}))
         else:
             return make_response(
