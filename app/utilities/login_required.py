@@ -2,6 +2,7 @@ import os
 import jwt
 from functools import wraps
 from flask import request
+from app.databases.database import Database
 from app.utilities.helper_functions import Helper_Functions
 
 
@@ -12,11 +13,12 @@ def admin_required(f):
         if access_token:
             status = decode_admin_status(access_token)
             if status == 'True':
-                if isinstance(status, str):
+                if isinstance(status, str) and status != 'True':
                     return Helper_Functions.the_return_method(401, status)
-                return f(*args, **kwargs)
+                current_user = decode_token(access_token)
+                return f(current_user, *args, **kwargs)
             else:
-                return Helper_Functions.the_return_method(403, "Access not authorized.")
+                return Helper_Functions.the_return_method(403, "Access Not Granted.")
         else:
             return Helper_Functions.the_return_method(
                 401, "A Resource Token is required. Sign-in or log-in")       

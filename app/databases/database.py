@@ -37,7 +37,7 @@ class Database:
                                        "(id SERIAL PRIMARY KEY,"
                                        "created_on TIMESTAMP NOT NULL,"
                                        "created_by INTEGER NOT NULL,"
-                                       "type TEXT NULL,"
+                                       "t_ype TEXT NULL,"
                                        "location TEXT NOT NULL,"
                                        "status TEXT NOT NULL,"
                                        "images TEXT NOT NULL,"
@@ -84,17 +84,17 @@ class Database:
         return user
 
     def get_all_red_flags(self):
-        sql_get_red_flags_query = """SELECT * FROM incidents where type='red-flag'"""
+        sql_get_red_flags_query = """SELECT * FROM incidents where t_ype='red_flag'"""
         self.cursor.execute(sql_get_red_flags_query)
         red_flags = self.cursor.fetchall()
         return red_flags
 
     def save_incident(self, incident):
         postgres_insert_incident_query = ("INSERT INTO incidents ("
-                                          "created_on, created_by, type, location, status,"
-                                          "images, videos, comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING id")
+                                          "created_on, created_by, t_ype, location, status,"
+                                          "images, videos, comment) VALUES (%s,%s,%s,%s,%s,%s,%s,%s) RETURNING *;")
         record_to_insert = (incident.created_on, incident.created_by,
-                            incident.type, incident.location, incident.status, incident.images, incident.videos, incident.comment)
+                            incident.t_ype, incident.location, incident.status, incident.images, incident.videos, incident.comment)
         self.cursor.execute(postgres_insert_incident_query, record_to_insert)
         return self.cursor.fetchone()
 
@@ -105,37 +105,37 @@ class Database:
         incident = self.cursor.fetchone()
         return incident
 
-    def get_incident_by_id(self, id):
-        sql_select_incident_query = """SELECT * FROM incidents WHERE id = {0}""".format(
-            id)
+    def get_incident_by_id(self, id, _type):
+        sql_select_incident_query = """SELECT * FROM incidents WHERE id = {0} AND type = {1}""".format(
+            id, _type)
         self.cursor.execute(sql_select_incident_query)
         incident = self.cursor.fetchone()
         return incident
 
-    def update_location_of_incident(self, incident_id, new_location):
-        sql_update_incident_location = """UPDATE incidents SET location = %s WHERE id = %s RETURNING id"""
+    def update_location_of_incident(self, incident_id, new_location, type_):
+        sql_update_incident_location = """UPDATE incidents SET location = %s WHERE id = %s AND t_ype = %s RETURNING *"""
         self.cursor.execute(sql_update_incident_location,
-                            (new_location, incident_id))
+                            (new_location, incident_id, type_))
         incident_id = self.cursor.fetchone()
         return incident_id
 
-    def update_comment_of_incident(self, incident_id, new_comment):
-        sql_update_incident_comment = """UPDATE incidents SET comment = %s WHERE id = %s RETURNING id"""
+    def update_comment_of_incident(self, incident_id, new_comment,_type):
+        sql_update_incident_comment = """UPDATE incidents SET comment = %s WHERE id = %s AND type = %s RETURNING *;"""
         self.cursor.execute(sql_update_incident_comment,
-                            (new_comment, incident_id))
+                            (new_comment, incident_id, _type))
         incident = self.cursor.fetchone()
         return incident
 
-    def update_status_of_incident(self, incident_id, new_status):
-        sql_update_incident_status = """UPDATE incidents SET status = %s WHERE id = %s RETURNING id"""
+    def update_status_of_incident(self, incident_id, new_status, _type):
+        sql_update_incident_status = """UPDATE incidents SET status = %s WHERE id = %s AND type = %s RETURNING *;"""
         self.cursor.execute(sql_update_incident_status,
-                            (new_status, incident_id))
+                            (new_status, incident_id, _type))
         incident_id = self.cursor.fetchone()
         return incident_id
 
-    def delete_incident(self, incident_id):
-        sql_delete_incident = "DELETE FROM incidents WHERE id = {0}".format(
-            incident_id)
+    def delete_incident(self, incident_id, _type):
+        sql_delete_incident = "DELETE FROM incidents WHERE id = {0} AND type = {1}".format(
+            incident_id, _type)
         self.cursor.execute(sql_delete_incident)
         return True
 

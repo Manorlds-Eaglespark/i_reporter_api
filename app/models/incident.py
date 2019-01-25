@@ -8,7 +8,7 @@ class Incident:
         incident_info = args[0]
         self.created_on = datetime.now()
         self.created_by = incident_info[0]
-        self.type = incident_info[1]
+        self.t_ype = incident_info[1]
         self.location = incident_info[2]
         self.status = incident_info[3]
         self.images = incident_info[4]
@@ -24,7 +24,7 @@ class Incident:
             "id": data_list[0],
             "created_on": data_list[1],
             "created_by": data_list[2],
-            "type": data_list[3],
+            "t_ype": data_list[3],
             "location": data_list[4],
             "status": data_list[5],
             "images": data_list[6],
