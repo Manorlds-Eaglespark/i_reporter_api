@@ -113,7 +113,7 @@ def create_app(config_name):
     def update_redflag_comment(current_user, red_flag_id):
         comment = json.loads(request.data)['comment']
         data = database.update_comment_of_incident(
-                    red_flag_id, comment)
+                    red_flag_id, comment, 'red_flag')
         if data:
             return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message": "Updated red-flag record’s comment"})), 202
         else:
@@ -123,8 +123,8 @@ def create_app(config_name):
     @app.route('/api/v2/red-flags/<red_flag_id>', methods=['DELETE'])
     @login_required
     def delete_redflag(current_user, red_flag_id):
-        if database.get_incident_by_id(red_flag_id):
-            database.delete_incident(red_flag_id)
+        if database.get_incident_by_id(red_flag_id, 'red_flag'):
+            database.delete_incident(red_flag_id, 'red_flag')
             return make_response(jsonify({"status": 200, "data": [
                                          {"id": red_flag_id, "message": "red-flag record has been deleted"}]}))
         else:

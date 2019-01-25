@@ -106,9 +106,9 @@ class Database:
         return incident
 
     def get_incident_by_id(self, id, _type):
-        sql_select_incident_query = """SELECT * FROM incidents WHERE id = {0} AND type = {1}""".format(
-            id, _type)
-        self.cursor.execute(sql_select_incident_query)
+        sql_select_incident_query = """SELECT * FROM incidents WHERE id = %s AND t_ype = %s ;"""
+        data = (id, _type)
+        self.cursor.execute(sql_select_incident_query, data)
         incident = self.cursor.fetchone()
         return incident
 
@@ -120,7 +120,7 @@ class Database:
         return incident_id
 
     def update_comment_of_incident(self, incident_id, new_comment,_type):
-        sql_update_incident_comment = """UPDATE incidents SET comment = %s WHERE id = %s AND type = %s RETURNING *;"""
+        sql_update_incident_comment = """UPDATE incidents SET comment = %s WHERE id = %s AND t_ype = %s RETURNING *;"""
         self.cursor.execute(sql_update_incident_comment,
                             (new_comment, incident_id, _type))
         incident = self.cursor.fetchone()
@@ -134,9 +134,9 @@ class Database:
         return incident_id
 
     def delete_incident(self, incident_id, _type):
-        sql_delete_incident = "DELETE FROM incidents WHERE id = {0} AND type = {1}".format(
-            incident_id, _type)
-        self.cursor.execute(sql_delete_incident)
+        sql_delete_incident = "DELETE FROM incidents WHERE id = %s AND t_ype = %s"
+        data = ( incident_id, _type)
+        self.cursor.execute(sql_delete_incident, data)
         return True
 
     def get_all_interventions(self):
