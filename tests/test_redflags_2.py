@@ -26,6 +26,11 @@ class TestFlaskApi(unittest.TestCase):
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
+        self.header_admin_old = (
+            {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDgzODYwNDUsImlhdCI6MTU0ODM4NjAxNSwic3ViIjoxLCJhZG4iOiJUcnVlIn0.Etr_Z_U0wb2lfDaMAbfmuvSKkFLenYHHcfr72AlQXHU"})
+
+
+
     def test_get_list_of_incidents_no_token_header(self):
         redflag_incident = {
             "location": "0.112, 0.545",
@@ -118,6 +123,20 @@ class TestFlaskApi(unittest.TestCase):
                                      content_type='application/json', headers=self.header_old)
         data = json.loads(response.data)
         self.assertEqual(data["status"], 401)
+
+
+    def test_update_red_flag_status_expired_token_header(self):
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/status', data=json.dumps(new_location),
+                                     content_type='application/json', headers=self.header_admin_old)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+    
+    def test_update_red_flag_status_no_header_token(self):
+        response = self.client.patch('/api/v2/red-flags/' + str(id) + '/status', data=json.dumps(new_location),
+                                     content_type='application/json')
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 401)
+
 
     def tearDown(self):
         self.database.delete_all_tables()

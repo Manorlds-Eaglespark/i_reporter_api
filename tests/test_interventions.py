@@ -24,9 +24,14 @@ class TestFlaskApi(unittest.TestCase):
 
         self.response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user_1),
                                          content_type='application/json')
+        self.response2 = self.client.post('/api/v2/auth/login', data=json.dumps(admin_login),
+                                          content_type='application/json')
+        data2 = json.loads(self.response2.data)
         data = json.loads(self.response.data)
         self.token = data["data"][0]["access_token"]
+        self.token2 = data2["data"][0]["access_token"]
         self.headers = ({"Authorization": "Bearer " + self.token})
+        self.headers_admin = ({"Authorization": "Bearer " + self.token2})
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
@@ -203,6 +208,61 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(
             data["data"][0]["message"],
             "Intervention record has been deleted")
+
+    def test_update_intervention_location(self):
+        intervention_incident = {
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This is k the nkn comment sgfd"
+        }
+        response_ = self.client.post('/api/v2/interventions', data=json.dumps(intervention_incident),
+                                     content_type='application/json', headers=self.headers)
+        data_ = json.loads(response_.data)
+        id = data_["data"]["id"]
+        response = self.client.patch('/api/v2/interventions/' + str(id) + '/location', data=json.dumps(new_location),
+                                     content_type='application/json', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 202)
+        self.assertEqual(
+            data["message"],
+            "Updated Intervention record’s location")
+
+    def test_update_intervention_location_id_not_found(self):
+        id = 15155200
+        response = self.client.patch('/api/v2/interventions/' + str(id) + '/location', data=json.dumps(new_location),
+                                     content_type='application/json', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 404)
+        self.assertEqual(data["error"], "Resource not found.")
+
+    def test_create_new_red_flag_no_status(self):
+        input_data = incident3_data_dictionary
+        input_data["status"] = " "
+        response = self.client.post('/api/v2/red-flags', data=json.dumps(input_data),
+                                    content_type='application/json', headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 400)
+        self.assertEqual(
+            data["error"], "Valid status required. Status should be of type string")
+    def test_update_intervention_given_id_not_admin(self):
+        intervention_incident = {
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This dfdf is dfd dfsf the comment sdsdsa sgfd"
+        }
+        response_ = self.client.post('/api/v2/interventions', data=json.dumps(intervention_incident),
+                                     content_type='application/json', headers=self.headers)
+        data_ = json.loads(response_.data)
+        id = data_["data"]["id"]
+        response = self.client.patch(
+            '/api/v2/interventions/' + str(id)+'/status',
+            headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 403)
 
     def tearDown(self):
         self.database.delete_all_tables()

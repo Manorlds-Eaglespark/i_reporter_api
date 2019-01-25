@@ -224,7 +224,7 @@ def create_app(config_name):
         data = database.update_location_of_incident(
             intervention_id, location, 'intervention')
         if data:
-            return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message": "Updated Intevention record’s location"})), 202
+            return make_response(jsonify({"status": 202, "data": Incident.convert_to_dictionary(data), "message": "Updated Intervention record’s location"})), 202
         else:
             return make_response(
                 jsonify({"status": 404, "error": "Resource not found."}))

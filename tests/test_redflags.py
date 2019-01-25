@@ -20,9 +20,14 @@ class TestFlaskApi(unittest.TestCase):
 
         self.response = self.client.post('/api/v2/auth/login', data=json.dumps(login_user_2),
                                          content_type='application/json')
+        self.response2 = self.client.post('/api/v2/auth/login', data=json.dumps(admin_login),
+                                         content_type='application/json')
         data = json.loads(self.response.data)
+        data2 = json.loads(self.response2.data)
         self.token = data["data"][0]["access_token"]
+        self.token2 = data2["data"][0]["access_token"]
         self.headers = ({"Authorization": "Bearer " + self.token})
+        self.headers_admin = ({"Authorization": "Bearer " + self.token2})
         self.header_old = (
             {"Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NDc1OTUwMjksImlhdCI6MTU0NzU4NzgyOSwic3ViIjoxNjEwNSwiYWRuIjoiRmFsc2UifQ.AxU19wAI4_oPw0vyTgweu7MZ4Bf4VV6tsk4pJK68GrA"})
 
@@ -233,6 +238,25 @@ class TestFlaskApi(unittest.TestCase):
         self.assertEqual(data["status"], 400)
         self.assertEqual(
             data["error"], "Valid status required. Status should be of type string")
+
+   
+    def test_update_status_red_flag_given_id_not_admin(self):
+        redflag_incident = {
+            "location": "0.112, 0.545",
+            "status": " sdfsd",
+            "images": ["sdfaf", "vfdgdf"],
+            "videos": ["video link", "fgfdgs"],
+            "comment": "This dfdf is dfsf the comment sdsdsa sgfd"
+        }
+        response_ = self.client.post('/api/v2/red-flags', data=json.dumps(redflag_incident),
+                                     content_type='application/json', headers=self.headers)
+        data_ = json.loads(response_.data)
+        id = data_["data"]["id"]
+        response = self.client.patch(
+            '/api/v2/red-flags/' + str(id)+'/status',
+            headers=self.headers)
+        data = json.loads(response.data)
+        self.assertEqual(data["status"], 403)
 
     def tearDown(self):
         self.database.delete_all_tables()

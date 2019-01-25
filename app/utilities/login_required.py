@@ -12,18 +12,20 @@ def admin_required(f):
         access_token = get_token()
         if access_token:
             access_token = str(access_token).split(" ")[1]
-            status = decode_admin_status(access_token)
-            if status == 'True':
-                if isinstance(status, str) and status != 'True':
-                    return Helper_Functions.the_return_method(401, status)
-                current_user = decode_token(access_token)
+            user_id = decode_token(access_token)
+            if isinstance(user_id, str):
+                return Helper_Functions.the_return_method(401, user_id)
+            current_user = user_id
+            admin = decode_admin_status(access_token)
+            if admin == 'True':
                 return f(current_user, *args, **kwargs)
             else:
                 return Helper_Functions.the_return_method(403, "Access Not Granted.")
         else:
             return Helper_Functions.the_return_method(
-                401, "A Resource Token is required. Sign-in or log-in")       
+                401, "A Resource Token is required. Sign-in or log-in")
     return wrap
+
 
 
 def login_required(f):

@@ -16,6 +16,12 @@ register_user_1 = {
 }
 
 
+admin_login = {
+    "email": 'christinet@gmail.com',
+    "password": 'asdfdsaf'
+}
+
+
 
 
 login_user_2 = {
@@ -77,4 +83,18 @@ incident1_data_dictionary = {"created_by": 3, "type": "intervention", "location"
 
 new_comment = {
     "comment": "This is the new comment to test on"
+}
+
+new_location = {
+    "location": "new location"
+}
+
+new_status = {
+"status": "Resolved"
+}
+
+
+admin_login = {
+    "email": 'christinet@gmail.com',
+    "password": 'asdfdsaf'
 }

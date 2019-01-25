@@ -100,3 +100,9 @@ new_comment = {
 new_status = {
     "status": "Resolved"
 }
+
+
+admin_login = {
+    "email": 'christinet@gmail.com',
+    "password": 'asdfdsaf'
+    }
